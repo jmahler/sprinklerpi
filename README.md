@@ -16,9 +16,13 @@ on any schedule: every day, every other day, every third Friday,
 every day during the month of august.  The possible combinations
 are endless.
 
-Using the power of `cron` on a RasberryPI running Linux with
+Using the power of `cron` on a [RasberryPI][rpi] running Linux with
 a small amount interface hardware to control the sprinkler
 valves and the result is a very powerful sprinkler control system.
+
+  [rpi]: http://www.rasberrypi.org
+
+Refer to the full documentation ([doc/main.pdf](https://github.com/jmahler/sprinklerpi/blob/master/doc/main.pdf?raw=true)) for more info.
 
 AUTHOR
 ------
