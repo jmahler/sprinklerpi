@@ -11,6 +11,7 @@
 \usepackage{fancyvrb}
 \usepackage{parskip}
 \usepackage{verbatimbox}
+\usepackage{color}
 
 \usepackage{courier}
 \usepackage{listings}
@@ -41,6 +42,7 @@
 
 \addbibresource{references.bib}
 
+\graphicspath{{figs/}}
 % }}}
 
 \begin{document}
@@ -140,7 +142,10 @@ Figure \ref{fig:control} shows the control schematic.
 \label{sec:driver}
 
 \begin{figure}[hbp]
-% TODO
+\centering
+%\includegraphics[scale=1.5]{figs/driver}
+\def\svgwidth{270px}
+\input{figs/driver.pdf_tex}
 \caption{Sprinkler valve driver circuit.}\label{fig:driver}
 \end{figure}
 
@@ -150,16 +155,16 @@ If it is assumed that during steady state both the solenoid
 and the triac have negligible resistance (Figure \ref{fig:driver}),
 a 10 $\Omega$ resistor can be used to limit the current to 240 mA.
 
-The control signal to the Triac is very sensitive.
-Even the minutest current will cause it to conduct.
+The control signal to the triac (Q401E4) is very sensitive.
+The tinyest current will cause it to conduct.
 If it is driven by a 0-5V signal it will conduct not only
 with a 5V signal but also with 0V signal.
 To overcome this issue a diode was used to ensure no current
 flows when it is reverse biased.
-And finally a FET is used to control the Triac while also
-reducing the required driver circuit to less than 0.5 mA.
-This amount of current draw is then well within the limits
-of CMOS logic.
+The FET (2N7000) is used to switch the triac while it also
+serves to limit the control current of a 0-5 volt signal
+to less than 0.5 mA.
+This current draw is then well within the limits typical CMOS logic.
 
 \pagebreak
 \printbibliography
