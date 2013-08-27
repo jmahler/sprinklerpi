@@ -133,8 +133,12 @@ must be inverted.
 Figure \ref{fig:control} shows the control schematic.
 
 \begin{figure}[hbp]
-% TODO
-\caption{Sprinkler valve control logic.}\label{fig:control}
+\includegraphics[scale=0.85]{figs/control}
+\caption{Sprinkler valve control logic.
+Sprinkler valve number is input using SPI from the RasberryPI in
+to the shift register.  The number is decoded and inverted to produce
+a single high signal for one valve.
+All outputs are disabled when OA is clear.}\label{fig:control}
 \end{figure}
 % }}}
 
