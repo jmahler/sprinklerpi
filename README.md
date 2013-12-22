@@ -22,7 +22,7 @@ valves and the result is a very powerful sprinkler control system.
 
   [rpi]: http://www.rasberrypi.org
 
-Refer to the full documentation ([doc/main.pdf](https://github.com/jmahler/sprinklerpi/blob/master/doc/main.pdf?raw=true)) for more info.
+Refer to the full documentation ([doc/main.pdf](https://github.com/jmahler/sprinklerpi/blob/build/doc/main.pdf?raw=true)) for more info.
 
 AUTHOR
 ------
