@@ -1,5 +1,5 @@
 
-all: power_supply.pdf driver.pdf
+all: power_supply.pdf driver.pdf control.pdf
 
 %.eps: %.ps
 	ps2epsi $< $@

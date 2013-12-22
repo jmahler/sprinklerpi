@@ -137,12 +137,13 @@ more logic than has been discussed so far.
 A shift register is needed to take the bits as inputs.
 A decoder is needed to convert shifted in number to a single
 bit output.
-And in this case, since the 74LS138 decoder is used, the outputs
-must be inverted.
+In this case a 74HC238 3-8 decoder is used since it provides non-inverting
+inputs suitable from the drivers (Section \ref{sec:driver}).
+An output high will turn on a valve.
 Figure \ref{fig:control} shows the control schematic.
 
 \begin{figure}[hbp]
-\includegraphics[scale=0.85]{svg/control}
+\includegraphics[scale=0.90]{xcircuit/control}
 \caption{Sprinkler valve control logic.
 Sprinkler valve number is input using SPI from the RasberryPI in
 to the shift register.  The number is decoded and inverted to produce
@@ -205,7 +206,7 @@ By bridging the center of these two 12 VAC outputs
 a combined 24 VAC output is available.
 
 The mean current draw of the RasberryPI 500 mA with a maximum of 1 A
-\footnote{The current draw of the RasberryPI was determined experimentally.}.
+\footnote{The current draw of the RasberryPI was determined experimentally to be 500 mA.}.
 This can be supplied by a LM7508 5 volt DC voltage supply
 which is capable of a 1 A maximum.
 But an AC voltage cannot be supplied to the 7508 directly,
