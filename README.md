@@ -28,7 +28,7 @@ AUTHOR
 ------
 
 Jeremiah Mahler <jmmahler@gmail.com><br>
-<https://plus.google.com/101159326398579740638/about>
+<https://plus.google.com/+JeremiahMahler/about>
 
 COPYRIGHT
 ---------
