@@ -41,6 +41,8 @@
 
 \addbibresource{main.bib}
 
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
 % }}}
 
 \begin{document}
@@ -156,15 +158,22 @@ All outputs are disabled when OA is clear.}\label{fig:control}
 
 \begin{figure}[hbp]
 \centering
-\includegraphics[scale=1.5]{svg/driver}
+\includegraphics[scale=0.8]{xcircuit/driver}
 \caption{Sprinkler valve driver circuit.}\label{fig:driver}
 \end{figure}
 
-To turn the sprinkler valves on and off requires 24 VAC
-and approximately 270 mA.
+To turn the sprinkler valves on requires 24 VAC at approximately 270 mA.
 If it is assumed that during steady state both the solenoid
 and the triac have negligible resistance (Figure \ref{fig:driver}),
 a 10 $\Omega$ resistor can be used to limit the current to 240 mA.
+At 1 watt the resistor supports the worst case amperage with a margin
+over 10\%.
+
+\begin{align*}
+	P &= I^2 R \\
+	  &= (270\e{-3})^2 \cdot 10 \\
+	  &= 0.729 \quad \text{[W]}
+\end{align*}
 
 The control signal to the triac (Q401E4) is very sensitive.
 The tinyest current will cause it to conduct.
@@ -175,7 +184,8 @@ flows when it is reverse biased.
 The FET (2N7000) is used to switch the triac while it also
 serves to limit the control current of a 0-5 volt signal
 to less than 0.5 mA.
-This current draw is then well within the limits typical CMOS logic.
+This places the control current well within the limits
+of CMOS logic as required by the control chips (Section \ref{sec:control}).
 
 % }}}
 

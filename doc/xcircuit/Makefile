@@ -1,11 +1,11 @@
 
-all: power_supply.pdf
+all: power_supply.pdf driver.pdf
 
-power_supply.eps: power_supply.ps
+%.eps: %.ps
 	ps2epsi $< $@
 
 %.pdf: %.eps
 	epspdf $<
 
 clean:
-	-rm -f power_supply.pdf
+	-rm -f power_supply.pdf driver.pdf
