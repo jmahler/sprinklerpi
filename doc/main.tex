@@ -185,18 +185,17 @@ This current draw is then well within the limits typical CMOS logic.
 \label{sec:power}
 
 The power supply must provide two different voltages.
-It must provide 24 volts AC for the sprinkler valves.
-And it must provide 5 volts DC for the RasberryPI.
-And it should accomplish this using a 110 volt AC
-input.
+The sprinkler valves require 24 volts AC and the
+RasberrPI requires 5 volts DC.
+And it must create these from a 110 volt AC input.
 
-The 24 volts AC can be achieved using a split pole
-transformer.
-The 100 VAC input is split in to two 12 VAC outputs.
-By connecting the center of these two 12 VAC outputs
+The 24 volts AC can be achieved using a split pole transformer.
+The 110 volt AC splits in to two 12 volt AC outputs.
+By bridging the center of these two 12 VAC outputs
 a combined 24 VAC output is available.
 
-The current draw of the RasberryPI is 500 mA on average.
+The mean current draw of the RasberryPI 500 mA with a maximum of 1 A
+\footnote{The current draw of the RasberryPI was determined experimentally.}.
 This can be supplied by a LM7508 5 volt DC voltage supply
 which is capable of a 1 A maximum.
 But an AC voltage cannot be supplied to the 7508 directly,
@@ -214,7 +213,7 @@ shown in Figure \ref{fig:power}.
 
 \begin{figure}[hbp]
 \centering
-\includegraphics[scale=2.0]{svg/power}
+\includegraphics[scale=1.0]{xcircuit/power_supply}
 \caption{Power supply circuit.}\label{fig:power}
 \end{figure}
 
