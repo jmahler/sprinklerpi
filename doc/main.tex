@@ -10,7 +10,6 @@
 \usepackage{amsmath}
 \usepackage{fancyvrb}
 \usepackage{parskip}
-\usepackage{verbatimbox}
 \usepackage{color}
 
 \usepackage{courier}
@@ -40,7 +39,7 @@
 			bibstyle=authortitle,citestyle=verbose-inote]{biblatex}
 \setlength{\bibitemsep}{\baselineskip}
 
-\addbibresource{references.bib}
+\addbibresource{main.bib}
 
 % }}}
 
@@ -107,21 +106,29 @@ Instead of using individual GPIO pins, the four SPI pins provided by
 the SPI are used.
 This design sends 8-bits for each message (Figure \ref{fig:spi}).
 But only three bits are used to address each valve ($2^3 = 8$).
-If the design was simply expanded to use the available bits
+If the design was expanded to use the available bits
 it could address 128 valves ($2^7 = 128$).
+The single enable bit was chosen to simplify the circuitry.
+However it does reduce the maximum number of addresses by one bit.
 
-\begin{verbbox}
-  7      4 3      1      0
- +--------+--------+------+
- | unused | valve# | en_n |
- +--------+--------+------+
-\end{verbbox}
+{
+\renewcommand*\arraystretch{1.5}
 \begin{figure}[hbp]
+
 \centering
-\theverbbox
+\begin{tabular}{l r l r l r }
+7 & 4 & 3 & 1 & \multicolumn{2}{c}{0} \\
+\hline
+\multicolumn{2}{|c|}{\hspace*{6mm} unused \hspace*{6mm}} &
+\multicolumn{2}{|c|}{\hspace*{4mm} valve \hspace*{4mm}} &
+\multicolumn{2}{|c|}{\hspace*{1mm} en\_n \hspace*{1mm}} \\
+\hline
+\end{tabular}
+
 \caption{SPI message format.}
 \label{fig:spi}
 \end{figure}
+}
 
 Going from SPI to signals which can turn on/off a valve requires
 more logic than has been discussed so far.
@@ -133,7 +140,7 @@ must be inverted.
 Figure \ref{fig:control} shows the control schematic.
 
 \begin{figure}[hbp]
-\includegraphics[scale=0.85]{figs/control}
+\includegraphics[scale=0.85]{svg/control}
 \caption{Sprinkler valve control logic.
 Sprinkler valve number is input using SPI from the RasberryPI in
 to the shift register.  The number is decoded and inverted to produce
@@ -149,7 +156,7 @@ All outputs are disabled when OA is clear.}\label{fig:control}
 
 \begin{figure}[hbp]
 \centering
-\includegraphics[scale=1.5]{figs/driver}
+\includegraphics[scale=1.5]{svg/driver}
 \caption{Sprinkler valve driver circuit.}\label{fig:driver}
 \end{figure}
 
@@ -207,7 +214,7 @@ shown in Figure \ref{fig:power}.
 
 \begin{figure}[hbp]
 \centering
-\includegraphics[scale=2.0]{figs/power}
+\includegraphics[scale=2.0]{svg/power}
 \caption{Power supply circuit.}\label{fig:power}
 \end{figure}
 
