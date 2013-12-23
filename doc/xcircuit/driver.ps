@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: driver.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Sun Dec 22 13:10:56 2013
+%%CreationDate: Sun Dec 22 20:39:21 2013
 %%Pages: 1
-%%BoundingBox: 68 68 370 346
+%%BoundingBox: 68 68 388 358
 %%DocumentNeededResources: font Helvetica Times-Roman 
 %%EndComments
 %%BeginProlog
@@ -295,33 +295,38 @@ begingate
 endgate
 } def
 
+/::LED {
+begingate
+0.500 315 0 -1 generic::tap
+1 1.000 -12 -13 0 -1 2 polygon
+1 1.000 -8 -25 4 -13 2 polygon
+0.500 315 4 -13 generic::tap
+1.000 0 -32 -16 analog::diode
+endgate
+} def
+
 
 %%EndSetup
 
 %%Page: power_supply 1
 %%PageOrientation: Portrait
 /pgsave save def bop
-% 32.00 8.00 gridspace
 1.0000 inchscale
-2.6000 setlinewidth 1120 592 translate
+2.6000 setlinewidth 1168 624 translate
 
 1.000 0 -256 32 analog::acsource
 (24 VAC) {/Helvetica cf} 2 16 0 0.500 -216 64 label
-0.800 0 -672 -352 analog::gnd
-(2N7000) {/Helvetica cf} 2 16 0 0.500 -784 -176 label
+0.800 0 -672 -384 analog::gnd
+(2N7000) {/Helvetica cf} 2 16 0 0.500 -784 -208 label
 1.000 0 -512 -128 analog::inductor
 1.000 0 -512 64 analog::resistor
 1.000 0 -528 224 ::triac
-1.000 0 -672 64 analog::resistor
--1.000 180 -672 -80 analog::diode
-1.000 0 -712 -224 ::nmos3
-1 1.000 -752 -256 -872 -256 2 polygon
+1.000 0 -672 96 analog::resistor
+-1.000 180 -672 -48 analog::diode
+1.000 0 -712 -256 ::nmos3
 1 1.000 -512 -64 -512 0 2 polygon
 1 1.000 -512 128 -512 192 2 polygon
-1 1.000 -672 128 -672 192 -576 192 3 polygon
-1 1.000 -672 0 -672 -32 2 polygon
-1 1.000 -672 -128 -672 -160 2 polygon
-1 1.000 -672 -288 -672 -352 2 polygon
+1 1.000 -672 -320 -672 -384 2 polygon
 (sprinkler) {/Helvetica cf} 2 16 0 0.500 -464 -96 label
 (valve) {/Helvetica cf} 2 16 0 0.500 -464 -120 label
 1 1.000 -512 -192 -512 -256 -256 -256 -256 -32 4 polygon
@@ -330,12 +335,24 @@ endgate
 (270 mA) {/Helvetica cf} 2 16 0 0.500 -440 -280 label
 (10) {/Helvetica cf} 2 16 0 0.500 -480 88 label
 (1W) {/Helvetica cf} 2 16 0 0.500 -480 64 label
-(1k) {/Helvetica cf} 2 16 0 0.500 -648 88 label
-(1/4 W) {/Helvetica cf} 2 16 0 0.500 -648 64 label
-(0-5V DC) {/Helvetica cf} 2 16 0 0.500 -928 -216 label
+(1k) {/Helvetica cf} 2 16 0 0.500 -648 120 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -648 96 label
+(0-5V DC) {/Helvetica cf} 2 16 0 0.500 -976 -248 label
 (Q401E4) {/Helvetica cf} 2 16 0 0.500 -488 264 label
--1.000 0 -872 -256 generic::circle
-(5V ON) {/Helvetica cf} 2 16 0 0.500 -928 -240 label
+-1.000 0 -952 -288 generic::circle
+(5V ON) {/Helvetica cf} 2 16 0 0.500 -976 -272 label
+-1.000 90 -736 -96 ::LED
+1.000 90 -896 -128 analog::resistor
+(5V) {/Helvetica cf} 2 16 0 0.500 -976 -112 label
+1 1.000 -672 160 -672 192 -576 192 3 polygon
+1 1.000 -672 32 -672 0 2 polygon
+1 1.000 -672 -96 -672 -192 2 polygon
+1 1.000 -704 -128 -672 -128 2 polygon
+1 1.000 -832 -128 -800 -128 2 polygon
+-1.000 0 -952 -128 generic::circle
+1 1.000 -960 -288 -752 -288 2 polygon
+(220) {/Helvetica cf} 2 16 0 0.500 -920 -84 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -920 -104 label
 pgsave restore showpage
 
 %%Trailer
