@@ -150,6 +150,14 @@ to the shift register.  The number is decoded and inverted to produce
 a single high signal for one valve.
 All outputs are disabled when OA is clear.}\label{fig:control}
 \end{figure}
+
+On power up it is important that the valves remain off.
+However the shift register chip (74HC194) does not guarantee
+the output state during power up.
+To resolve this issue a simple RC circuit is used to to hold the
+chip in the clear state for several seconds after power
+on (Figure \ref{fig:control}).
+
 % }}}
 
 % {{{ Driver

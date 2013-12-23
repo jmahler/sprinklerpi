@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: control.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Sun Dec 22 14:40:28 2013
+%%CreationDate: Sun Dec 22 19:44:35 2013
 %%Pages: 1
-%%BoundingBox: 68 68 436 427
+%%BoundingBox: 68 68 577 427
 %%DocumentNeededResources: font Helvetica Helvetica-Bold Times-Roman 
 %%EndComments
 %%BeginProlog
@@ -260,13 +260,42 @@ begingate
 endgate
 } def
 
+/analog::resistor {
+begingate
+1 1.000 0 64 0 36 2 polygon
+1 1.000 0 -64 0 -36 2 polygon
+1 1.000 0 -36 14 -30 -14 -18 14 -6 -14 6 14 18 -14 30 0 36 8 polygon
+1.000 0.000 0.000 scb
+(r.1) {/Times-Roman cf} 2 9 0 1.000 0 64 pinlabel
+(r.2) {/Times-Roman cf} 2 13 0 1.000 0 -64 pinlabel
+0.180 0.545 0.341 scb
+(spice:R%i %pr.1 %pr.2 1.0K) {/Times-Roman cf} 2 0 0 1.000 -208 -160 infolabel
+(sim:r %pr.1 %pr.2) {/Times-Roman cf} 2 0 0 1.000 -208 -208 infolabel
+endgate
+} def
+
+/analog::polarized {
+begingate
+1 1.000 0 -64 0 -6 2 polygon
+1 1.000 0 64 0 6 2 polygon
+1 1.000 -32 6 32 6 2 polygon
+1 1.000 0 -80 74 66.000 114.000 xcarc
+1.000 0.000 0.000 scb
+(t) {/Times-Roman cf} 2 9 0 1.000 0 64 pinlabel
+(b) {/Times-Roman cf} 2 13 0 1.000 0 -64 pinlabel
+0.180 0.545 0.341 scb
+(spice:C%i %pt %pb 1.0P) {/Times-Roman cf} 2 0 0 1.000 -208 -160 infolabel
+(sim:e %pt %pb %pb) {/Times-Roman cf} 2 0 0 1.000 -208 -208 infolabel
+endgate
+} def
+
 
 %%EndSetup
 
 %%Page: control 1
 %%PageOrientation: Portrait
 /pgsave save def bop
-% 32.00 1.00 gridspace
+% 32.00 8.00 gridspace
 1.0000 inchscale
 2.6000 setlinewidth 2176 504 translate
 
@@ -331,10 +360,19 @@ endgate
 1 1.000 -1248 448 -1248 480 2 polygon
 1 1.000 -1184 448 -1184 480 2 polygon
 1 1.000 -1728 608 -1696 608 2 polygon
-(5V) {/Helvetica cf} 2 21 0 0.500 -1057 495 label
+(5V) {/Helvetica cf} 2 21 0 0.500 -718 513 label
 1 1.000 -1056 480 -1056 448 2 polygon
 1.000 0 -1376 0 generic::dot
 1.000 0 -1568 224 generic::dot
+0.800 0 -928 384 analog::gnd
+(220k) {/Helvetica cf} 2 21 0 0.500 -801 543 label
+1 1.000 -1056 480 -1056 512 -864 512 3 polygon
+1.000 270 -800 512 analog::resistor
+(33 uF) {/Helvetica cf} 2 21 0 0.500 -865 447 label
+(hold clear \(< 2V\)) {/Helvetica cf} 2 16 0 0.500 -820 458 label
+(for 2 sec) {/Helvetica cf} 2 16 0 0.500 -820 442 label
+1.000 0 -928 448 analog::polarized
+2 1.000 -984 568 -984 408 -648 408 -648 568 4 polygon
 pgsave restore showpage
 
 %%Trailer
