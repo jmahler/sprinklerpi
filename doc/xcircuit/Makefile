@@ -8,4 +8,4 @@ all: power_supply.pdf driver.pdf control.pdf
 	epspdf $<
 
 clean:
-	-rm -f power_supply.pdf driver.pdf
+	-rm -f power_supply.pdf driver.pdf control.pdf
