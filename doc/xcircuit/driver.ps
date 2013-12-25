@@ -1,9 +1,9 @@
-%!PS-Adobe-3.0 EPSF-3.0
+%!PS-Adobe-3.0
 %%Title: driver.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Sun Dec 22 20:39:21 2013
-%%Pages: 1
-%%BoundingBox: 68 68 388 358
+%%CreationDate: Wed Dec 25 11:40:56 2013
+%%Pages: 2
+%%BoundingBox: 0 0 612 792
 %%DocumentNeededResources: font Helvetica Times-Roman 
 %%EndComments
 %%BeginProlog
@@ -305,21 +305,42 @@ begingate
 endgate
 } def
 
+/generic::dot {
+% trivial
+begingate
+248 1.000 0 0 6 0.000 360.000 xcarc
+1.000 0.000 0.000 scb
+(x) {/Times-Roman cf} 2 29 0 1.000 0 0 pinlabel
+endgate
+} def
+
+/generic::jumper {
+% trivial
+begingate
+1 1.000 0 0 10 -90.000 90.000 xcarc
+1 1.000 0 10 0 16 2 polygon
+1 1.000 0 -10 0 -16 2 polygon
+1.000 0.000 0.000 scb
+(a) {/Times-Roman cf} 2 1 0 1.000 0 16 pinlabel
+(a) {/Times-Roman cf} 2 13 0 1.000 0 -16 pinlabel
+endgate
+} def
+
 
 %%EndSetup
 
-%%Page: power_supply 1
+%%Page: driver_one 1
 %%PageOrientation: Portrait
 /pgsave save def bop
 1.0000 inchscale
 2.6000 setlinewidth 1168 624 translate
 
-1.000 0 -256 32 analog::acsource
-(24 VAC) {/Helvetica cf} 2 16 0 0.500 -216 64 label
+1.000 0 -256 -96 analog::acsource
+(24 VAC) {/Helvetica cf} 2 16 0 0.500 -216 -72 label
 0.800 0 -672 -384 analog::gnd
 (2N7000) {/Helvetica cf} 2 16 0 0.500 -784 -208 label
 1.000 0 -512 -128 analog::inductor
-1.000 0 -512 64 analog::resistor
+1.000 0 -256 96 analog::resistor
 1.000 0 -528 224 ::triac
 1.000 0 -672 96 analog::resistor
 -1.000 180 -672 -48 analog::diode
@@ -329,16 +350,14 @@ endgate
 1 1.000 -672 -320 -672 -384 2 polygon
 (sprinkler) {/Helvetica cf} 2 16 0 0.500 -464 -96 label
 (valve) {/Helvetica cf} 2 16 0 0.500 -464 -120 label
-1 1.000 -512 -192 -512 -256 -256 -256 -256 -32 4 polygon
-1 1.000 -256 96 -256 320 -512 320 -512 256 4 polygon
 0 1.000 -544 -64 -544 -192 -480 -192 -480 -64 4 polygon
 (270 mA) {/Helvetica cf} 2 16 0 0.500 -440 -280 label
-(10) {/Helvetica cf} 2 16 0 0.500 -480 88 label
-(1W) {/Helvetica cf} 2 16 0 0.500 -480 64 label
+(10) {/Helvetica cf} 2 16 0 0.500 -232 112 label
+(1W) {/Helvetica cf} 2 16 0 0.500 -232 88 label
 (1k) {/Helvetica cf} 2 16 0 0.500 -648 120 label
 (1/4 W) {/Helvetica cf} 2 16 0 0.500 -648 96 label
 (0-5V DC) {/Helvetica cf} 2 16 0 0.500 -976 -248 label
-(Q401E4) {/Helvetica cf} 2 16 0 0.500 -488 264 label
+(Q401E4) {/Helvetica cf} 2 16 0 0.500 -600 256 label
 -1.000 0 -952 -288 generic::circle
 (5V ON) {/Helvetica cf} 2 16 0 0.500 -976 -272 label
 -1.000 90 -736 -96 ::LED
@@ -353,6 +372,149 @@ endgate
 1 1.000 -960 -288 -752 -288 2 polygon
 (220) {/Helvetica cf} 2 16 0 0.500 -920 -84 label
 (1/4 W) {/Helvetica cf} 2 16 0 0.500 -920 -104 label
+1 1.000 -512 128 -512 0 2 polygon
+1 1.000 -512 -192 -512 -256 -256 -256 -256 -160 4 polygon
+1 1.000 -256 -32 -256 32 2 polygon
+1 1.000 -256 160 -256 320 -512 320 -512 256 4 polygon
+pgsave restore showpage
+
+%%Page: driver_mult 2
+%%PageOrientation: Portrait
+/pgsave save def bop
+1.0000 inchscale
+2.6000 setlinewidth 1400 422 translate
+
+1.000 0 288 0 analog::acsource
+(24 VAC) {/Helvetica cf} 2 16 0 0.500 328 24 label
+1.000 0 288 192 analog::resistor
+(10) {/Helvetica cf} 2 16 0 0.500 312 208 label
+(1W) {/Helvetica cf} 2 16 0 0.500 312 184 label
+1.000 0 -288 -96 analog::inductor
+1.000 0 -304 256 ::triac
+1 1.000 -288 -32 -288 32 2 polygon
+1 1.000 -288 160 -288 224 2 polygon
+(sprinkler) {/Helvetica cf} 2 16 0 0.500 -240 -64 label
+(valve) {/Helvetica cf} 2 16 0 0.500 -240 -88 label
+0 1.000 -320 -32 -320 -160 -256 -160 -256 -32 4 polygon
+(Q401E4) {/Helvetica cf} 2 16 0 0.500 -376 288 label
+1 1.000 -288 160 -288 32 2 polygon
+1.000 0 64 -96 analog::inductor
+1.000 0 48 256 ::triac
+1 1.000 64 -32 64 32 2 polygon
+1 1.000 64 160 64 224 2 polygon
+(sprinkler) {/Helvetica cf} 2 16 0 0.500 112 -64 label
+(valve) {/Helvetica cf} 2 16 0 0.500 112 -88 label
+0 1.000 32 -32 32 -160 96 -160 96 -32 4 polygon
+(Q401E4) {/Helvetica cf} 2 16 0 0.500 -24 288 label
+1 1.000 64 160 64 32 2 polygon
+1 1.000 -288 288 -288 352 2 polygon
+1 1.000 64 288 64 352 2 polygon
+1 1.000 -288 -224 -288 -160 2 polygon
+1 1.000 64 -224 64 -160 2 polygon
+1.000 0 -288 352 generic::dot
+1.000 0 64 352 generic::dot
+1.000 0 64 -224 generic::dot
+1.000 0 -288 -224 generic::dot
+(#2) {/Helvetica cf} 2 16 0 0.500 -240 -120 label
+(#1) {/Helvetica cf} 2 16 0 0.500 112 -120 label
+1.000 180 -64 352 generic::jumper
+1.000 180 -416 352 generic::jumper
+1 1.000 -352 224 -416 224 -416 336 3 polygon
+1 1.000 0 224 -64 224 -64 336 3 polygon
+0.800 0 -224 512 analog::gnd
+1.000 0 -64 432 analog::resistor
+1.000 0 -64 528 analog::diode
+(1k) {/Helvetica cf} 2 16 0 0.500 -40 456 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -40 432 label
+(0-5V DC) {/Helvetica cf} 2 16 0 0.500 -160 952 label
+(5V ON) {/Helvetica cf} 2 16 0 0.500 -160 928 label
+-1.000 180 -32 608 ::LED
+1.000 180 -64 736 analog::resistor
+(5V) {/Helvetica cf} 2 16 0 0.500 120 796 label
+-1.000 180 88 800 generic::circle
+(220) {/Helvetica cf} 2 16 0 0.500 -136 748 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -136 728 label
+1.000 90 -160 616 ::nmos3
+1 1.000 -96 576 -64 576 2 polygon
+1.000 0 -64 576 generic::dot
+1.000 180 -192 800 generic::jumper
+1 1.000 -192 656 -192 784 2 polygon
+1.000 0 -64 800 generic::dot
+-1.000 90 -192 912 generic::circle
+1 1.000 -192 816 -192 912 2 polygon
+(#1) {/Helvetica cf} 2 16 0 0.500 -200 944 label
+(2N7000) {/Helvetica cf} 2 16 0 0.500 -280 608 label
+1 1.000 -224 512 -224 576 2 polygon
+(2.0 V) {/Helvetica cf} 2 16 0 0.500 -24 636 label
+(0.7 V) {/Helvetica cf} 2 16 0 0.500 -24 524 label
+0.800 0 -576 512 analog::gnd
+1.000 0 -416 432 analog::resistor
+1.000 0 -416 528 analog::diode
+(1k) {/Helvetica cf} 2 16 0 0.500 -392 456 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -392 432 label
+-1.000 180 -384 608 ::LED
+1.000 180 -416 736 analog::resistor
+(220) {/Helvetica cf} 2 16 0 0.500 -488 748 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -488 728 label
+1.000 90 -512 616 ::nmos3
+1 1.000 -448 576 -416 576 2 polygon
+1.000 0 -416 576 generic::dot
+1.000 180 -544 800 generic::jumper
+1 1.000 -544 656 -544 784 2 polygon
+1.000 0 -416 800 generic::dot
+-1.000 90 -544 912 generic::circle
+1 1.000 -544 816 -544 912 2 polygon
+(#2) {/Helvetica cf} 2 16 0 0.500 -552 944 label
+(2N7000) {/Helvetica cf} 2 16 0 0.500 -632 608 label
+1 1.000 -576 512 -576 576 2 polygon
+(2.0 V) {/Helvetica cf} 2 16 0 0.500 -376 636 label
+(0.7 V) {/Helvetica cf} 2 16 0 0.500 -376 524 label
+0.800 0 -1152 512 analog::gnd
+1.000 0 -992 432 analog::resistor
+1.000 0 -992 528 analog::diode
+(1k) {/Helvetica cf} 2 16 0 0.500 -968 456 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -968 432 label
+-1.000 180 -960 608 ::LED
+1.000 180 -992 736 analog::resistor
+(220) {/Helvetica cf} 2 16 0 0.500 -1064 748 label
+(1/4 W) {/Helvetica cf} 2 16 0 0.500 -1064 728 label
+1.000 90 -1088 616 ::nmos3
+1 1.000 -1024 576 -992 576 2 polygon
+1.000 0 -992 576 generic::dot
+1 1.000 -1120 656 -1120 784 2 polygon
+-1.000 90 -1120 912 generic::circle
+1 1.000 -1120 816 -1120 912 2 polygon
+(#8) {/Helvetica cf} 2 16 0 0.500 -1128 944 label
+(2N7000) {/Helvetica cf} 2 16 0 0.500 -1208 608 label
+1 1.000 -1152 512 -1152 576 2 polygon
+(2.0 V) {/Helvetica cf} 2 16 0 0.500 -952 636 label
+(0.7 V) {/Helvetica cf} 2 16 0 0.500 -952 524 label
+1.000 0 -864 -96 analog::inductor
+1.000 0 -880 256 ::triac
+1 1.000 -864 -32 -864 32 2 polygon
+1 1.000 -864 160 -864 224 2 polygon
+(sprinkler) {/Helvetica cf} 2 16 0 0.500 -816 -64 label
+(valve) {/Helvetica cf} 2 16 0 0.500 -816 -88 label
+0 1.000 -896 -32 -896 -160 -832 -160 -832 -32 4 polygon
+(Q401E4) {/Helvetica cf} 2 16 0 0.500 -952 288 label
+1 1.000 -864 160 -864 32 2 polygon
+1 1.000 -864 288 -864 352 2 polygon
+1 1.000 -864 -224 -864 -160 2 polygon
+(#8) {/Helvetica cf} 2 16 0 0.500 -816 -120 label
+1 1.000 -928 224 -992 224 -992 336 3 polygon
+1.000 0 -608 64 generic::dot
+1.000 0 -576 64 generic::dot
+1.000 0 -544 64 generic::dot
+1.000 0 -800 608 generic::dot
+1.000 0 -768 608 generic::dot
+1.000 0 -736 608 generic::dot
+1 1.000 -992 336 -992 368 2 polygon
+1 1.000 -1120 784 -1120 816 2 polygon
+1 1.000 -64 800 -992 800 2 polygon
+1 1.000 288 256 288 352 -864 352 3 polygon
+1 1.000 -64 800 96 800 2 polygon
+1 1.000 288 -64 288 -224 -864 -224 3 polygon
+1 1.000 288 64 288 128 2 polygon
 pgsave restore showpage
 
 %%Trailer

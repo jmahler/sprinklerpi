@@ -1,5 +1,11 @@
 
-all: power_supply.pdf driver.pdf control.pdf
+all: power_supply.pdf driver_one.pdf driver_mult.pdf control.pdf
+
+driver_one.ps: driver.ps
+	psselect -p1 $< $@
+
+driver_mult.ps: driver.ps
+	psselect -p2 $< $@
 
 %.eps: %.ps
 	ps2epsi $< $@
@@ -9,3 +15,4 @@ all: power_supply.pdf driver.pdf control.pdf
 
 clean:
 	-rm -f power_supply.pdf driver.pdf control.pdf
+	-rm -f driver_one.ps driver_mult.ps
