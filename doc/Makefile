@@ -12,7 +12,6 @@ all: main.pdf
 
 # pdf, with links
 main.pdf: main.tex main.bib
-	cd svg; make
 	pdflatex $<
 	biber main
 	pdflatex $<

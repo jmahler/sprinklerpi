@@ -1,7 +1,7 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: power_supply.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Tue Dec 24 00:45:09 2013
+%%CreationDate: Wed Dec 25 10:39:44 2013
 %%Pages: 1
 %%BoundingBox: 68 68 724 367
 %%DocumentNeededResources: font Helvetica Helvetica-Bold Times-Roman 
@@ -308,7 +308,7 @@ endgate
 
 /::Mc34063A {
 begingate
-(MC34063A) {/Helvetica-Bold cf} 2 16 270 0.800 12 -72 label
+(MC34063A) {/Helvetica-Bold cf} 2 16 90 0.800 -8 76 label
 (3) {/Helvetica cf} 2 23 0 0.500 40 -32 label
 (2) {/Helvetica cf} 2 23 0 0.500 40 32 label
 (4) {/Helvetica cf} 2 23 0 0.500 40 -96 label
@@ -380,7 +380,7 @@ endgate
 %%Page: power_supply 1
 %%PageOrientation: Portrait
 /pgsave save def bop
-% 32.00 8.00 gridspace
+% 32.00 2.00 gridspace
 1.0000 inchscale
 2.6000 setlinewidth 664 708 translate
 
@@ -394,11 +394,10 @@ endgate
 1 1.000 -352 192 -352 256 -192 256 3 polygon
 1 1.000 -352 64 -352 -32 -192 -32 3 polygon
 (24 VAC) {/Helvetica cf} 2 16 0 0.500 368 216 label
-(12 VAC) {/Helvetica cf} 2 16 270 0.500 -16 0 label
 1.000 0 384 256 generic::circle
 1.000 0 384 192 generic::circle
-(12 VAC) {/Helvetica cf} 2 16 270 0.500 -16 160 label
 -1.000 90 64 96 generic::jumper
+(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 224 label
 1 1.000 48 96 0 96 2 polygon
 1 1.000 80 96 288 96 2 polygon
 1 1.000 288 -96 64 -96 64 -32 3 polygon
@@ -463,6 +462,7 @@ endgate
 1.000 0 384 0 generic::dot
 1.000 0 288 -96 generic::dot
 1.000 0 640 -16 generic::dot
+(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 72 label
 pgsave restore showpage
 
 %%Trailer
