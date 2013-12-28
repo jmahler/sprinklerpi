@@ -44,61 +44,66 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <assert.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <unistd.h>
-
-// choose device for your chip enable (CE0, CE1) 
-char dev[] = "/dev/spidev0.0";
-//char dev[] = "/dev/spidev0.1";
+#include <errno.h>
 
 int main(int argc, char* argv[]) {
 
-	char usage[] = "usage: water [0-8]";
 	int fd;
 	int n;
 	char cmd;
+	// choose device for your chip enable (CE0, CE1) 
+	char dev[] = "/dev/spidev0.0";
+	//char dev[] = "/dev/spidev0.1";
+	ssize_t ret;
 
-	assert(1 == sizeof(cmd));
+	// Get arguments, valve number
+	if (1 == argc) {
+		n = 0;  // no arg, turn all off
+	} else if (2 == argc) {
+		n = atoi(argv[1]);
 
-	if (!(argc >= 1 && argc <= 2)) {
-		printf("%s\n", usage);
+		// Check for valid valve number
+		if (n < 0) {
+			fprintf(stderr, "Negative valve number is invalid.\n");
+			return 1;
+		} else if (n > 8) {
+			fprintf(stderr, "Valve numbers larger than 8 are not supported.\n");
+			return 1;
+		}
+	} else {
+		fprintf(stderr, "usage: %s [0-8]\n", argv[0]);
 		return 1;
 	}
 
 	fd = open(dev, O_WRONLY);
 	if (-1 == fd) {
-		perror("open");
-		return 1;
-	}
-
-	n = 0;  // default all off
-	if (2 == argc) {
-		n = atoi(argv[1]);
-	}
-	
-	if (n < 0 || n > 8) {
-		printf("invalid command\n");
-		printf("%s\n", usage);
+		fprintf(stderr, "Unable to open '%s': %s\n", dev, strerror(errno));
 		return 1;
 	}
 
 	//       command
 	//  7      4 3     1      0
 	// +--------+-------+------+
-	// |  X     | valve | en_n |
+	// | unused | valve | en_n |
 	// +--------+-------+------+
 	//
-
 	if (0 == n) {
-		cmd = 1;  // disable all
+		cmd = 1;  // disable all, en_n = 1
 	} else {
-		cmd = (n - 1) << 1;  // enable #
+		cmd = (n - 1) << 1;  // valve # (0 offset), en_n = 0
 	}
 
-	write(fd, &cmd, sizeof(cmd));
+	ret = write(fd, &cmd, sizeof(cmd));
+	if (ret == -1) {
+		fprintf(stderr, "Unable to write '%s': %s\n", dev, strerror(errno));
+		close(fd);
+		return 1;
+	}
 
 	close(fd);
 
