@@ -1,0 +1,216 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:sprinklerpi
+LIBS:sprinklerpi-cache
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 11 11
+Title ""
+Date "29 dec 2013"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L MOSFET_N Q1
+U 1 1 52BF6749
+P 5250 3950
+AR Path="/52C10EE6/52BF6749" Ref="Q1"  Part="1" 
+AR Path="/52C0B96B/52BF6749" Ref="Q2"  Part="1" 
+AR Path="/52C0B96C/52BF6749" Ref="Q3"  Part="1" 
+AR Path="/52C10EE5/52BF6749" Ref="Q4"  Part="1" 
+AR Path="/52BF98D7/52BF6749" Ref="Q5"  Part="1" 
+AR Path="/52C10EE9/52BF6749" Ref="Q6"  Part="1" 
+AR Path="/52C10EE8/52BF6749" Ref="Q7"  Part="1" 
+AR Path="/52C10EE7/52BF6749" Ref="Q8"  Part="1" 
+F 0 "Q8" H 5260 4120 60  0000 R CNN
+F 1 "MOSFET_N" H 5260 3800 60  0000 R CNN
+F 2 "~" H 5250 3950 60  0000 C CNN
+F 3 "~" H 5250 3950 60  0000 C CNN
+	1    5250 3950
+	0    1    1    0   
+$EndComp
+$Comp
+L LED D1
+U 1 1 52BF677B
+P 5750 3500
+AR Path="/52C10EE6/52BF677B" Ref="D1"  Part="1" 
+AR Path="/52C0B96B/52BF677B" Ref="D7"  Part="1" 
+AR Path="/52C0B96C/52BF677B" Ref="D8"  Part="1" 
+AR Path="/52C10EE5/52BF677B" Ref="D9"  Part="1" 
+AR Path="/52BF98D7/52BF677B" Ref="D10"  Part="1" 
+AR Path="/52C10EE9/52BF677B" Ref="D11"  Part="1" 
+AR Path="/52C10EE8/52BF677B" Ref="D12"  Part="1" 
+AR Path="/52C10EE7/52BF677B" Ref="D13"  Part="1" 
+F 0 "D13" H 5750 3600 50  0000 C CNN
+F 1 "LED" H 5750 3400 50  0000 C CNN
+F 2 "~" H 5750 3500 60  0000 C CNN
+F 3 "~" H 5750 3500 60  0000 C CNN
+	1    5750 3500
+	0    1    1    0   
+$EndComp
+$Comp
+L R R3
+U 1 1 52BF678A
+P 5750 2600
+AR Path="/52C10EE6/52BF678A" Ref="R3"  Part="1" 
+AR Path="/52C0B96B/52BF678A" Ref="R8"  Part="1" 
+AR Path="/52C0B96C/52BF678A" Ref="R10"  Part="1" 
+AR Path="/52C10EE5/52BF678A" Ref="R12"  Part="1" 
+AR Path="/52BF98D7/52BF678A" Ref="R14"  Part="1" 
+AR Path="/52C10EE9/52BF678A" Ref="R16"  Part="1" 
+AR Path="/52C10EE8/52BF678A" Ref="R18"  Part="1" 
+AR Path="/52C10EE7/52BF678A" Ref="R20"  Part="1" 
+F 0 "R20" V 5830 2600 40  0000 C CNN
+F 1 "220" V 5757 2601 40  0000 C CNN
+F 2 "~" V 5680 2600 30  0000 C CNN
+F 3 "~" H 5750 2600 30  0000 C CNN
+	1    5750 2600
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR014
+U 1 1 52BF679B
+P 5750 2000
+AR Path="/52C10EE6/52BF679B" Ref="#PWR014"  Part="1" 
+AR Path="/52C0B96B/52BF679B" Ref="#PWR024"  Part="1" 
+AR Path="/52C0B96C/52BF679B" Ref="#PWR026"  Part="1" 
+AR Path="/52C10EE5/52BF679B" Ref="#PWR028"  Part="1" 
+AR Path="/52BF98D7/52BF679B" Ref="#PWR030"  Part="1" 
+AR Path="/52C10EE9/52BF679B" Ref="#PWR032"  Part="1" 
+AR Path="/52C10EE8/52BF679B" Ref="#PWR034"  Part="1" 
+AR Path="/52C10EE7/52BF679B" Ref="#PWR036"  Part="1" 
+F 0 "#PWR036" H 5750 2090 20  0001 C CNN
+F 1 "+5V" H 5750 2090 30  0000 C CNN
+F 2 "" H 5750 2000 60  0000 C CNN
+F 3 "" H 5750 2000 60  0000 C CNN
+	1    5750 2000
+	1    0    0    -1  
+$EndComp
+$Comp
+L R R4
+U 1 1 52BF67C2
+P 5750 4600
+AR Path="/52C10EE6/52BF67C2" Ref="R4"  Part="1" 
+AR Path="/52C0B96B/52BF67C2" Ref="R9"  Part="1" 
+AR Path="/52C0B96C/52BF67C2" Ref="R11"  Part="1" 
+AR Path="/52C10EE5/52BF67C2" Ref="R13"  Part="1" 
+AR Path="/52BF98D7/52BF67C2" Ref="R15"  Part="1" 
+AR Path="/52C10EE9/52BF67C2" Ref="R17"  Part="1" 
+AR Path="/52C10EE8/52BF67C2" Ref="R19"  Part="1" 
+AR Path="/52C10EE7/52BF67C2" Ref="R21"  Part="1" 
+F 0 "R21" V 5830 4600 40  0000 C CNN
+F 1 "1k" V 5757 4601 40  0000 C CNN
+F 2 "~" V 5680 4600 30  0000 C CNN
+F 3 "~" H 5750 4600 30  0000 C CNN
+	1    5750 4600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 3700 5750 4350
+Wire Wire Line
+	5450 4050 5750 4050
+Connection ~ 5750 4050
+Wire Wire Line
+	5750 2850 5750 3300
+$Comp
+L GND #PWR015
+U 1 1 52BF67F6
+P 4850 4450
+AR Path="/52C10EE6/52BF67F6" Ref="#PWR015"  Part="1" 
+AR Path="/52C0B96B/52BF67F6" Ref="#PWR025"  Part="1" 
+AR Path="/52C0B96C/52BF67F6" Ref="#PWR027"  Part="1" 
+AR Path="/52C10EE5/52BF67F6" Ref="#PWR029"  Part="1" 
+AR Path="/52BF98D7/52BF67F6" Ref="#PWR031"  Part="1" 
+AR Path="/52C10EE9/52BF67F6" Ref="#PWR033"  Part="1" 
+AR Path="/52C10EE8/52BF67F6" Ref="#PWR035"  Part="1" 
+AR Path="/52C10EE7/52BF67F6" Ref="#PWR037"  Part="1" 
+F 0 "#PWR037" H 4850 4450 30  0001 C CNN
+F 1 "GND" H 4850 4380 30  0001 C CNN
+F 2 "" H 4850 4450 60  0000 C CNN
+F 3 "" H 4850 4450 60  0000 C CNN
+	1    4850 4450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5050 4050 4850 4050
+Wire Wire Line
+	4850 4050 4850 4450
+Wire Wire Line
+	5750 2350 5750 2000
+$Comp
+L TRIAC U3
+U 1 1 52BF68B3
+P 6700 5250
+AR Path="/52C10EE6/52BF68B3" Ref="U3"  Part="1" 
+AR Path="/52C0B96B/52BF68B3" Ref="U5"  Part="1" 
+AR Path="/52C0B96C/52BF68B3" Ref="U6"  Part="1" 
+AR Path="/52C10EE5/52BF68B3" Ref="U7"  Part="1" 
+AR Path="/52BF98D7/52BF68B3" Ref="U8"  Part="1" 
+AR Path="/52C10EE9/52BF68B3" Ref="U9"  Part="1" 
+AR Path="/52C10EE8/52BF68B3" Ref="U10"  Part="1" 
+AR Path="/52C10EE7/52BF68B3" Ref="U11"  Part="1" 
+F 0 "U11" H 6450 5600 70  0000 C CNN
+F 1 "TRIAC" H 6400 5000 60  0000 C CNN
+F 2 "~" H 6700 5250 60  0000 C CNN
+F 3 "~" H 6700 5250 60  0000 C CNN
+	1    6700 5250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5750 4850 5750 5450
+Wire Wire Line
+	5750 5450 6200 5450
+Wire Wire Line
+	6700 4650 7400 4650
+Wire Wire Line
+	6700 5500 6700 5750
+Wire Wire Line
+	6700 5750 7400 5750
+Wire Wire Line
+	5250 3750 5250 3150
+Wire Wire Line
+	5250 3150 4550 3150
+Text HLabel 4550 3150 0    60   Input ~ 0
+CTL
+Text HLabel 7400 4650 2    60   BiDi ~ 0
+DRV_A
+Text HLabel 7400 5750 2    60   BiDi ~ 0
+DRV_B
+Wire Wire Line
+	6700 4650 6700 4850
+$EndSCHEMATC
