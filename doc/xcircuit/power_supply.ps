@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: power_supply.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Wed Dec 25 10:39:44 2013
+%%CreationDate: Sun Dec 29 23:12:40 2013
 %%Pages: 1
-%%BoundingBox: 68 68 724 367
+%%BoundingBox: 68 68 857 367
 %%DocumentNeededResources: font Helvetica Helvetica-Bold Times-Roman 
 %%EndComments
 %%BeginProlog
@@ -363,14 +363,29 @@ begingate
 endgate
 } def
 
-/::zener\040diode {
+/::Schottky\040Diode {
 begingate
 248 1.000 -18 -16 0 16 18 -16 3 polygon
 1 1.000 0 -48 0 -16 2 polygon
 1 1.000 0 48 0 16 2 polygon
 1 1.000 -18 16 18 16 2 polygon
-1 1.000 18 16 22 22 2 polygon
-1 1.000 -18 16 -22 10 2 polygon
+1 1.000 -18 16 -18 10 -12 10 3 polygon
+1 1.000 18 16 18 22 12 22 3 polygon
+endgate
+} def
+
+/analog::capacitor {
+begingate
+1 1.000 0 -64 0 -6 2 polygon
+1 1.000 0 64 0 6 2 polygon
+1 1.000 -32 6 32 6 2 polygon
+1 1.000 -32 -6 32 -6 2 polygon
+1.000 0.000 0.000 scb
+(c.1) {/Times-Roman cf} 2 9 0 1.000 0 64 pinlabel
+(c.2) {/Times-Roman cf} 2 13 0 1.000 0 -64 pinlabel
+0.180 0.545 0.341 scb
+(spice:C%i %pc.1 %pc.2 1.0P) {/Times-Roman cf} 2 0 0 1.000 -208 -160 infolabel
+(sim:c %pc.1 %pc.2) {/Times-Roman cf} 2 0 0 1.000 -208 -208 infolabel
 endgate
 } def
 
@@ -380,7 +395,7 @@ endgate
 %%Page: power_supply 1
 %%PageOrientation: Portrait
 /pgsave save def bop
-% 32.00 2.00 gridspace
+% 32.00 8.00 gridspace
 1.0000 inchscale
 2.6000 setlinewidth 664 708 translate
 
@@ -411,7 +426,6 @@ endgate
 1 1.000 768 -144 800 -144 800 -160 3 polygon
 1.000 0 880 -144 analog::polarized
 (470 pF) {/Helvetica cf} 2 16 0 0.500 896 -184 label
-1.000 0 1024 -144 ::zener\040diode
 (1N5819) {/Helvetica cf} 2 16 0 0.500 1040 -112 label
 1 1.000 768 48 800 48 800 96 640 96 640 48 672 48 6 polygon
 1 1.000 672 -16 640 -16 640 48 3 polygon
@@ -422,7 +436,7 @@ endgate
 1 1.000 672 -96 608 -96 608 -176 544 -176 4 polygon
 1 1.000 544 -32 544 -16 640 -16 3 polygon
 (100 uF) {/Helvetica cf} 2 16 0 0.500 472 -264 label
-1.000 0 1200 -320 generic::circle
+1.000 0 1506 -320 generic::circle
 0.600 0 544 -288 analog::gnd
 0.600 0 640 -480 analog::gnd
 1.000 0 1152 -144 analog::inductor
@@ -439,20 +453,19 @@ endgate
 1 1.000 1152 -208 1152 -320 800 -320 3 polygon
 1.000 0 1152 -416 analog::polarized
 1 1.000 1152 -352 1152 -320 2 polygon
-(470 uF) {/Helvetica cf} 2 16 0 0.500 1168 -456 label
+(182 uF) {/Helvetica cf} 2 16 0 0.500 1168 -456 label
 0.600 0 1152 -480 analog::gnd
-(3.8k) {/Helvetica cf} 2 16 0 0.500 720 -352 label
-(1.2k) {/Helvetica cf} 2 16 0 0.500 664 -416 label
-(0.33) {/Helvetica cf} 2 16 0 0.500 480 -96 label
+(6.6k) {/Helvetica cf} 2 16 0 0.500 720 -352 label
+(2.2k) {/Helvetica cf} 2 16 0 0.500 664 -416 label
+(0.25) {/Helvetica cf} 2 16 0 0.500 480 -96 label
 (+) {/Helvetica cf} 2 16 0 0.500 896 -128 label
 (+) {/Helvetica cf} 2 16 0 0.500 560 -208 label
 1.000 0 544 -176 generic::dot
 1.000 0 640 -320 generic::dot
 1.000 0 1024 -16 generic::dot
 1.000 0 1152 -320 generic::dot
-1 1.000 1200 -320 1152 -320 2 polygon
-(5V) {/Helvetica cf} 2 16 0 0.500 1232 -312 label
-(1A) {/Helvetica cf} 2 16 0 0.500 1234 -331 label
+(5V) {/Helvetica cf} 2 16 0 0.500 1538 -312 label
+(600 mA) {/Helvetica cf} 2 16 0 0.500 1540 -331 label
 1 1.000 544 -176 416 -176 416 0 384 0 4 polygon
 0.600 0 160 -160 analog::gnd
 1 1.000 160 -112 160 -160 2 polygon
@@ -463,6 +476,22 @@ endgate
 1.000 0 288 -96 generic::dot
 1.000 0 640 -16 generic::dot
 (12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 72 label
+(R1) {/Helvetica cf} 2 16 0 0.500 590 -420 label
+(R2) {/Helvetica cf} 2 16 0 0.500 718 -298 label
+(CT) {/Helvetica cf} 2 16 0 0.500 842 -186 label
+(Co) {/Helvetica cf} 2 16 0 0.500 1104 -458 label
+1.000 90 1312 -320 analog::inductor
+(1.0 uF) {/Helvetica cf} 2 16 0 0.500 1456 -456 label
+0.600 0 1440 -480 analog::gnd
+1 1.000 1154 -320 1248 -320 2 polygon
+1 1.000 1376 -320 1506 -320 2 polygon
+1 1.000 1440 -354 1440 -320 2 polygon
+1.000 0 1440 -320 generic::dot
+1.000 0 1024 -144 ::Schottky\040Diode
+(1.0 uH) {/Helvetica cf} 2 16 0 0.500 1280 -288 label
+(15V) {/Helvetica cf} 2 16 0 0.500 424 -136 label
+(1A) {/Helvetica cf} 2 16 0 0.500 424 -160 label
+1.000 0 1440 -416 analog::capacitor
 pgsave restore showpage
 
 %%Trailer

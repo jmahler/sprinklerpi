@@ -211,27 +211,27 @@ The power supply must provide two different voltages: 24 volts AC and
 5 volts DC.
 The sprinkler valves require 24 volts AC at 270 mA.
 The RasberryPI and other digital logic require 5 volts DC with a
-maximum draw of 1 A
+maximum draw of 600 mA
 \footnote{The current draw of the RasberryPI was determined
 experimentally to be approximately 500 mA.}.
 These voltages must be created from a 110 volt AC input.
 
 The 24 volts AC can be achieved using a split pole transformer
-where it is split in to two 12 volt AC outputs.
+with two 12 volt AC outputs.
 By bridging the center of these two 12 volt AC outputs
 a combined 24 volt AC output is available.
 
 A switching voltage regulator, the MC34063A, was chosen for
 the 5 volt supply.
-It has a high efficiency (85\%) and consumes less power than an
-equivalent linear regulator such as the LM7805.
+It has a greater efficiency than a linear regulator such as
+the LM7805.
 
-The circuit which achieves all of these design constraints is
+The circuit which achieves all of these design requirements is
 shown in Figure \ref{fig:power}.
 
 \begin{figure}[hbp]
 \centering
-\includegraphics[angle=90,scale=0.95]{xcircuit/power_supply}
+\includegraphics[angle=90,scale=0.80]{xcircuit/power_supply}
 \caption{Power supply circuit. A 24 volt AC and 5 volt DC output are
 provided.  The 5 volt DC is provided by the MC340363A switching
 regulator.}\label{fig:power}

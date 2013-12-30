@@ -37,7 +37,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 11
 Title "Control Logic"
-Date "29 dec 2013"
+Date "30 dec 2013"
 Rev ""
 Comp ""
 Comment1 ""
@@ -206,7 +206,7 @@ F2 "110AC_A" I L 1500 1350 60
 F3 "110AC_B" I L 1500 1450 60 
 F4 "24AC_A" O R 2500 1350 60 
 F5 "24AC_B" O R 2500 1450 60 
-F6 "5V_1A" O R 2500 1600 60 
+F6 "5V_600mA" O R 2500 1600 60 
 $EndSheet
 $Comp
 L R R1
