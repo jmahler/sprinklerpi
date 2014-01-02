@@ -1,9 +1,9 @@
 %!PS-Adobe-3.0 EPSF-3.0
 %%Title: power_supply.ps
 %%Creator: XCircuit v3.7 rev55
-%%CreationDate: Sun Dec 29 23:12:40 2013
+%%CreationDate: Thu Jan  2 14:39:54 2014
 %%Pages: 1
-%%BoundingBox: 68 68 857 367
+%%BoundingBox: 68 68 857 370
 %%DocumentNeededResources: font Helvetica Helvetica-Bold Times-Roman 
 %%EndComments
 %%BeginProlog
@@ -389,6 +389,21 @@ begingate
 endgate
 } def
 
+/fuses::fuse {
+begingate
+1 1.500 40 0 6 0.000 360.000 xcarc
+1 1.500 -40 0 6 0.000 360.000 xcarc
+1 1.500 0 -48 0 48 -28 0 28 0 spline
+1 1.500 -34 0 -28 0 2 polygon
+1 1.500 28 0 34 0 2 polygon
+1 1.000 -48 0 -64 0 2 polygon
+1 1.000 48 0 64 0 2 polygon
+1.000 0.000 0.000 scb
+(in.m) {/Times-Roman cf} 2 7 0 1.000 64 0 pinlabel
+(in.p) {/Times-Roman cf} 2 7 0 1.000 -64 0 pinlabel
+endgate
+} def
+
 
 %%EndSetup
 
@@ -399,26 +414,24 @@ endgate
 1.0000 inchscale
 2.6000 setlinewidth 664 708 translate
 
-1.000 0 -352 128 analog::acsource
-1 1.000 -32 256 384 256 2 polygon
-1 1.000 -32 -32 64 -32 64 192 384 192 4 polygon
-(110 VAC) {/Helvetica cf} 2 16 0 0.500 -472 136 label
-1.000 0 -112 112 ::transformer
-1 1.000 -32 96 0 96 0 128 -32 128 4 polygon
-1.000 0 0 96 generic::dot
-1 1.000 -352 192 -352 256 -192 256 3 polygon
-1 1.000 -352 64 -352 -32 -192 -32 3 polygon
-(24 VAC) {/Helvetica cf} 2 16 0 0.500 368 216 label
-1.000 0 384 256 generic::circle
-1.000 0 384 192 generic::circle
--1.000 90 64 96 generic::jumper
-(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 224 label
-1 1.000 48 96 0 96 2 polygon
-1 1.000 80 96 288 96 2 polygon
-1 1.000 288 -96 64 -96 64 -32 3 polygon
--1.000 180 288 0 ::rectifier
-1.000 180 160 -96 generic::jumper
-1 1.000 192 0 160 0 160 -80 3 polygon
+1.000 0 -352 -48 analog::acsource
+(110 VAC) {/Helvetica cf} 2 16 0 0.500 -472 -40 label
+1.000 0 -112 -64 ::transformer
+1 1.000 -32 -80 0 -80 0 -48 -32 -48 4 polygon
+1.000 0 0 -80 generic::dot
+1 1.000 -352 16 -352 80 -192 80 3 polygon
+1 1.000 -352 -112 -352 -208 -192 -208 3 polygon
+(24 VAC) {/Helvetica cf} 2 16 0 0.500 536 184 label
+1.000 0 544 224 generic::circle
+1.000 0 544 160 generic::circle
+-1.000 90 64 -80 generic::jumper
+(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 48 label
+1 1.000 48 -80 0 -80 2 polygon
+1 1.000 80 -80 288 -80 2 polygon
+1 1.000 288 -272 64 -272 64 -208 3 polygon
+-1.000 180 288 -176 ::rectifier
+1.000 180 160 -272 generic::jumper
+1 1.000 192 -176 160 -176 160 -256 3 polygon
 1.000 0 720 -48 ::Mc34063A
 1.000 0 640 -416 analog::resistor
 1.000 90 736 -320 analog::resistor
@@ -426,7 +439,6 @@ endgate
 1 1.000 768 -144 800 -144 800 -160 3 polygon
 1.000 0 880 -144 analog::polarized
 (470 pF) {/Helvetica cf} 2 16 0 0.500 896 -184 label
-(1N5819) {/Helvetica cf} 2 16 0 0.500 1040 -112 label
 1 1.000 768 48 800 48 800 96 640 96 640 48 672 48 6 polygon
 1 1.000 672 -16 640 -16 640 48 3 polygon
 1.000 0 640 48 generic::dot
@@ -435,12 +447,12 @@ endgate
 1.000 0 544 -96 analog::resistor
 1 1.000 672 -96 608 -96 608 -176 544 -176 4 polygon
 1 1.000 544 -32 544 -16 640 -16 3 polygon
-(100 uF) {/Helvetica cf} 2 16 0 0.500 472 -264 label
+(2200 uF) {/Helvetica cf} 2 16 0 0.500 456 -264 label
 1.000 0 1506 -320 generic::circle
 0.600 0 544 -288 analog::gnd
 0.600 0 640 -480 analog::gnd
 1.000 0 1152 -144 analog::inductor
-(220 uH) {/Helvetica cf} 2 16 0 0.500 1184 -112 label
+(220 uH) {/Helvetica cf} 2 16 0 0.500 1184 -136 label
 1 1.000 768 -80 880 -80 2 polygon
 1 1.000 800 -224 800 -160 2 polygon
 0.600 0 880 -224 analog::gnd
@@ -466,16 +478,15 @@ endgate
 1.000 0 1152 -320 generic::dot
 (5V) {/Helvetica cf} 2 16 0 0.500 1538 -312 label
 (600 mA) {/Helvetica cf} 2 16 0 0.500 1540 -331 label
-1 1.000 544 -176 416 -176 416 0 384 0 4 polygon
-0.600 0 160 -160 analog::gnd
-1 1.000 160 -112 160 -160 2 polygon
-1.000 0 64 -32 generic::dot
-1.000 0 192 0 generic::dot
-1.000 0 288 96 generic::dot
-1.000 0 384 0 generic::dot
-1.000 0 288 -96 generic::dot
+0.600 0 160 -336 analog::gnd
+1 1.000 160 -288 160 -336 2 polygon
+1.000 0 64 -208 generic::dot
+1.000 0 192 -176 generic::dot
+1.000 0 288 -80 generic::dot
+1.000 0 384 -176 generic::dot
+1.000 0 288 -272 generic::dot
 1.000 0 640 -16 generic::dot
-(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 72 label
+(12 VAC) {/Helvetica cf} 2 16 90 0.500 -24 -104 label
 (R1) {/Helvetica cf} 2 16 0 0.500 590 -420 label
 (R2) {/Helvetica cf} 2 16 0 0.500 718 -298 label
 (CT) {/Helvetica cf} 2 16 0 0.500 842 -186 label
@@ -488,10 +499,33 @@ endgate
 1 1.000 1440 -354 1440 -320 2 polygon
 1.000 0 1440 -320 generic::dot
 1.000 0 1024 -144 ::Schottky\040Diode
-(1.0 uH) {/Helvetica cf} 2 16 0 0.500 1280 -288 label
-(15V) {/Helvetica cf} 2 16 0 0.500 424 -136 label
-(1A) {/Helvetica cf} 2 16 0 0.500 424 -160 label
+(1.0 uH) {/Helvetica cf} 2 16 0 0.500 1280 -264 label
+(1N4001) {/Helvetica cf} 2 16 0 0.500 352 -256 label
 1.000 0 1440 -416 analog::capacitor
+1 1.000 384 -176 544 -176 2 polygon
+1 1.000 -32 -208 64 -208 2 polygon
+1 1.000 -32 80 0 80 0 224 384 224 4 polygon
+1 1.000 64 -208 64 160 384 160 3 polygon
+(1.6A max) {/Helvetica cf} 2 16 0 0.500 128 232 label
+(0.8A max) {/Helvetica cf} 2 16 0 0.500 128 -72 label
+(20V) {/Helvetica cf} 2 16 0 0.500 456 -288 label
+(10V) {/Helvetica cf} 2 16 0 0.500 1168 -480 label
+(10V) {/Helvetica cf} 2 16 0 0.500 896 -208 label
+(F24-800-C2-B) {/Helvetica cf} 2 16 0 0.500 -192 -248 label
+(1A) {/Helvetica cf} 2 16 0 0.500 352 -280 label
+(Ipk = 1.2A) {/Helvetica cf} 2 16 0 0.500 872 -8 label
+(1/4W) {/Helvetica cf} 2 16 0 0.500 720 -376 label
+(1/4W) {/Helvetica cf} 2 16 0 0.500 664 -440 label
+(1/4W) {/Helvetica cf} 2 16 0 0.500 480 -120 label
+(10V) {/Helvetica cf} 2 16 0 0.500 1456 -480 label
+(20V) {/Helvetica cf} 2 16 0 0.500 1048 -136 label
+(2A) {/Helvetica cf} 2 16 0 0.500 1048 -160 label
+(2A) {/Helvetica cf} 2 16 0 0.500 1184 -160 label
+(1A) {/Helvetica cf} 2 16 0 0.500 1280 -288 label
+1.000 0 448 224 fuses::fuse
+1 1.000 384 160 544 160 2 polygon
+1 1.000 512 224 544 224 2 polygon
+(1.0A) {/Helvetica cf} 2 16 0 0.500 424 256 label
 pgsave restore showpage
 
 %%Trailer
