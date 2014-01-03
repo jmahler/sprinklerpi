@@ -239,6 +239,41 @@ regulator.}\label{fig:power}
 
 % }}}
 
+% {{{ Expansion
+\clearpage
+\section{Expansion}
+\label{sec:expansion}
+
+The RasberryPI uses SPI to communicate with the
+control logic which which drives the sprinkler valve.
+Each group can control up to eight valves with one valve
+being on at a time.
+A daisy chain arrangement can be constructed to allow SPI
+to communicate with more than one group as shown in
+Figure \ref{fig:expansion_spi}.
+
+\begin{figure}[hbp]
+\centering
+\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_spi}
+\caption{Daisy chain SPI configuration to for multiple control groups.
+}\label{fig:expansion_spi}
+\end{figure}
+
+With the current power supply design it is limited to three
+control groups as shown in Figure \ref{fig:expansion_current}.
+Each group can control eight valves with one being on at a time.
+This makes a total of 24 valves where three can be on at once.
+
+\begin{figure}[hbp]
+\centering
+\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_current}
+\caption{With a power supply capable of 1 amp at 24 volts AC and
+600 mA at 5 volts DC a maximum of three control groups and one
+Rasberry PI can be driven.}\label{fig:expansion_current}
+\end{figure}
+
+% }}}
+
 \pagebreak
 \printbibliography
 
