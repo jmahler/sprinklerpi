@@ -1,0 +1,460 @@
+EESchema Schematic File Version 2
+LIBS:power
+LIBS:device
+LIBS:transistors
+LIBS:conn
+LIBS:linear
+LIBS:regul
+LIBS:74xx
+LIBS:cmos4000
+LIBS:adc-dac
+LIBS:memory
+LIBS:xilinx
+LIBS:special
+LIBS:microcontrollers
+LIBS:dsp
+LIBS:microchip
+LIBS:analog_switches
+LIBS:motorola
+LIBS:texas
+LIBS:intel
+LIBS:audio
+LIBS:interface
+LIBS:digital-audio
+LIBS:philips
+LIBS:display
+LIBS:cypress
+LIBS:siliconi
+LIBS:opto
+LIBS:atmel
+LIBS:contrib
+LIBS:valves
+LIBS:sprinklerpi
+EELAYER 27 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 10
+Title "Control Logic"
+Date "3 jan 2014"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L CONN_4 P2
+U 1 1 52BF3CA6
+P 1500 3000
+F 0 "P2" V 1450 3000 50  0000 C CNN
+F 1 "CONN_4" V 1550 3000 50  0000 C CNN
+F 2 "~" H 1500 3000 60  0000 C CNN
+F 3 "~" H 1500 3000 60  0000 C CNN
+	1    1500 3000
+	-1   0    0    1   
+$EndComp
+$Sheet
+S 2150 2650 1600 1000
+U 52BF392A
+F0 "control" 50
+F1 "control.sch" 50
+F2 "MISO" I L 2150 2850 60 
+F3 "MOSI" O L 2150 2950 60 
+F4 "SCLK" O L 2150 3050 60 
+F5 "CE0" O L 2150 3150 60 
+F6 "VD_1" O R 3750 2800 60 
+F7 "VD_2" O R 3750 2900 60 
+F8 "VD_3" O R 3750 3000 60 
+F9 "VD_4" O R 3750 3100 60 
+F10 "VD_5" O R 3750 3200 60 
+F11 "VD_6" O R 3750 3300 60 
+F12 "VD_7" O R 3750 3400 60 
+F13 "VD_8" O R 3750 3500 60 
+F14 "5V" I L 2150 3450 60 
+$EndSheet
+Wire Wire Line
+	1850 2850 2150 2850
+Wire Wire Line
+	1850 2950 2150 2950
+Wire Wire Line
+	1850 3050 2150 3050
+Wire Wire Line
+	1850 3150 2150 3150
+Wire Wire Line
+	3750 2800 4800 2800
+Wire Wire Line
+	3750 2900 4800 2900
+Wire Wire Line
+	3750 3000 4700 3000
+Wire Wire Line
+	3750 3100 4600 3100
+Wire Wire Line
+	3750 3200 5000 3200
+Wire Wire Line
+	3750 3300 4500 3300
+Wire Wire Line
+	3750 3400 4400 3400
+Wire Wire Line
+	3750 3500 4300 3500
+$Comp
+L PWR_FLAG #FLG01
+U 1 1 52BF56F5
+P 700 7300
+F 0 "#FLG01" H 700 7395 30  0001 C CNN
+F 1 "PWR_FLAG" H 700 7480 30  0000 C CNN
+F 2 "" H 700 7300 60  0000 C CNN
+F 3 "" H 700 7300 60  0000 C CNN
+	1    700  7300
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR02
+U 1 1 52BF5770
+P 700 7600
+F 0 "#PWR02" H 700 7600 30  0001 C CNN
+F 1 "GND" H 700 7530 30  0001 C CNN
+F 2 "" H 700 7600 60  0000 C CNN
+F 3 "" H 700 7600 60  0000 C CNN
+	1    700  7600
+	1    0    0    -1  
+$EndComp
+$Comp
+L PWR_FLAG #FLG03
+U 1 1 52BF581F
+P 1000 7300
+F 0 "#FLG03" H 1000 7395 30  0001 C CNN
+F 1 "PWR_FLAG" H 1000 7480 30  0000 C CNN
+F 2 "" H 1000 7300 60  0000 C CNN
+F 3 "" H 1000 7300 60  0000 C CNN
+	1    1000 7300
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR04
+U 1 1 52BF5827
+P 1000 7600
+F 0 "#PWR04" H 1000 7690 20  0001 C CNN
+F 1 "+5V" H 1000 7690 30  0000 C CNN
+F 2 "" H 1000 7600 60  0000 C CNN
+F 3 "" H 1000 7600 60  0000 C CNN
+	1    1000 7600
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	1000 7300 1000 7600
+Wire Wire Line
+	700  7300 700  7600
+$Sheet
+S 5200 2450 800  500 
+U 52C10EE6
+F0 "driver_1" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 5200 2700 60 
+F3 "DRV_A" B R 6000 2600 60 
+F4 "DRV_B" B R 6000 2800 60 
+$EndSheet
+Text Notes 1750 2700 2    60   ~ 0
+RasberryPI
+Wire Wire Line
+	4800 2900 4800 3500
+Wire Wire Line
+	4800 3500 5200 3500
+Wire Wire Line
+	4700 3000 4700 4300
+Wire Wire Line
+	4700 4300 5200 4300
+Wire Wire Line
+	4600 3100 4600 5100
+Wire Wire Line
+	4600 5100 5200 5100
+Wire Wire Line
+	4800 2800 4800 2700
+Wire Wire Line
+	4800 2700 5200 2700
+$Comp
+L R R1
+U 1 1 52C0C8A4
+P 6300 1750
+F 0 "R1" V 6380 1750 40  0000 C CNN
+F 1 "10" V 6307 1751 40  0000 C CNN
+F 2 "~" V 6230 1750 30  0000 C CNN
+F 3 "~" H 6300 1750 30  0000 C CNN
+	1    6300 1750
+	1    0    0    -1  
+$EndComp
+$Comp
+L +5V #PWR05
+U 1 1 52C0F8A5
+P 2050 4400
+F 0 "#PWR05" H 2050 4490 20  0001 C CNN
+F 1 "+5V" H 2050 4490 30  0000 C CNN
+F 2 "" H 2050 4400 60  0000 C CNN
+F 3 "" H 2050 4400 60  0000 C CNN
+	1    2050 4400
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5000 3200 5000 3100
+Wire Wire Line
+	5000 3100 6850 3100
+Wire Wire Line
+	4500 3300 4500 3900
+Wire Wire Line
+	4500 3900 6850 3900
+Wire Wire Line
+	4400 3400 4400 4700
+Wire Wire Line
+	4400 4700 6850 4700
+Wire Wire Line
+	4300 3500 4300 5500
+Wire Wire Line
+	4300 5500 6850 5500
+$Comp
+L CONN_8 P4
+U 1 1 52C146CF
+P 6750 6750
+F 0 "P4" V 6700 6750 60  0000 C CNN
+F 1 "CONN_8" V 6800 6750 60  0000 C CNN
+F 2 "~" H 6750 6750 60  0000 C CNN
+F 3 "~" H 6750 6750 60  0000 C CNN
+	1    6750 6750
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	6300 3400 6000 3400
+Wire Wire Line
+	6300 4200 6000 4200
+Connection ~ 6300 3400
+Wire Wire Line
+	6300 5000 6000 5000
+Connection ~ 6300 4200
+Wire Wire Line
+	8000 2600 8000 5400
+Connection ~ 6300 2600
+Wire Wire Line
+	8000 3800 7650 3800
+Wire Wire Line
+	8000 4600 7650 4600
+Connection ~ 8000 3800
+Wire Wire Line
+	8000 5400 7650 5400
+Connection ~ 8000 4600
+Wire Wire Line
+	6400 2800 6400 6400
+Wire Wire Line
+	6500 6400 6500 3600
+Wire Wire Line
+	6500 3600 6000 3600
+Wire Wire Line
+	6600 6400 6600 4400
+Wire Wire Line
+	6600 4400 6000 4400
+Wire Wire Line
+	6700 6400 6700 5200
+Wire Wire Line
+	6700 5200 6000 5200
+Wire Wire Line
+	7650 3200 8100 3200
+Wire Wire Line
+	8100 3200 8100 5900
+Wire Wire Line
+	8100 5900 6800 5900
+Wire Wire Line
+	6800 5900 6800 6400
+Wire Wire Line
+	7650 4000 8200 4000
+Wire Wire Line
+	8200 4000 8200 6000
+Wire Wire Line
+	8200 6000 6900 6000
+Wire Wire Line
+	6900 6000 6900 6400
+Wire Wire Line
+	7650 4800 8300 4800
+Wire Wire Line
+	8300 4800 8300 6100
+Wire Wire Line
+	8300 6100 7000 6100
+Wire Wire Line
+	7000 6100 7000 6400
+Wire Wire Line
+	7650 5600 8400 5600
+Wire Wire Line
+	8400 5600 8400 6200
+Wire Wire Line
+	8400 6200 7100 6200
+Wire Wire Line
+	7100 6200 7100 6400
+$Comp
+L CONN_8 P5
+U 1 1 52C1A92D
+P 9500 6750
+F 0 "P5" V 9450 6750 60  0000 C CNN
+F 1 "CONN_8" V 9550 6750 60  0000 C CNN
+F 2 "~" H 9500 6750 60  0000 C CNN
+F 3 "~" H 9500 6750 60  0000 C CNN
+	1    9500 6750
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	9150 950  9150 6400
+Wire Wire Line
+	9250 6400 9250 6300
+Wire Wire Line
+	9150 6300 9850 6300
+Connection ~ 9150 6300
+Wire Wire Line
+	9350 6300 9350 6400
+Connection ~ 9250 6300
+Wire Wire Line
+	9450 6300 9450 6400
+Connection ~ 9350 6300
+Wire Wire Line
+	9550 6300 9550 6400
+Connection ~ 9450 6300
+Wire Wire Line
+	9650 6300 9650 6400
+Connection ~ 9550 6300
+Wire Wire Line
+	9750 6300 9750 6400
+Connection ~ 9650 6300
+Wire Wire Line
+	9850 6300 9850 6400
+Connection ~ 9750 6300
+Wire Wire Line
+	6000 2600 8000 2600
+Wire Wire Line
+	6000 2800 6400 2800
+$Sheet
+S 5200 3250 800  500 
+U 52C0B96B
+F0 "driver_2" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 5200 3500 60 
+F3 "DRV_A" B R 6000 3400 60 
+F4 "DRV_B" B R 6000 3600 60 
+$EndSheet
+$Sheet
+S 5200 4050 800  500 
+U 52C0B96C
+F0 "driver_3" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 5200 4300 60 
+F3 "DRV_A" B R 6000 4200 60 
+F4 "DRV_B" B R 6000 4400 60 
+$EndSheet
+$Sheet
+S 5200 4850 800  500 
+U 52C10EE5
+F0 "driver_4" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 5200 5100 60 
+F3 "DRV_A" B R 6000 5000 60 
+F4 "DRV_B" B R 6000 5200 60 
+$EndSheet
+$Sheet
+S 6850 3650 800  500 
+U 52BF98D7
+F0 "driver_6" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 6850 3900 60 
+F3 "DRV_A" B R 7650 3800 60 
+F4 "DRV_B" B R 7650 4000 60 
+$EndSheet
+$Sheet
+S 6850 4450 800  500 
+U 52C10EE9
+F0 "driver_7" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 6850 4700 60 
+F3 "DRV_A" B R 7650 4600 60 
+F4 "DRV_B" B R 7650 4800 60 
+$EndSheet
+$Sheet
+S 6850 5250 800  500 
+U 52C10EE8
+F0 "driver_8" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 6850 5500 60 
+F3 "DRV_A" B R 7650 5400 60 
+F4 "DRV_B" B R 7650 5600 60 
+$EndSheet
+$Sheet
+S 6850 2850 800  500 
+U 52C10EE7
+F0 "driver_5" 50
+F1 "driver.sch" 50
+F2 "CTL" I L 6850 3100 60 
+F3 "DRV_A" B R 7650 3000 60 
+F4 "DRV_B" B R 7650 3200 60 
+$EndSheet
+Wire Wire Line
+	7650 3000 8000 3000
+Connection ~ 8000 3000
+$Comp
+L CONN_2 P1
+U 1 1 52C74B9B
+P 1450 1050
+F 0 "P1" V 1400 1050 40  0000 C CNN
+F 1 "CONN_2" V 1500 1050 40  0000 C CNN
+F 2 "~" H 1450 1050 60  0000 C CNN
+F 3 "~" H 1450 1050 60  0000 C CNN
+	1    1450 1050
+	-1   0    0    1   
+$EndComp
+Text Notes 1600 850  2    60   ~ 0
+24V AC
+$Comp
+L CONN_2 P3
+U 1 1 52C74D39
+P 1500 4500
+F 0 "P3" V 1450 4500 40  0000 C CNN
+F 1 "CONN_2" V 1550 4500 40  0000 C CNN
+F 2 "~" H 1500 4500 60  0000 C CNN
+F 3 "~" H 1500 4500 60  0000 C CNN
+	1    1500 4500
+	-1   0    0    1   
+$EndComp
+Text Notes 1600 4300 2    60   ~ 0
+5V DC
+$Comp
+L GND #PWR06
+U 1 1 52C75328
+P 2050 4800
+F 0 "#PWR06" H 2050 4800 30  0001 C CNN
+F 1 "GND" H 2050 4730 30  0001 C CNN
+F 2 "" H 2050 4800 60  0000 C CNN
+F 3 "" H 2050 4800 60  0000 C CNN
+	1    2050 4800
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1850 4600 2050 4600
+Wire Wire Line
+	2050 4600 2050 4800
+Wire Wire Line
+	1850 4400 2050 4400
+Wire Wire Line
+	1800 1150 6300 1150
+Wire Wire Line
+	6300 1150 6300 1500
+Wire Wire Line
+	1800 950  9150 950 
+Wire Wire Line
+	6300 2000 6300 5000
+$Comp
+L +5V #PWR07
+U 1 1 52C77918
+P 1850 3450
+F 0 "#PWR07" H 1850 3540 20  0001 C CNN
+F 1 "+5V" H 1850 3540 30  0000 C CNN
+F 2 "" H 1850 3450 60  0000 C CNN
+F 3 "" H 1850 3450 60  0000 C CNN
+	1    1850 3450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	1850 3450 2150 3450
+$EndSCHEMATC
