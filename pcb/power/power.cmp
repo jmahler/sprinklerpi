@@ -1,0 +1,150 @@
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Sun 05 Jan 2014 09:22:26 PM PST
+
+BeginCmp
+TimeStamp = /52C723E7;
+Reference = C1;
+ValeurCmp = 2200 uF;
+IdModule  = Elko_vert_DM16_RM7-5_CopperClear;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C723F7;
+Reference = C2;
+ValeurCmp = 470 pF;
+IdModule  = Elko_vert_DM10_RM5_CopperClear;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72412;
+Reference = C3;
+ValeurCmp = 180 uF;
+IdModule  = Elko_vert_DM10_RM5_CopperClear;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72452;
+Reference = C4;
+ValeurCmp = 1.0 uF;
+IdModule  = Elko_vert_DM10_RM5_CopperClear;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C723AA;
+Reference = D1;
+ValeurCmp = DIODE;
+IdModule  = D5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72398;
+Reference = D2;
+ValeurCmp = DIODE;
+IdModule  = D5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C7239E;
+Reference = D3;
+ValeurCmp = DIODE;
+IdModule  = D5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C723A4;
+Reference = D4;
+ValeurCmp = DIODE;
+IdModule  = D5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72406;
+Reference = D5;
+ValeurCmp = 1N5819;
+IdModule  = D5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C720F9;
+Reference = F1;
+ValeurCmp = 1A;
+IdModule  = FUSE_HOLDER_100057;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C02A8A;
+Reference = K1;
+ValeurCmp = CONN_3;
+IdModule  = bornier3_V;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C7240C;
+Reference = L1;
+ValeurCmp = 220uH;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C7244C;
+Reference = L2;
+ValeurCmp = 1.0 uH;
+IdModule  = R5;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C767AF;
+Reference = P1;
+ValeurCmp = CONN_3X2;
+IdModule  = pin_array_3x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C76BB5;
+Reference = P2;
+ValeurCmp = CONN_3X2;
+IdModule  = pin_array_3x2;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72B3E;
+Reference = R1;
+ValeurCmp = 0.5M;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C723D8;
+Reference = R2;
+ValeurCmp = 0.25;
+IdModule  = R4;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C7241F;
+Reference = R3;
+ValeurCmp = 2.2k;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C72425;
+Reference = R4;
+ValeurCmp = 6.6k;
+IdModule  = R3;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C7238E;
+Reference = T1;
+ValeurCmp = TRANSFO4;
+IdModule  = TRANSFORMER_F24-800-C2;
+EndCmp
+
+BeginCmp
+TimeStamp = /52C723B6;
+Reference = U1;
+ValeurCmp = MC34063;
+IdModule  = DIP-8__300;
+EndCmp
+
+EndListe
