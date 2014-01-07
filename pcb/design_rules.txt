@@ -1,0 +1,27 @@
+
+PCB trace widths
+----------------
+
+The following widths were used from PCB design.
+When permissible larger sizes than needed were used.
+
+temp rise: 10 degC
+
+0.5A	5  mil (0.005")
+1A		12 mil (0.012")
+1.2A	15 mil (0.015")
+1.6A	23 mil (0.023")
+2A		30 mil (0.030")
+
+Osh Park Design Rules
+---------------------
+
+http://oshpark.com/guidelines
+
+6 mil (0.006") minimum trace width
+6 mil (0.006") minimum spacing
+at least 15 mil (0.015") clearance from traces to the edge of board
+13 mil (0.013") minimum drill size
+7 mil (0.007") minimum annular ring
+
+These values were configured in the Kicad PCB design rules.

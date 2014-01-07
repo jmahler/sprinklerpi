@@ -29,6 +29,7 @@ LIBS:opto
 LIBS:atmel
 LIBS:contrib
 LIBS:valves
+LIBS:local
 LIBS:power-cache
 EELAYER 27 0
 EELAYER END
@@ -36,7 +37,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Control Logic"
-Date "4 jan 2014"
+Date "6 jan 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -123,17 +124,6 @@ Wire Wire Line
 Wire Wire Line
 	1500 1850 1500 1950
 $Comp
-L TRANSFO4 T1
-U 1 1 52C7238E
-P 2050 2300
-F 0 "T1" H 2050 2550 70  0000 C CNN
-F 1 "TRANSFO4" H 2050 2000 70  0000 C CNN
-F 2 "~" H 2050 2300 60  0000 C CNN
-F 3 "~" H 2050 2300 60  0000 C CNN
-	1    2050 2300
-	-1   0    0    1   
-$EndComp
-$Comp
 L DIODE D2
 U 1 1 52C72398
 P 3500 2300
@@ -200,8 +190,6 @@ F 3 "~" H 6400 3700 60  0000 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2450 2500 2850 2500
-Wire Wire Line
 	3900 2300 3900 2500
 Wire Wire Line
 	3900 2900 3900 3500
@@ -211,7 +199,6 @@ Wire Wire Line
 	3300 3100 3100 3100
 Wire Wire Line
 	3100 2900 3100 3750
-Connection ~ 2850 2500
 Connection ~ 3900 3100
 Connection ~ 3100 3100
 Wire Wire Line
@@ -256,13 +243,13 @@ Wire Wire Line
 $Comp
 L CP C1
 U 1 1 52C723E7
-P 4900 2500
-F 0 "C1" H 4950 2600 40  0000 L CNN
-F 1 "2200 uF" H 4950 2400 40  0000 L CNN
-F 2 "~" H 5000 2350 30  0000 C CNN
-F 3 "~" H 4900 2500 300 0000 C CNN
-	1    4900 2500
-	-1   0    0    1   
+P 4900 2550
+F 0 "C1" H 4950 2650 40  0000 L CNN
+F 1 "2200 uF" H 4950 2450 40  0000 L CNN
+F 2 "~" H 5000 2400 30  0000 C CNN
+F 3 "~" H 4900 2550 300 0000 C CNN
+	1    4900 2550
+	-1   0    0    -1  
 $EndComp
 $Comp
 L GND #PWR08
@@ -275,12 +262,9 @@ F 3 "" H 4900 2900 60  0000 C CNN
 	1    4900 2900
 	1    0    0    -1  
 $EndComp
-Connection ~ 4900 2300
 Wire Wire Line
 	6400 2300 6400 3200
 Connection ~ 5450 2300
-Wire Wire Line
-	4900 2700 4900 2900
 $Comp
 L CP C2
 U 1 1 52C723F7
@@ -290,10 +274,8 @@ F 1 "470 pF" H 5400 4150 40  0000 L CNN
 F 2 "~" H 5450 4100 30  0000 C CNN
 F 3 "~" H 5350 4250 300 0000 C CNN
 	1    5350 4250
-	-1   0    0    1   
+	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	5350 4050 5350 3850
 Wire Wire Line
 	5350 3850 5550 3850
 $Comp
@@ -307,8 +289,6 @@ F 3 "" H 5350 4650 60  0000 C CNN
 	1    5350 4650
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5350 4450 5350 4650
 $Comp
 L ZENER D5
 U 1 1 52C72406
@@ -340,7 +320,7 @@ F 1 "180 uF" H 8500 5250 40  0000 L CNN
 F 2 "~" H 8550 5200 30  0000 C CNN
 F 3 "~" H 8450 5350 300 0000 C CNN
 	1    8450 5350
-	-1   0    0    1   
+	-1   0    0    -1  
 $EndComp
 $Comp
 L GND #PWR010
@@ -391,8 +371,6 @@ Wire Wire Line
 Wire Wire Line
 	7550 4950 7350 4950
 Connection ~ 7350 4950
-Wire Wire Line
-	8450 4450 8450 5150
 Connection ~ 8450 4950
 $Comp
 L GND #PWR011
@@ -405,8 +383,6 @@ F 3 "" H 8450 5850 60  0000 C CNN
 	1    8450 5850
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	8450 5550 8450 5850
 $Comp
 L GND #PWR012
 U 1 1 52C7243C
@@ -454,14 +430,12 @@ F 1 "1.0 uF" H 9950 5250 40  0000 L CNN
 F 2 "~" H 10000 5200 30  0000 C CNN
 F 3 "~" H 9900 5350 300 0000 C CNN
 	1    9900 5350
-	-1   0    0    1   
+	-1   0    0    -1  
 $EndComp
 Wire Wire Line
 	8050 4950 9000 4950
 Wire Wire Line
 	9600 4950 10750 4950
-Wire Wire Line
-	9900 5150 9900 4950
 Connection ~ 9900 4950
 $Comp
 L GND #PWR014
@@ -474,22 +448,10 @@ F 3 "" H 9900 5850 60  0000 C CNN
 	1    9900 5850
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	9900 5550 9900 5850
-Wire Wire Line
-	1300 2100 1650 2100
-Wire Wire Line
-	1300 2200 1500 2200
-Wire Wire Line
-	1500 2200 1500 2500
-Wire Wire Line
-	1500 2500 1650 2500
 Text Notes 5550 1450 2    60   ~ 0
 24V AC
 Wire Wire Line
-	2450 2300 3300 2300
-Wire Wire Line
-	3100 2500 3100 2300
+	3100 2300 3100 2500
 Connection ~ 3100 2300
 Wire Wire Line
 	3900 3500 2850 3500
@@ -611,4 +573,54 @@ Wire Wire Line
 Connection ~ 10650 5950
 Wire Wire Line
 	10550 5850 10550 5950
+$Comp
+L TRANSFORMER_F24-800-C2 T1
+U 1 1 52CB0ADB
+P 2050 2400
+F 0 "T1" H 2050 2800 70  0000 C CNN
+F 1 "TRANSFORMER_F24-800-C2" H 2150 2000 70  0000 C CNN
+F 2 "~" H 2050 2400 60  0000 C CNN
+F 3 "~" H 2050 2400 60  0000 C CNN
+	1    2050 2400
+	-1   0    0    -1  
+$EndComp
+Wire Wire Line
+	2450 2300 3300 2300
+Wire Wire Line
+	2500 2300 2500 2500
+Wire Wire Line
+	2500 2500 2450 2500
+Wire Wire Line
+	2450 2700 2850 2700
+Connection ~ 2850 2700
+Connection ~ 2500 2300
+Wire Wire Line
+	1300 2200 1550 2200
+Wire Wire Line
+	1550 2200 1550 2100
+Wire Wire Line
+	1550 2100 1650 2100
+Wire Wire Line
+	1300 2100 1450 2100
+Wire Wire Line
+	1450 2100 1450 2700
+Wire Wire Line
+	1450 2700 1650 2700
+Wire Wire Line
+	4900 2350 4900 2300
+Connection ~ 4900 2300
+Wire Wire Line
+	4900 2750 4900 2900
+Wire Wire Line
+	5350 4050 5350 3850
+Wire Wire Line
+	5350 4450 5350 4650
+Wire Wire Line
+	9900 5150 9900 4950
+Wire Wire Line
+	9900 5550 9900 5850
+Wire Wire Line
+	8450 4450 8450 5150
+Wire Wire Line
+	8450 5550 8450 5850
 $EndSCHEMATC
