@@ -25,3 +25,15 @@ at least 15 mil (0.015") clearance from traces to the edge of board
 7 mil (0.007") minimum annular ring
 
 These values were configured in the Kicad PCB design rules.
+
+Pad Sizes
+---------
+
+ID  				OD
+42 mil (0.042")		80 mil (0.080")
+
+Spacing
+-------
+
+100 mil (0.100")
+

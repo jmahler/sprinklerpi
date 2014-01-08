@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Mon 06 Jan 2014 03:46:18 PM PST
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Tue 07 Jan 2014 09:29:03 PM PST
 
 BeginCmp
 TimeStamp = /52C723E7;
@@ -81,7 +81,7 @@ BeginCmp
 TimeStamp = /52C7240C;
 Reference = L1;
 ValeurCmp = 220uH;
-IdModule  = R5;
+IdModule  = INDUCTOR_TORROID_VERT_086;
 EndCmp
 
 BeginCmp
