@@ -1,0 +1,247 @@
+
+% {{{ preamble
+
+\documentclass[12pt,letterpaper]{article}
+
+\usepackage{url}
+\usepackage{hyperref}
+
+\usepackage{graphicx}
+
+\usepackage{makeidx}
+\makeindex
+\usepackage[nottoc]{tocbibind}
+% like \index but prints the entry as well
+\newcommand{\pindex}[1]{#1\index{#1}}
+
+\usepackage{vmargin}  % make the margins a bit smaller
+\setmarginsrb{1.0in}{1.0in}{1.0in}{1.0in}{0in}{0.4in}{0.0in}{0.40in}
+
+\usepackage{setspace}
+
+\raggedright
+%\setlength{\parindent}{0.5in}
+%\noindent
+\usepackage{parskip}
+
+\usepackage{sectsty}
+\sectionfont{\large}
+
+% no numbers in bibliography, good
+\usepackage[backend=biber,autocite=footnote,
+			bibstyle=authortitle,citestyle=verbose-inote]{biblatex}
+
+\addbibresource{references.bib}
+
+% redefine first level enumerate
+\renewcommand*{\theenumi}{\thesection.\arabic{enumi}}
+\renewcommand*{\labelenumi}{\theenumi}
+% redefine second level enumerate
+\renewcommand*{\theenumii}{\theenumi.\arabic{enumii}}
+\renewcommand*{\labelenumii}{\theenumii}
+
+% }}}
+
+\begin{document}
+
+% {{{ title page
+
+\vspace*{1.0in}
+
+\centerline{\Large \textbf{SprinklerPI}}
+\centerline{(Requirements)}
+
+\vspace{0.5in}
+
+\begin{center}
+\begin{tabular}{c}
+Jeremiah Mahler \\
+EECE 490B, CSU Chico \\
+\today
+\end{tabular}
+\end{center}
+
+\thispagestyle{empty}
+
+\vfill
+
+% }}}
+
+\pagebreak
+\tableofcontents
+\addtocontents{toc}{~\hfill{Page}\par}
+\pagebreak
+
+% {{{ Project Overview
+\section{Project Overview}
+
+This project is a sprinkler timer for watering lawns and plants
+on a regular schedule.
+It is network accessible and can be configured through a web browser.
+The system is also expandable.
+It can control from one valve to several hundred valves.
+
+% users
+The primary user of this project would be a homeowner who has
+lawns or other plants that need watering on a regular schedule.
+Businesses with landscaping that needs watering could also use
+this system.
+
+The system will need to be installed by someone familiar with
+irrigation systems (timers and valves).
+Since this system is network accessible it will need to be initially
+configured by someone familiar with Ethernet and Wireless networks.
+
+After installation anyone should be capable of configuring the
+water schedule through the web based interface.
+
+% environmental impact
+This project has a positive environmental impact as a result of the
+more efficient use of water resources.
+
+It is estimated that this project will take four months to complete.
+It is estimated that the hardware will cost approximately \$225.
+
+% }}}
+
+\pagebreak
+
+% {{{ Features and Functions
+\section{Features and Functions}
+
+\begin{enumerate}
+\item Product shall be capable of driving residential grade sprinkler valves.
+	\begin{enumerate}
+	\item 24 volts AC control signal.
+	\item 270 mA rms current.
+	\item Maximum current draw should limited to no more than 300 mA.
+	\item Residential, $1/2"$ to $1"$ NPT size.
+	\end{enumerate}
+
+\item Product shall be expandable to control more valves.
+	\begin{enumerate}
+	\item Each control group shall allow eight valves.
+	\item For one control group only one valve can be on at a time.
+	\item It will support a minimum of one to three control groups
+		(8 to 24 valves).
+	\end{enumerate}
+
+\end{enumerate}
+% }}}
+
+% {{{ User Interface
+\section{User Interface}
+
+\begin{enumerate}
+\item Web based interface for all configuration/settings.
+	\begin{enumerate}
+	\item Setting timer schedules.
+	\item Manually starting/stopping valves.
+	\item Viewing history of valve run times.
+	\item User authentication.
+	\end{enumerate}
+\item Network configuration.
+	\begin{enumerate}
+	\item Configuration performed on Linux based Rasberry PI.
+	\item Standard ssh terminal access.
+	\end{enumerate}
+\item Hardware interface.
+	\begin{enumerate}
+	\item LED indicating when valve is on.
+	\item LED indicating when power is applied.
+	\item Manual shutoff of all valves.
+	\end{enumerate}
+\end{enumerate}
+
+% }}}
+
+% {{{ External Interface Requirements
+\pagebreak
+\section{External Interface Requirements}
+\begin{enumerate}
+\item Communication between the Linux computer (Rasberry PI) and
+		the control groups will be done using SPI.
+\item Expansion is supported by daisy chaining SPI.
+\end{enumerate}
+
+% }}}
+
+% {{{ Installation Requirements
+\section{Installation Requirements}
+\begin{enumerate}
+	\item LEDs must be provided to indicate when a valve is on.
+	\item LEDs should indicate when power is applied.
+	\item Terminals for checking primary voltages must be available.
+	\item PCB should clearly indicate voltages.
+\end{enumerate}
+% }}}
+
+% {{{ Design Constraints
+\section{Design Constraints}
+
+\begin{enumerate}
+	\item A Linux computer capable of communication over SPI.
+	\begin{enumerate}
+		\item Currently a RasberryPI\autocite{rpi} satisfies these requirements.
+	\end{enumerate}
+	\item All components should fit inside a standard timer box:
+		$9.25"$ x $10.75"$ x $3.25"$
+\end{enumerate}
+% }}}
+
+% {{{ Test Requirements
+\section{Test Requirements}
+
+\begin{enumerate}
+	\item 110 volt AC terminals accessible.
+	\item 24 volt AC terminals accessible.
+	\item 5 volt DC terminals accessible.
+	\item LEDs to indicate when a valve is on.
+\end{enumerate}
+% }}}
+
+% {{{ Packaging
+\section{Packaging}
+
+\begin{enumerate}
+	\item All components should mount to a backplane using standoffs.
+	\item All items should fit inside a standard sprinkler timer box.
+	\item All circuits should be manufactured to used PCBs.
+\end{enumerate}
+% }}}
+
+% {{{ Environmental Requirements
+\section{Environmental Requirements}
+
+\begin{enumerate}
+\item The product shall operate at temperatures from -40 degF
+		up to 150 degF.
+\item Push on connectors or ribbon cables can be used (no vibration).
+\item All components must tolerate high humidity environments without
+	degradation.
+\end{enumerate}
+% }}}
+
+% {{{ Power Supply Requirements
+\section{Power Supply Requirements}
+
+\begin{enumerate}
+	\item Power supply is from a 110 volts AC 15A circuit.
+	\item Provide 5 volts DC at 600 mA.
+	\begin{enumerate}
+		\item Current should be limited to no more than 1 A.
+	\end{enumerate}
+	\item Provide 24 volts AC at 1 A.
+	\begin{enumerate}
+		\item Should be fused at 1 A.
+	\end{enumerate}
+	\item RasberryPI (Linux) requires 5 volts at 500 mA.
+\end{enumerate}
+
+% }}}
+
+\pagebreak
+\printbibliography[heading=bibintoc]
+
+\end{document}
+
