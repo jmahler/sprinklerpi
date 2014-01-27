@@ -1,10 +1,10 @@
 
-all: main.pdf
+all: concept.pdf
 
-main.pdf: main.tex references.bib
-	pdflatex main.tex
-	biber main
-	pdflatex main.tex
+concept.pdf: concept.tex
+	pdflatex concept.tex
+	biber concept
+	pdflatex concept.tex
 
 clean:
 	-rm -f *.aux *.log *.blg *.bbl *.toc *.lof *.bcf

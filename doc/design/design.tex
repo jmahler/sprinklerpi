@@ -19,7 +19,7 @@
 
 \usepackage[backend=biber,autocite=footnote,
 	            bibstyle=authortitle,citestyle=verbose-inote]{biblatex}
-\addbibresource{main.bib}
+\addbibresource{refs.bib}
 \setlength\bibitemsep{1em}
 
 \usepackage[xindy,toc,nonumberlist]{glossaries}
@@ -64,6 +64,12 @@
 {
 	name={FIFO},
 	description={First in first out}.
+}
+
+\newglossaryentry{RFID}
+{
+	name={RFID},
+	description={Radio frequency identification}.
 }
 
 
@@ -503,6 +509,7 @@ Figure \ref{fig:timer-daemon} gives a flowchart of its operation.
 % {{{ Future Directions
 \section{Future Directions}
 
+\FloatBarrier
 \subsection{Automated Hardware Testing}
 
 Currently the operation of the system can be manually
@@ -536,7 +543,8 @@ The tester is connected in place of the actual sprinkler valves.}
 \label{fig:tester}
 \end{figure}
 
-\subsection{i2c Bus}
+\FloatBarrier
+\subsection{i2c, LIN, CAN Bus}
 
 The SPI bus will become cumbersome to use with many
 controllers.
@@ -544,7 +552,6 @@ In a daisy chain configuration each controller requires
 eight bits.
 As an example, with ten controllers an eighty bit command
 would have to be sent.
-
 A more capable bus such as i2c, LIN or CAN might be a good alternative.
 
 \subsection{Internet of Things}
@@ -570,12 +577,30 @@ Internet of Things devices are typically auto-identified and easier
 to setup.
 It may be worthwhile to try and make the SprinklerPI system easier
 to configure and setup in this way.
-Perhaps a barcode on the device which maps to a url.
+Perhaps a bar code on the device which maps to a url.
 Then a phone could easily reach the interface for that device.
 
 More research is needed to see what characteristics of Internet of Things
 devices can be used.
 Or even whether one of the burgeoning protocols could be implemented.
+
+\subsection{Battery Backup}
+
+Most residential sprinkler systems have a 9 volt battery to keep power
+applied to prevent the schedules from being lost if the power briefly goes out.
+This system does not have this same need since data is written to flash
+on the Linux computer is kept during a power outage.
+
+The battery backup idea could be expanded in this case to make the
+system more robust.
+If the system could continue watering even when the power is out
+this could be a valuable feature beyond a standard sprinkler system.
+
+If a re-chargeable battery was used an appropriate charging circuit
+would need to be constructed.
+
+Since the valves require 24 volts AC this would need to be generated from
+DC as well.
 
 % }}}
 

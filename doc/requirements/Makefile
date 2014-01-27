@@ -1,14 +1,14 @@
 
-all: main.pdf
+all: requirements.pdf
 
-main.pdf: main.tex references.bib
-	pdflatex main.tex
-	biber main
-	pdflatex main.tex
+requirements.pdf: requirements.tex
+	pdflatex requirements.tex
+	biber requirements
+	pdflatex requirements.tex
 
-main-all.pdf: main.pdf
-	#pdftk ERD-cover.pdf main.pdf drawings/*.PDF cat output out.pdf
-	pdftk cover-page.pdf main.pdf cat output main-all.pdf
+requirements-all.pdf: requirements.pdf
+	#pdftk ERD-cover.pdf requirements.pdf drawings/*.PDF cat output out.pdf
+	pdftk cover-page.pdf requirements.pdf cat output requirements-all.pdf
 
 clean:
 	-rm -f *.aux *.log *.blg *.bbl *.toc *.lof *.bcf
@@ -16,5 +16,5 @@ clean:
 	-rm -f *.idx *.ilg *.ind *.idl
 	-rm -f *.glo *.xdy
 	-rm -f *.glg *.gls *.ist
-	-rm -f main.pdf main-all.pdf
+	-rm -f requirements.pdf requirements-all.pdf
 
