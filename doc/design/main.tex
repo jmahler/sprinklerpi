@@ -108,22 +108,21 @@ Figure \ref{fig:archoview} gives an overview.
 \begin{center}
 \includegraphics[scale=0.5]{dia/architectural_overview}
 \end{center}
-\caption{Overview of hardware in system.
-Only one control/driver is shown, 
-additional control/drivers can be added up to a maximum of three.
-Expansion is limited by the power supply.}
+\caption{Overview of SprinklerPI in system.}
 \label{fig:archoview}
 \end{figure}
 
-There many details to this system that are necessary for it to work.
+There are many subcomponents of the SprinklerPI system.
 The power supply must take 110 volts AC from a residential outlet
-and convert it to 24 volts AC for the sprinkler valves and 5 volts
-DC for the Linux computer and the digital logic.
+The power supply must take 110 volts AC from a residential outlet
+and convert it to 24 volts AC and 5 volts DC.
+The 24 volts AC is needed to drive the sprinkler valves.
+The 5 volts DC is needed for the Linux computer and the digital logic (control).
 The digital logic (control) must take accept a command over SPI
 and turn on one of the sprinkler valves or turn them all off.
 The driver must take a digital logic input and drive the appropriate
 sprinkler valve using 24 volts AC.
-The web based user interface must allow the timer schedule to be
+The web based user interface must allow the timer schedules to be
 set and for the valves to be manually operated.
 Figure \ref{fig:spioview} gives an overview of the major components
 inside the SprinklerPI system.
@@ -152,8 +151,9 @@ Second is the Linux computer which is a standard RasberryPI model B.
 And third is the Control Driver which contains all the
 circuitry needed to accept commands using SPI from the RasberryPI
 and to drive up to eight individual sprinkler valves.
-Additional Control Drivers can added to expand the system for more
-valves.  Each Control Driver supports up to eight valves.
+Additional Control Drivers can be added to drive additional sprinkler
+valves.
+Each individual Control Driver supports eight valves.
 To keep the system modular each of these modules will be on a
 separate PCB.
 Figure \ref{fig:hwoview} gives an overview of the hardware in the system.
@@ -186,7 +186,6 @@ If this were not required, and the system entered some random
 state during power on, a valve could be inadvertently turned on.
 And since there is no watchdog mechanism this valve would remain
 on until the next command was received.
-
 Figure \ref{fig:hwstate} shows the state machine of the
 Control Driver circuitry in hardware.
 
@@ -214,16 +213,13 @@ described in Section \ref{sec:control}.
 \subsubsection{Control}
 \label{sec:control}
 
-Before the sprinkler valve can be driven, some control logic is necessary
+Before a sprinkler valve can be driven some control logic is necessary
 between the RasberryPI and the driver (Section \ref{sec:driver}).
 Most residential sprinkler systems are capable of driving eight circuits.
 And only one of these circuits is active at any one time
 \footnote{If multiple circuits were active this could lower the
 water pressure resulting in inconsistent watering amounts.}.
-This controller uses the same design
-\footnote{With some minor redesign this controller could be
-expanded to control a large number of circuits possibly
-with multiple active circuits at a time.}.
+This controller uses the same design.
 
 The RasberryPI has enough GPIO pins to control each valve independently.
 But doing this would be a waste.
@@ -259,13 +255,13 @@ However it does reduce the maximum number of addresses by one bit.
 \end{figure}
 }
 
-Going from SPI to signals which can turn on/off a valve requires
-more logic than has been discussed so far.
+Translating a 8-bit message received over SPI to signal turn on
+a sprinkler valve requires a small amount of discrete logic.
 A shift register is needed to take the bits as inputs.
 A decoder is needed to convert shifted in number to a single
 bit output.
 In this case a 74HC238 3-8 decoder is used since it provides non-inverting
-inputs suitable from the drivers (Section \ref{sec:driver}).
+outputs.
 An output high will turn on a valve.
 Figure \ref{fig:control} shows the control schematic.
 
@@ -292,14 +288,20 @@ on (Figure \ref{fig:control}).
 \subsubsection{Driver}
 \label{sec:driver}
 
+The control circuit (Section \ref{sec:control}) provides a digital
+output signal in the range of 0 to 5 volts DC.
+This signal is inadequate for driving the sprinkler valve which
+requires 24 volts AC.
+The driver circuit discussed here is used to apply 24 volts AC
+signal when triggered by a 5 volts DC signal.
+
 \begin{figure}[hbp]
 \centering
 \includegraphics[scale=0.7]{xcircuit/driver_mult}
-\caption{Sprinkler valve driver circuits.  For brevity not
-all drivers are shown since they all have identical designs.
+\caption{Sprinkler valve driver circuits.
+Not all branches are shown since they are identical.
 LEDs are used to indicate when the valve is on/off.
-This design assumes that only one valve will be one at a time.
-}\label{fig:driver}
+It is assumed that only one valve will be on at a time.}\label{fig:driver}
 \end{figure}
 
 To turn the sprinkler valves on requires 24 VAC at approximately 270 mA.
@@ -336,7 +338,7 @@ of CMOS logic as required by the control chips (Section \ref{sec:control}).
 The power supply must provide two different voltages: 24 volts AC and
 5 volts DC.
 The sprinkler valves require 24 volts AC at 270 mA.
-The RasberryPI and other digital logic require 5 volts DC with a
+The Linux computer and other digital logic require 5 volts DC with a
 maximum draw of 600 mA
 \footnote{The current draw of the RasberryPI was determined
 experimentally to be approximately 500 mA.}.
@@ -372,9 +374,9 @@ regulator.}\label{fig:power}
 \subsection{Timing Diagrams}
 
 Figure \ref{fig:timing} is a diagram of a message being sent
-using SPI from the RasberryPI to the control module.
+using SPI from the Linux computer to the control module.
 Refer to Section \ref{sec:control} for a description of
-the meaning of these transferred values.
+the meaning of these messages.
 
 \begin{figure}[h!]
 \begin{center}
@@ -480,21 +482,6 @@ Figure \ref{fig:queue-daemon} gives a flow chart of its operation.
 
 % TODO - abort operation?
 
-\FloatBarrier
-\subsection{Queue Daemon}
-
-The queue daemon monitors the queue file and executes the command.
-An example command might be ``run valve 3 for 5 minutes''.
-Figure \ref{fig:queue-daemon} gives a flow chart of its operation.
-
-\begin{figure}[htbp!]
-\begin{center}
-\includegraphics[scale=0.45]{dia/queue-daemon}
-\end{center}
-\caption{Flow chart of the queue daemon operation.}
-\label{fig:queue-daemon}
-\end{figure}
-
 \clearpage
 \FloatBarrier
 \subsection{Timer Daemon}
@@ -540,7 +527,14 @@ verify its operation using this test module.
 The entire system could be tested and verified in a
 few minutes.
 
-% TODO - diagram of test module
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[scale=0.45]{dia/tester}
+\end{center}
+\caption{Automated testing system.
+The tester is connected in place of the actual sprinkler valves.}
+\label{fig:tester}
+\end{figure}
 
 \subsection{i2c Bus}
 
@@ -551,7 +545,7 @@ eight bits.
 As an example, with ten controllers an eighty bit command
 would have to be sent.
 
-A more capable bus such as i2c or CAN might be a good alternative.
+A more capable bus such as i2c, LIN or CAN might be a good alternative.
 
 \subsection{Internet of Things}
 
