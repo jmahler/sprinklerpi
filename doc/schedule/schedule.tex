@@ -1,0 +1,61 @@
+
+\documentclass{article}
+
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{amsmath}
+
+\raggedright
+
+\begin{document}
+
+Jeremiah Mahler \\
+EECE 490B \\
+\today
+
+\vspace{0.25in}
+
+\begin{center}
+\textbf{SprinklerPI implementation schedule}
+{\renewcommand{\arraystretch}{2}%
+\begin{tabular}{|l|l|}
+\hline
+Fri Jan 31 & send power supply PCB to manufacturer (2 weeks) \\
+\hline
+Fri Feb 7 & queue daemon built and tested \\
+\hline
+Fri Feb 14 	& power supply PCBs arrive, assemble \\
+			& timer daemon built and tested \\
+\hline
+Fri Feb 21 & send control/driver PCB to manufacturer (2 weeks) \\
+\hline
+Fri Feb 28 & www user interface built and tested \\
+\hline
+Fri Mar 7 & control/driver PCBs arrive, assemble \\
+\hline
+Tue Mar 11 & test operation with multiple control/driver using SPI \\
+\hline
+\multicolumn{2}{|c|}{checkpoint: fully operational, three control/drivers, SPI} \\
+\hline
+Fri Mar 21 & send test module PCB to manufacturer (2 weeks) \\
+\hline
+Fri Mar 21 & send test module PCB to manufacturer (2 weeks) \\
+\hline
+Fri Apr 4 & test module PCBs arrive, assemble \\
+\hline
+Fri Apr 11 & full automated hardware testing operational \\
+\hline
+\multicolumn{2}{|c|}{checkpoint: fully automated hardware testing} \\
+\hline
+Fri Apr 18 & design control/driver circuit for i2c bus \\
+\hline
+Fri May 2 & i2c bus PCB arrive, assemble \\
+\hline
+Fri May 16 & end of semester \\
+\hline
+\end{tabular}
+}
+\end{center}
+
+\end{document}
+
