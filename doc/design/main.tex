@@ -100,63 +100,95 @@ EECE 490B, CSU Chico \\
 \clearpage
 \section{Architectural Design}
 
-There are three main components in this architecture:
-the power supply, the RasberryPI Linux computer, and the Control Driver.
-See Figure \ref{fig:archoview} for a diagram.
+At the highest level the SprinklerPI system creates a web interface
+for controlling sprinkler valves.
+Figure \ref{fig:archoview} gives an overview.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=0.9]{xcircuit/architecture_overview}
+\includegraphics[scale=0.5]{dia/architectural_overview}
 \end{center}
-\caption{System architecture overview with one control/driver.
-Additional control/drivers can be added up to a maximum of three.
+\caption{Overview of hardware in system.
+Only one control/driver is shown, 
+additional control/drivers can be added up to a maximum of three.
 Expansion is limited by the power supply.}
 \label{fig:archoview}
 \end{figure}
 
-The power supply must take an input of 110 volts AC.
-This is the standard residential voltage found in the U.S.
-It must provide 24 volts AC to drive the sprinkler valves.
-And it must provide 5 volts DC to power the RasberryPI as well
-as the logic in the Control Driver.
+There many details to this system that are necessary for it to work.
+The power supply must take 110 volts AC from a residential outlet
+and convert it to 24 volts AC for the sprinkler valves and 5 volts
+DC for the Linux computer and the digital logic.
+The digital logic (control) must take accept a command over SPI
+and turn on one of the sprinkler valves or turn them all off.
+The driver must take a digital logic input and drive the appropriate
+sprinkler valve using 24 volts AC.
+The web based user interface must allow the timer schedule to be
+set and for the valves to be manually operated.
+Figure \ref{fig:spioview} gives an overview of the major components
+inside the SprinklerPI system.
 
-The RasberryPI Linux computer is a standard version B model.
-It communicates to the Control Driver using SPI.
-User access is provided either through the Ethernet interface
-or through the USB interface with a wireless adapter.
-It is powered from a 5 volt DC source.
-
-The Control Driver controls a group of eight sprinkler valves.
-It takes commands over SPI.
-It requires a 25 volt AC source to power the sprinkler valves.
-And it requires a 5 volt DC source to power the internal logic.
-
-The Control Driver also provides a SPI MOSI output so that more
-than one Control Driver can be daisy chained to support more
-sprinkler valves.  Currently the limiting factor for expansion is
-the power supply.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.47]{dia/sprinklerpi_overview}
+\end{center}
+\caption{Overview of main components inside the SprinklerPI system.}
+\label{fig:spioview}
+\end{figure}
 
 % }}}
 
+% {{{ Hardware Design
 \clearpage
 \section{Hardware Design}
 \label{sec:hardware}
 
+There are three main hardware components in this system.
+First is the power supply.
+It takes 110 volts AC and outputs both 5 volts DC and 24 volts AC.
+The sprinkler valves require 24 volts AC.
+The Linux computer and digital logic require 5 volts DC.
+Second is the Linux computer which is a standard RasberryPI model B.
+And third is the Control Driver which contains all the
+circuitry needed to accept commands using SPI from the RasberryPI
+and to drive up to eight individual sprinkler valves.
+Additional Control Drivers can added to expand the system for more
+valves.  Each Control Driver supports up to eight valves.
+To keep the system modular each of these modules will be on a
+separate PCB.
+Figure \ref{fig:hwoview} gives an overview of the hardware in the system.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.9]{xcircuit/hardware_overview}
+\end{center}
+\caption{Overview of hardware in system.
+Only one control/driver is shown, 
+additional control/drivers can be added up to a maximum of three.
+Expansion is limited by the power supply.}
+\label{fig:hwoview}
+\end{figure}
+
 % {{{ State Flow Diagrams
 \subsection{State Flow Diagrams}
 
-Figure \ref{fig:hwstate} shows the state machine of the
-control circuitry in hardware.
+The primary module of interest with regard to state flow is
+the Control Driver (Figure \ref{fig:hwoview}).
+It controls the sprinkler valves based on commands it receives
+from the Linux computer (RasberryPI) over SPI.
 
-The system is always either driving one of the eight valves
+The Control Driver is always either driving one of the eight valves
 or has all of the valves off.
 The only time this changes is when a new command is sent.
 
 During power on all the valves must remain in the off state.
 If this were not required, and the system entered some random
-state during power on, a valve could inadvertently be turned on.
-And this valve would not be turned off until the next
-command was received.
+state during power on, a valve could be inadvertently turned on.
+And since there is no watchdog mechanism this valve would remain
+on until the next command was received.
+
+Figure \ref{fig:hwstate} shows the state machine of the
+Control Driver circuitry in hardware.
 
 \begin{figure}[h!]
 \centering
@@ -168,15 +200,17 @@ turn off all valves.}\label{fig:hwstate}
 \end{figure}
 
 The hardware state is determined by the control circuitry
-(Section \ref{sec:control}).
+described in Section \ref{sec:control}.
 
 % }}}
 
 % {{{ Schematics
+\clearpage
 \FloatBarrier
 \subsection{Schematics}
 
 % {{{ Control
+\FloatBarrier
 \subsubsection{Control}
 \label{sec:control}
 
@@ -193,9 +227,9 @@ with multiple active circuits at a time.}.
 
 The RasberryPI has enough GPIO pins to control each valve independently.
 But doing this would be a waste.
-Future expansion to a large number of circuits would be severely limited.
-And the time requirements are very generous.
-Being able to switch a valve every second is more than adequate.
+Future expansion to a large number of circuits would be limited.
+Also the time requirements for are very generous.
+Being able to switch valves at 1 Hz is more than adequate.
 
 Instead of using individual GPIO pins, the four SPI pins provided by
 the SPI are used.
@@ -254,6 +288,7 @@ on (Figure \ref{fig:control}).
 % }}}
 
 % {{{ Driver
+\FloatBarrier
 \subsubsection{Driver}
 \label{sec:driver}
 
@@ -270,7 +305,7 @@ This design assumes that only one valve will be one at a time.
 To turn the sprinkler valves on requires 24 VAC at approximately 270 mA.
 If it is assumed that during steady state both the solenoid
 and the triac have negligible resistance (Figure \ref{fig:driver}),
-a 10 $\Omega$ resistor can be used to limit the current to 240 mA.
+a 10 $\Omega$ resistor can be used to limit the current to 270 mA.
 At 1 watt the resistor supports the worst case amperage with a margin
 over 10\%.
 
@@ -365,27 +400,23 @@ In this case the value 2 is transferred.}
 
 % describe external interface
 
-The primary controller is the ARM STM32F4.
-It interfaces directly with all the sensors and actuators necessary to
-operate the engine.
-It runs in real time and does not interact directly with the user.
+The operation of the hardware as a whole provides the ability to
+turn a valve on or to turn them all off.
+One valve can be on at a time for a single Control Driver module.
+Commands are written over SPI from the Linux computer (RasberryPI).
 
-The secondary controller is the RasberryPI.
-It communicates with the primary controller over SPI.
-Through this communication channel all the settings on the STM32F4 can
-be configured.
+The user interface, described in Section \ref{sec:swdesign}, will
+establish a friendly user interface on top of this simple hardware
+interface.
 
-The secondary controller (RasberryPI) also acts as the primary user interface.
-All configuration options are accessed using dynamic files.
-When the files are modified the changes will be automatically propigated
-to the controller.
-And when the controller has new information the files are automatically
-updated.
+% }}}
+
 % }}}
 
 % {{{ Software Design
 \FloatBarrier
 \section{Software Design}
+\label{sec:swdesign}
 
 The software creates a user interface for controlling
 and scheduling the sprinkler valves.
@@ -522,8 +553,35 @@ would have to be sent.
 
 A more capable bus such as i2c or CAN might be a good alternative.
 
-%\subsection{Internet of Things}
-% TODO
+\subsection{Internet of Things}
+
+The Internet of Things\autocite{wiki:iot} is a term used to describe
+the many Internet accessible devices which becoming more prevalent.
+In particular, devices that uniquely identify themselves using RFID
+tags or by some other means.
+Most often these are household devices.
+
+However the Internet of Things is still in its infancy.
+Specifications are being written but it is still not precisely
+clear exactly what constitutes an Internet of Things device.
+
+The SprinklerPI is Internet accessible which is an obvious
+characteristic of Internet of Things.
+And it is likely that when a specific protocol or interface becomes
+established the SprinklerPI system could be made to support it.
+
+Currently the SprinklerPI system is manually configured and a known
+network address is required to access it.
+Internet of Things devices are typically auto-identified and easier
+to setup.
+It may be worthwhile to try and make the SprinklerPI system easier
+to configure and setup in this way.
+Perhaps a barcode on the device which maps to a url.
+Then a phone could easily reach the interface for that device.
+
+More research is needed to see what characteristics of Internet of Things
+devices can be used.
+Or even whether one of the burgeoning protocols could be implemented.
 
 % }}}
 
@@ -536,3 +594,4 @@ A more capable bus such as i2c or CAN might be a good alternative.
 \printbibliography[heading=bibintoc]
 
 \end{document}
+

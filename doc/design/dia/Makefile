@@ -1,6 +1,6 @@
 
 all: hardware_state.pdf software_overview.pdf queue-daemon.pdf \
-	timer-daemon.pdf
+	timer-daemon.pdf architectural_overview.pdf sprinklerpi_overview.pdf
 
 %.pdf: %.eps
 	epspdf $<

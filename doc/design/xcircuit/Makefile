@@ -1,5 +1,5 @@
 
-all: architecture_overview.pdf control.pdf driver_mult.pdf power_supply.pdf
+all: hardware_overview.pdf control.pdf driver_mult.pdf power_supply.pdf
 
 %.eps: %.ps
 	ps2epsi $< $@
@@ -8,4 +8,4 @@ all: architecture_overview.pdf control.pdf driver_mult.pdf power_supply.pdf
 	epspdf $<
 
 clean:
-	-rm -f architecture_overview.pdf
+	-rm -f *.pdf
