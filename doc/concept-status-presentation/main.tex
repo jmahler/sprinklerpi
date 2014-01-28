@@ -1,0 +1,138 @@
+
+\documentclass[gray]{beamer}
+\usetheme{PaloAlto}
+
+% use these for printing
+%\documentclass[handout,gray]{beamer}
+%\usecolortheme{seagull}  % good for printing
+%\usepackage{pgfpages}
+%\pgfpagesuselayout{2 on 1}[letterpaper,border shrink=10mm]
+
+%\setbeamertemplate{navigation symbols}{}  % remove navigation
+% remove navigation, replace with slide numbers
+\setbeamertemplate{navigation symbols}{\normalsize{\insertframenumber/\inserttotalframenumber}}
+% other ways to use frame numbers ...
+%\setbeamertemplate{footline}[frame number]
+%\setbeamerfont{page number in head/foot}{size=\small}
+%\setbeamertemplate{footline}{\hfill\insertframenumber/\inserttotalframenumber}
+%\hfill\insertframenumber/\inserttotalframenumber
+%\vfill
+
+\usepackage{listings}
+\lstset{numbers=left,
+		language=C,
+		tabsize=4,
+		basicstyle=\ttfamily\tiny,
+		captionpos=b,
+		xleftmargin=0.3in}
+
+% {{{ titlepage
+
+\title{SprinklerPI}
+\subtitle{Web Based Sprinkler Control System}
+\author[Jeremiah Mahler]{\large{Jeremiah Mahler} \\ \footnotesize\texttt{jmmahler@gmail.com}}
+%\author[Jeremiah Mahler]{\footnotesize\texttt{jmmahler@gmail.com}}
+%\author{\footnotesize\texttt{jmmahler@gmail.com}}
+\institute{California State University Chico}
+\date{\small{\today}}
+%\subject{Design}
+
+\begin{document}
+
+\frame{\titlepage}
+
+%\section[]{}
+%\begin{frame}
+%\begin{center}
+%\textbf{\LARGE{Jeremiah Mahler}} \\
+%\vspace{0.5em}
+%\footnotesize\texttt{jmmahler@gmail.com} \\
+%\vspace{1em}
+%\small{January 17, 2013}
+%\end{center}
+%\frametitle{Introduction}
+%\end{frame}
+
+% }}}
+
+% {{{ Fuel Injection?
+\section{Fuel Injection?}
+\begin{frame}
+\frametitle{Fuel Injection?}
+\begin{itemize}
+\item Fuel Injection
+	\begin{itemize}
+		\item Very complex.
+		\item Many things have to be finished just to ``work.''
+		\item Few working intermediate steps.
+	\end{itemize}
+\item SprinklerPI
+	\begin{itemize}
+		\item Modular.
+		\item Many working intermediate steps.
+		\item Complex features can be added.
+		\begin{itemize}
+			\item Automated hardware testing.
+			\item CAN bus
+			\item Battery backup (charging circuit).
+			\item DC to AC inverter.
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+\end{frame}
+% }}}
+
+% {{{ Concept
+\section{Concept}
+\begin{frame}
+\frametitle{Concept}
+\begin{itemize}
+\item Web based sprinkler control system.
+\item Expandable from 1 to hundreds of valves.
+\end{itemize}
+\begin{center}
+\includegraphics[scale=0.40]{xcircuit/hardware_overview}
+\end{center}
+\end{frame}
+% }}}
+
+% {{{ Status/Schedule
+\section{Status/Sched}
+\begin{frame}
+\frametitle{Status/Schedule}
+\begin{itemize}
+\item Status
+\begin{itemize}
+	\item Basic drive circuit tested.
+	\item Power supply designed.
+	\item SPI operation using a single controller tested.
+\end{itemize}
+\item Schedule
+\begin{itemize}
+\item Complete power supply PCB to be manufactured.
+\item Write queue and timer daemons.
+\item Verify SPI operation with multiple controllers.
+\end{itemize}
+\end{itemize}
+\end{frame}
+% }}}
+
+% {{{ Questions
+\section{Questions}
+\begin{frame}[fragile]
+\frametitle{}
+\begin{center}
+\vspace{6em}
+Questions? \\
+\vspace{5em}
+\vspace{2em}
+\begin{tabular}{ll}
+Jeremiah Mahler \quad\quad\quad & \footnotesize\texttt{<jmmahler@gmail.com>} \\
+				& \footnotesize\texttt{github.com/jmahler}
+\end{tabular}
+
+\end{center}
+\end{frame}
+% }}}
+
+\end{document}
