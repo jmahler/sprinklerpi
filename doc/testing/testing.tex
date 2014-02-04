@@ -1,0 +1,343 @@
+
+\documentclass{article}
+
+\usepackage{graphviz}
+\usepackage{url}
+\usepackage{hyperref}
+\usepackage{fullpage}
+\usepackage{parskip}
+\usepackage{fancyvrb}
+\usepackage{amsmath}
+
+\usepackage{listings}
+\lstset{numbers=left,
+		basicstyle=\footnotesize,
+		captionpos=b,
+		xleftmargin=0.3in}
+
+\providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
+
+\VerbatimFootnotes
+
+\raggedright
+
+% Change enumerate section numbering
+\renewcommand*{\theenumii}{\theenumi.\arabic{enumii}}
+\renewcommand*{\labelenumii}{\theenumi.\arabic{enumii}}
+
+\begin{document}
+
+% {{{ title page
+\vspace*{1.0in}
+
+\centerline{\Large \textbf{SprinklerPI}}
+\centerline{(Product Test Plan)}
+
+\vspace{0.5in}
+
+\begin{center}
+\begin{tabular}{c}
+Jeremiah Mahler \\
+EECE 490B, CSU Chico \\
+\today
+\end{tabular}
+\end{center}
+
+\thispagestyle{empty}
+
+\vfill
+
+\pagebreak
+% }}}
+
+\thispagestyle{empty}
+\tableofcontents
+\clearpage
+
+% {{{ Information Required for Execution
+\section{Information Required for Execution}
+
+\subsection{Purpose}
+
+The purpose of this test protocol is to verify the full and complete
+operation of the SprinklerPI system.
+
+\subsection{Scope}
+
+This test protocol should be executed to verify that each principal feature
+and function performs within specification called out by the engineering
+requirements document. In addition, other necessary specifications shall
+be tested such as specific and necessary user, installation and power
+requirements. The testing called out in this protocol is subject exclusively
+to those selected specifications provided for the SprinklerPI.
+
+\subsection{Responsibilities}
+
+It is the responsibility of the assigned test engineer to execute all tests
+included herein to the best of their ability. If necessary, seek additional
+assistance to execute tasks.
+
+\subsection{References}
+
+Not applicable at this time.
+
+%\subsection{Definitions}
+
+\subsection{Equipment/Supplies}
+
+\begin{itemize}
+\item 110 volts AC power outlet.
+\item Digital volt meter.
+\item One Sprinkler valve, residential 270 mA.
+\end{itemize}
+
+\subsection{Precautions \& Warnings}
+
+This test plan contains certain warnings and cautions designed to alert the
+test engineer while performing tests. The following illustrates each of
+these messages and how to recognize them.
+
+\fbox{
+\textbf{WARNING: \textless message\textgreater}
+}
+
+The ``WARNING: Message'' alerts the user about safety issues that are of
+the highest importance, such as possible injury to the operator.
+
+\fbox{
+\textbf{CAUTION: \textless message\textgreater}
+}
+
+The ``CAUTION: Message'' alerts the user to issues concerning possible
+damage to the equipment or that can lead to erroneous test results.
+
+% }}}
+
+\section{Testing Features and Functions}
+
+% {{{ Power Supply
+\subsection{Power Supply}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item 110 volts AC, standard U.S. residential output.
+	\item Digital multi meter.
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item 110 volts AC
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item 24 volts AC
+	\item 5 volts DC
+	\item Pass: 24$\pm1.2$ volts AC measured (5\%).
+		5$\pm0.15$ volts DC measured (3\%).
+	\item Fail: voltages measured out of range.
+	\end{itemize}
+\item Test Description \\
+
+With the 110 volts AC applied the voltage supply should
+produce both a 25 volts AC output and a 5 volts DC output.
+These values are measured using a digital multi meter.
+The test passes if they are within the tolerance range,
+otherwise the test fails.
+
+\item Test Results \\
+	\vspace{0.2in}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		& Value & Pass/Fail & Results/Data\hspace{2in} \\
+		\hline
+		24 volts AC &&& \\
+		\hline
+		5 volts DC &&& \\
+		\hline
+	\end{tabular}
+\end{enumerate}
+% }}}
+
+% {{{ Control
+\subsection{Control}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item 110 volts AC, standard U.S. residential output
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item Input command, through user interface, to turn valve on.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item LED indicator for valve circuit when sprinkler valve on.
+	\item Pass: LED goes on less than one second after on command.
+		LED goes off less than one second after off command.
+	\item Fail: LED does not respond.  LED for wrong circuit responds.
+	\end{itemize}
+\item Test Description \\
+
+With the full system powered on a command signal
+given through the user interface should turn
+on the corresponding driver circuit which should illuminate
+the corresponding LED indicator.
+This process should be repeated for each of the
+eight circuits of the control/driver.
+
+\item Test Results \\
+	\vspace{0.2in}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		& Pass/Fail & Results/Data\hspace{2in} \\
+		\hline
+		1 && \\
+		\hline
+		2 && \\
+		\hline
+		3 && \\
+		\hline
+		4 && \\
+		\hline
+		5 && \\
+		\hline
+		6 && \\
+		\hline
+		7 && \\
+		\hline
+		8 && \\
+		\hline
+	\end{tabular}
+\end{enumerate}
+% }}}
+
+% {{{ Driver
+\subsection{Driver}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item 110 volts AC, standard U.S. residential output
+	\item Sprinkler valve, 270 mA residential
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item Input command, through user interface, to turn valve on.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item Detected operation of sprinkler valve.
+	\item Pass: Valve switches on less than one second after command.
+		Valve switches off less than one second after command.
+	\item Fail: No response or slow response of valve.
+	\end{itemize}
+\item Test Description \\
+
+With the full system powered on a command signal
+given through the user interface should turn
+the corresponding sprinkler valve on.
+This process should be repeated for each of the
+eight circuits of the control/driver.
+
+\item Test Results \\
+	\vspace{0.2in}
+	\begin{tabular}{|l|l|l|}
+		\hline
+		Valve & Pass/Fail & Results/Data\hspace{2in} \\
+		\hline
+		1 && \\
+		\hline
+		2 && \\
+		\hline
+		3 && \\
+		\hline
+		4 && \\
+		\hline
+		5 && \\
+		\hline
+		6 && \\
+		\hline
+		7 && \\
+		\hline
+		8 && \\
+		\hline
+	\end{tabular}
+\end{enumerate}
+% }}}
+
+\section{Other Testing}
+
+% {{{ User Interface
+\subsection{User Interface}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item Computer with web browser and network connection.
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item Turn valve on/off.
+	\item Check status of valve.
+	\item Schedule time and duration to run valve.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item Valves go on when commanded.
+	\item Status of operating valve shown when on.
+	\item Scheduling a time and duration works as expected.
+	\item Pass: Valves operate according to the commands.
+	\item Fail: Response is not expected.
+	\end{itemize}
+\item Test Description \\
+
+The basic commands given through the web interface are:
+on/off valve, show current status, schedule a time/duration.
+These tests verify these operations.
+
+\item Test Results \\
+	\vspace{0.25in}
+	\begin{tabular}{|l|l|l|l|l|l|c|}
+		\hline
+		\multicolumn{7}{|c|}{Valves On/Off} \\
+		\hline
+		\# & On? & On Status? & Off? & Off Status? & Pass/Fail & \hspace{0.7in}Notes\hspace{0.7in} \\
+		\hline
+		1 &&&&&& \\
+		\hline
+		2 &&&&&& \\
+		\hline
+		3 &&&&&& \\
+		\hline
+		4 &&&&&& \\
+		\hline
+		5 &&&&&& \\
+		\hline
+		6 &&&&&& \\
+		\hline
+		7 &&&&&& \\
+		\hline
+		8 &&&&&& \\
+		\hline
+	\end{tabular}
+
+	\vspace{0.25in}
+	\begin{tabular}{|l|l|l|l|l|}
+		\hline
+		\multicolumn{5}{|c|}{Schedule} \\
+		\hline
+		\# & Time Start & Time End & Pass/Fail & \hspace{0.5in}Notes\hspace{0.5in} \\
+		\hline
+		& now & now + 1 minute & & \\
+		\hline
+		& now & now + 5 minute & & \\
+		\hline
+	\end{tabular}
+
+\end{enumerate}
+
+% }}}
+
+\end{document}
+
