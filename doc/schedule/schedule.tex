@@ -19,41 +19,47 @@ EECE 490B \\
 
 \begin{center}
 \textbf{SprinklerPI implementation schedule}
-{\renewcommand{\arraystretch}{2}%
+{\renewcommand{\arraystretch}{1.6}%
 \begin{tabular}{|l|l|}
 \hline
-Fri Jan 31 & send power supply PCB to manufacturer (2 weeks) \\
+Week 1 & send power supply PCB to manufacturer (2 weeks) \\
 \hline
-Fri Feb 7 & queue daemon built and tested \\
+Week 2 	& design control/driver PCB \\
 \hline
-Fri Feb 14 	& power supply PCBs arrive, assemble \\
-			& timer daemon built and tested \\
+Week 3 	& design control/driver PCB \\
+		& build queue daemon, timer daemon \\
+		& build www user interface \\
 \hline
-Fri Feb 21 & send control/driver PCB to manufacturer (2 weeks) \\
+Week 4	& power supply PCBs arrive, assemble \\
+		& send control/driver PCB to manufacturer (2 weeks) \\
+		& automated hardware testing research \\
 \hline
-Fri Feb 28 & www user interface built and tested \\
+Week 5	& automated hardware testing research \\
 \hline
-Fri Mar 7 & control/driver PCBs arrive, assemble \\
-\hline
-Tue Mar 11 & test operation with multiple control/driver using SPI \\
+Week 6  & control/driver PCB arrive, assemble \\
+		& test fully operational system \\
+		& design automated hardware testing \\
 \hline
 \multicolumn{2}{|c|}{checkpoint: fully operational, three control/drivers, SPI} \\
 \hline
-Fri Mar 21 & send test module PCB to manufacturer (2 weeks) \\
+Week 7 	& queue daemon and timer daemon built and tested \\
+		& www user interface built and tested \\
+		& timer daemon built and tested \\
+		& design automated hardware testing PCBs \\
 \hline
-Fri Mar 21 & send test module PCB to manufacturer (2 weeks) \\
+Week 8 	& send automated hardware testing PCB to manufacturer (2 weeks) \\
 \hline
-Fri Apr 4 & test module PCBs arrive, assemble \\
+Week 9  & send control/driver PCB to manufacturer (2 weeks) \\
 \hline
-Fri Apr 11 & full automated hardware testing operational \\
+Week 10  & automated hardware testing PCBs arrive, assemble \\
+		 & automated hardware testing testing and debug \\
 \hline
 \multicolumn{2}{|c|}{checkpoint: fully automated hardware testing} \\
 \hline
-Fri Apr 18 & design control/driver circuit for i2c bus \\
+Week 11-14 & CAN Bus Research \\
+			& CAN Bus Implementation \\
 \hline
-Fri May 2 & i2c bus PCB arrive, assemble \\
-\hline
-Fri May 16 & end of semester \\
+Week 15 & end of semester \\
 \hline
 \end{tabular}
 }
@@ -69,10 +75,7 @@ Fri May 16 & end of semester \\
 	\gantttitle{April}{4}
 	\gantttitle{May}{4} \\
 	\gantttitle{Week}{16} \\
-	%\gantttitlelist{1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4}{1} \\
 	\gantttitlelist{1,...,16}{1} \\
-%	\gantttitlelist{1,...,12}{1} \\
-%	\ganttgroup{Group 1}{1}{7} \\
 
 	\ganttbar{Design CD PCBs}{1}{4} \\
 	\ganttlinkedbar[name=pcb2]{Manufacture CD PCBs}{5}{6} \\
@@ -98,47 +101,27 @@ Fri May 16 & end of semester \\
 
 	\ganttlink{test1}{spi1}
 
-	\ganttbar[name=can1]{CAN Bus Research}{1}{8} \\
+	\ganttbar{Automated Hardware Testing Research}{1}{6} \\
+	\ganttlinkedbar{Design Test PCBs}{7}{7} \\
+	\ganttlinkedbar{Manufacture Test PCBs}{8}{9} \\
+	\ganttlinkedbar[name=test2]{Assemble Test PCBs}{10}{10} \\
 
-	\ganttbar[name=can2]{Design CAN CD PCBs}{9}{9} \\
+	\ganttmilestone[name=tstD]{Complete Hardware Testing}{10} \\
+	\ganttlink{test2}{tstD}
 
-%	\ganttlink{spi1}{can2}
-	\ganttlink{can1}{can2}
+	\ganttbar{CAN Bus Research}{1}{14}
+%	\ganttlinkedbar{Design CAN CD PCBs}{9}{9} \\
+%	\ganttlinkedbar{Manufacture CAN CD PCBs}{10}{11} \\
+%	\ganttlinkedbar{Assemble CAN CD PCBs}{12}{12} \\
 
-	\ganttlinkedbar{Manufacture CAN CD PCBs}{10}{11} \\
-	\ganttlinkedbar{Assemble CAN CD PCBs}{12}{12} \\
-
-	\ganttbar{Battery Backup Research}{2}{8} \\
-
-	\ganttbar{Inverter Research}{4}{12} \\
-
-	\ganttbar{Automated Hardware Testing}{4}{12}
-
-%	\ganttbar{PS PCBs}{1}{1}
-%	\ganttlinkedbar{}{4}{4} \\
-%
-%	\ganttbar{PS PCBs}{1}{1}
-%	\ganttlinkedbar{}{4}{5} \\
-%
-%	\ganttbar{PS PCBs}{1}{1} \ganttnewline
-%	\ganttlinkedbar{PS PCBs assemble}{4}{5} \\
-%
-%	\ganttbar{CD PCBs}{1}{1} \ganttnewline
-%%	\ganttlinkedbar{Control/Driver PCBs}{2}{3} \\
-%
-%
-%	\ganttbar{Web Interface}{1}{3} \\
-
-%	\ganttlinkedbar{Task 2}{3}{7} \ganttnewline
-%	\ganttbar{Final Task}{8}{12}
+%	\ganttbar{Battery Backup Research}{4}{8} \\
+%	\ganttbar{Inverter Research}{4}{12}
 \end{ganttchart}
 
 \end{center}
 \caption{Gantt Chart of the SprinklerPI project schedule.
-PS: Power Supply.  CD: Control/Driver.}
+PS: Power Supply.  CD: Control/Driver.
+If time allows a CAN bus implementation may be built.}
 \end{figure}
 
-
-
 \end{document}
-
