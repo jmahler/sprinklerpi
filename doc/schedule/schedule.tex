@@ -5,6 +5,8 @@
 \usepackage{parskip}
 \usepackage{amsmath}
 
+\usepackage{pgfgantt}
+
 \raggedright
 
 \begin{document}
@@ -56,6 +58,87 @@ Fri May 16 & end of semester \\
 \end{tabular}
 }
 \end{center}
+
+\begin{figure}[hbt!]
+\begin{center}
+
+\begin{ganttchart}{1}{16}
+	\gantttitle{2014}{16} \\
+	\gantttitle{February}{4}
+	\gantttitle{March}{4}
+	\gantttitle{April}{4}
+	\gantttitle{May}{4} \\
+	\gantttitle{Week}{16} \\
+	%\gantttitlelist{1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4}{1} \\
+	\gantttitlelist{1,...,16}{1} \\
+%	\gantttitlelist{1,...,12}{1} \\
+%	\ganttgroup{Group 1}{1}{7} \\
+
+	\ganttbar{Design CD PCBs}{1}{4} \\
+	\ganttlinkedbar[name=pcb2]{Manufacture CD PCBs}{5}{6} \\
+	\ganttlinkedbar[name=d1]{Assemble CD PCBs}{7}{7} \\
+
+	\ganttbar{Design PS PCBs}{1}{1} \\
+	\ganttlinkedbar[name=pcb1]{Manufacture PS PCBs}{2}{3} \\
+	\ganttlinkedbar[name=d2]{Assemble PS PCBs}{4}{4} \\
+
+	\ganttlink{pcb1}{pcb2}
+
+	\ganttbar[name=test1]{Testing SPI Version}{8}{8} \\
+
+	\ganttbar[name=d3]{Queue Daemons}{1}{6} \\
+	\ganttbar[name=d4]{Web Interface}{1}{6} \\
+
+	\ganttlink{d1}{test1}
+	\ganttlink{d2}{test1}
+	\ganttlink{d3}{test1}
+	\ganttlink{d4}{test1}
+
+	\ganttmilestone[name=spi1]{Complete SPI Version}{8} \\
+
+	\ganttlink{test1}{spi1}
+
+	\ganttbar[name=can1]{CAN Bus Research}{1}{8} \\
+
+	\ganttbar[name=can2]{Design CAN CD PCBs}{9}{9} \\
+
+%	\ganttlink{spi1}{can2}
+	\ganttlink{can1}{can2}
+
+	\ganttlinkedbar{Manufacture CAN CD PCBs}{10}{11} \\
+	\ganttlinkedbar{Assemble CAN CD PCBs}{12}{12} \\
+
+	\ganttbar{Battery Backup Research}{2}{8} \\
+
+	\ganttbar{Inverter Research}{4}{12} \\
+
+	\ganttbar{Automated Hardware Testing}{4}{12}
+
+%	\ganttbar{PS PCBs}{1}{1}
+%	\ganttlinkedbar{}{4}{4} \\
+%
+%	\ganttbar{PS PCBs}{1}{1}
+%	\ganttlinkedbar{}{4}{5} \\
+%
+%	\ganttbar{PS PCBs}{1}{1} \ganttnewline
+%	\ganttlinkedbar{PS PCBs assemble}{4}{5} \\
+%
+%	\ganttbar{CD PCBs}{1}{1} \ganttnewline
+%%	\ganttlinkedbar{Control/Driver PCBs}{2}{3} \\
+%
+%
+%	\ganttbar{Web Interface}{1}{3} \\
+
+%	\ganttlinkedbar{Task 2}{3}{7} \ganttnewline
+%	\ganttbar{Final Task}{8}{12}
+\end{ganttchart}
+
+\end{center}
+\caption{Gantt Chart of the SprinklerPI project schedule.
+PS: Power Supply.  CD: Control/Driver.}
+\end{figure}
+
+
 
 \end{document}
 
