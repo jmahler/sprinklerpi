@@ -2,6 +2,8 @@
 all: design.pdf
 
 design.pdf: design.tex
+	cd dia; make
+	cd xcircuit; make
 	pdflatex $<
 	biber design
 	makeglossaries design
