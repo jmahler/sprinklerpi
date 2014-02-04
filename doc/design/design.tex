@@ -579,45 +579,13 @@ The tester is connected in place of the actual sprinkler valves.}
 \end{figure}
 
 \FloatBarrier
-\subsection{i2c, LIN, CAN Bus}
+\subsection{CAN Bus}
 
-The SPI bus will become cumbersome to use with many
-controllers.
-In a daisy chain configuration each controller requires
-eight bits.
-As an example, with ten controllers an eighty bit command
+The SPI bus will quickly become unwieldy to use with many controllers.
+In a daisy chain configuration each controller requires eight bits.
+As an example, with ten controllers, an eighty bit command
 would have to be sent.
-A more capable bus such as i2c, LIN or CAN might be a good alternative.
-
-\subsection{Internet of Things}
-
-The Internet of Things\autocite{wiki:iot} is a term used to describe
-the many Internet accessible devices which becoming more prevalent.
-In particular, devices that uniquely identify themselves using RFID
-tags or by some other means.
-Most often these are household devices.
-
-However the Internet of Things is still in its infancy.
-Specifications are being written but it is still not precisely
-clear exactly what constitutes an Internet of Things device.
-
-The SprinklerPI is Internet accessible which is an obvious
-characteristic of Internet of Things.
-And it is likely that when a specific protocol or interface becomes
-established the SprinklerPI system could be made to support it.
-
-Currently the SprinklerPI system is manually configured and a known
-network address is required to access it.
-Internet of Things devices are typically auto-identified and easier
-to setup.
-It may be worthwhile to try and make the SprinklerPI system easier
-to configure and setup in this way.
-Perhaps a bar code on the device which maps to a url.
-Then a phone could easily reach the interface for that device.
-
-More research is needed to see what characteristics of Internet of Things
-devices can be used.
-Or even whether one of the burgeoning protocols could be implemented.
+The CAN bus is much more capable it would be a good alternative.
 
 \subsection{Battery Backup}
 
@@ -648,4 +616,3 @@ DC as well.
 \printbibliography[heading=bibintoc]
 
 \end{document}
-
