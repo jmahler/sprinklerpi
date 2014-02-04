@@ -9,3 +9,8 @@ main.pdf
 *.dat
 *.pdf
 *.toc
+*.glg
+*.glo
+*.gls
+*.glsdefs
+*.xdy
