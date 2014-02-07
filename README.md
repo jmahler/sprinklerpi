@@ -2,12 +2,12 @@
 NAME
 ----
 
-sprinklerpi - Sprinkler control with Linux on a RasberryPI
+sprinklerpi - Sprinkler control with Linux using a RasberryPI
 
 DESCRIPTION
 -----------
 
-The task of watering your lawn is conceptually simple.
+The task of watering a lawn is conceptually simple.
 Turn on certain sprinklers at certain times and run them for
 a certain duration.
 
