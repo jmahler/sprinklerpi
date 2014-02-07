@@ -225,43 +225,53 @@ Most residential sprinkler systems are capable of driving eight circuits.
 And only one of these circuits is active at any one time
 \footnote{If multiple circuits were active this could lower the
 water pressure resulting in inconsistent watering amounts.}.
-This controller uses the same design.
+This controller is similar except it also supports expansion by groups
+of eight circuits.
 
-The RasberryPI has enough GPIO pins to control each valve independently.
-But doing this would be a waste.
-Future expansion to a large number of circuits would be limited.
-Also the time requirements for are very generous.
-Being able to switch valves at 1 Hz is more than adequate.
+This design uses SPI and a minimum of 8-bits is sent per message.
+Each control group requires 4-bits.  So for one to two control groups
+8-bits are required.  For three to four control groups 16-bits are required,
+and so on.  Figure \ref{fig:spi} shows the message format.
 
-Instead of using individual GPIO pins, the four SPI pins provided by
-the SPI are used.
-This design sends 8-bits for each message (Figure \ref{fig:spi}).
-But only three bits are used to address each valve ($2^3 = 8$).
-If the design was expanded to use the available bits
-it could address 128 valves ($2^7 = 128$).
-The single enable bit was chosen to simplify the circuitry.
-However it does reduce the maximum number of addresses by one bit.
+Each 4-bit control message contains a single enable bit.
+This design was chosen to simplify the clear of the decoder
+(Figure \ref{fig:control}).
 
 {
 \renewcommand*\arraystretch{1.5}
 \begin{figure}[hbp]
 
 \centering
+
 \begin{tabular}{l r l r l r }
 7 & 4 & 3 & 1 & \multicolumn{2}{c}{0} \\
 \hline
 \multicolumn{2}{|c|}{\hspace*{6mm} unused \hspace*{6mm}} &
-\multicolumn{2}{|c|}{\hspace*{4mm} valve \hspace*{4mm}} &
+\multicolumn{2}{|c|}{\hspace*{4mm} valve (group \#1) \hspace*{4mm}} &
 \multicolumn{2}{|c|}{\hspace*{1mm} en\_n \hspace*{1mm}} \\
 \hline
-\end{tabular}
+\end{tabular} \\
+(a)
 
-\caption{SPI message format.}
+\begin{tabular}{l r l r l r l r }
+7 & 5 & \multicolumn{2}{c}{4} & 3 & 1 & \multicolumn{2}{c}{0} \\
+\hline
+%\multicolumn{2}{|c|}{\hspace*{6mm} unused \hspace*{6mm}} &
+\multicolumn{2}{|c|}{\hspace*{4mm} valve (group \#2) \hspace*{4mm}} &
+\multicolumn{2}{|c|}{\hspace*{1mm} en\_n \hspace*{1mm}} &
+\multicolumn{2}{|c|}{\hspace*{4mm} valve (group \#1) \hspace*{4mm}} &
+\multicolumn{2}{|c|}{\hspace*{1mm} en\_n \hspace*{1mm}} \\
+\hline
+\end{tabular} \\
+(b)
+
+\caption{SPI message format for one group (a) and two groups (b).
+Each group represents eight valves so (b) would support 16 valves.}
 \label{fig:spi}
 \end{figure}
 }
 
-Translating a 8-bit message received over SPI to signal turn on
+Translating the message received over SPI to turn on
 a sprinkler valve requires a small amount of discrete logic.
 A shift register is needed to take the bits as inputs.
 A decoder is needed to convert shifted in number to a single
@@ -286,6 +296,41 @@ the output state during power up.
 To resolve this issue a simple RC circuit is used to to hold the
 chip in the clear state for several seconds after power
 on (Figure \ref{fig:control}).
+
+% }}}
+
+% {{{ Expansion
+\clearpage
+\subsubsection{Expansion}
+\label{sec:expansion}
+
+The RasberryPI uses SPI to communicate with the
+control logic which which drives the sprinkler valve.
+Each group can control up to eight valves with one valve
+being on at a time.
+A daisy chain arrangement can be constructed to allow SPI
+to communicate with more than one group as shown in
+Figure \ref{fig:expansion_spi}.
+
+\begin{figure}[hbp]
+\centering
+\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_spi}
+\caption{Daisy chain SPI configuration to for multiple control groups.
+}\label{fig:expansion_spi}
+\end{figure}
+
+With the current power supply design it is limited to three
+control groups as shown in Figure \ref{fig:expansion_current}.
+Each group can control eight valves with one being on at a time.
+This makes a total of 24 valves where three can be on at once.
+
+\begin{figure}[hbp]
+\centering
+\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_current}
+\caption{With a power supply capable of 1 amp at 24 volts AC and
+600 mA at 5 volts DC a maximum of three control groups and one
+Rasberry PI can be driven.}\label{fig:expansion_current}
+\end{figure}
 
 % }}}
 
@@ -369,41 +414,6 @@ shown in Figure \ref{fig:power}.
 \caption{Power supply circuit. A 24 volt AC and 5 volt DC output are
 provided.  The 5 volt DC is provided by the MC340363A switching
 regulator.}\label{fig:power}
-\end{figure}
-
-% }}}
-
-% {{{ Expansion
-\clearpage
-\subsubsection{Expansion}
-\label{sec:expansion}
-
-The RasberryPI uses SPI to communicate with the
-control logic which which drives the sprinkler valve.
-Each group can control up to eight valves with one valve
-being on at a time.
-A daisy chain arrangement can be constructed to allow SPI
-to communicate with more than one group as shown in
-Figure \ref{fig:expansion_spi}.
-
-\begin{figure}[hbp]
-\centering
-\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_spi}
-\caption{Daisy chain SPI configuration to for multiple control groups.
-}\label{fig:expansion_spi}
-\end{figure}
-
-With the current power supply design it is limited to three
-control groups as shown in Figure \ref{fig:expansion_current}.
-Each group can control eight valves with one being on at a time.
-This makes a total of 24 valves where three can be on at once.
-
-\begin{figure}[hbp]
-\centering
-\includegraphics[angle=0,scale=0.80]{xcircuit/expansion_current}
-\caption{With a power supply capable of 1 amp at 24 volts AC and
-600 mA at 5 volts DC a maximum of three control groups and one
-Rasberry PI can be driven.}\label{fig:expansion_current}
 \end{figure}
 
 % }}}
