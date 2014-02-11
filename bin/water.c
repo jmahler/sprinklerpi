@@ -16,15 +16,23 @@
  * To turn off all the sprinklers specify the circuit zero,
  * which is an unused circuit.
  *
- *   $ water 0
+ *   $ water "0"
  *
- * To water circuit 6
+ * If there are two control groups two zeros should be given, and so on.
  *
- *   $ water 6
+ *   $ water "00"
  *
- * Using the standard Linux `sleep` command, the duration
- * can be controlled.
- * This examples waters circuit 3 for 5 minutes.
+ * Note, it is good practice to enclose the command in quotes to ensure
+ * the shell does not misinterpret the command.
+ *
+ * To water circuit 6 in group 1 and 3 in group 5.
+ *
+ *   $ water 65
+ *
+ * With just this command a simple timer can be created using
+ * the `sleep` command.
+ * This example has one control group and waters circuit 3 for 5 minutes.
+ * Notice that it has to be explicitly turned off.
  *
  *   $ water 3; sleep 5m; water 0
  *
@@ -36,10 +44,6 @@
  *   water 4; sleep 7m;
  *   water 0
  *
- * This program doesn't do anything magical.
- * It simply opens the correct SPI device file and
- * writes an 8-bit number.  It does however make this a
- * little easier to do.
  */
 
 #include <sys/stat.h>
@@ -51,32 +55,24 @@
 #include <unistd.h>
 #include <errno.h>
 
+#include "sprinklerpi.h"
+
 int main(int argc, char* argv[]) {
 
 	int fd;
-	int n;
-	char cmd;
 	// choose device for your chip enable (CE0, CE1) 
 	char dev[] = "/dev/spidev0.0";
 	//char dev[] = "/dev/spidev0.1";
 	ssize_t ret;
+	size_t len;
+	unsigned char cmd_len;
+	char *cmd = NULL;
 
 	// Get arguments, valve number
-	if (1 == argc) {
-		n = 0;  // no arg, turn all off
-	} else if (2 == argc) {
-		n = atoi(argv[1]);
-
-		// Check for valid valve number
-		if (n < 0) {
-			fprintf(stderr, "Negative valve number is invalid.\n");
-			return 1;
-		} else if (n > 8) {
-			fprintf(stderr, "Valve numbers larger than 8 are not supported.\n");
-			return 1;
-		}
+	if (2 == argc) {
+		// one command argument, OK
 	} else {
-		fprintf(stderr, "usage: %s [0-8]\n", argv[0]);
+		fprintf(stderr, "usage: %s 0-8...\n", argv[0]);
 		return 1;
 	}
 
@@ -86,24 +82,22 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	//       command
-	//  7      4 3     1      0
-	// +--------+-------+------+
-	// | unused | valve | en_n |
-	// +--------+-------+------+
-	//
-	if (0 == n) {
-		cmd = 1;  // disable all, en_n = 1
-	} else {
-		cmd = (n - 1) << 1;  // valve # (0 offset), en_n = 0
+	// encode the ASCII command
+	// cmd will be malloc'ed with cmd_len bytes.
+	len = strlen(argv[1]);
+	ret = encode_cmd(argv[1], len, &cmd, &cmd_len);
+	if (ret < 0) {
+		fprintf(stderr, "Command error, are command numbers less than 8?\n");
+		return 1;
 	}
 
-	ret = write(fd, &cmd, sizeof(cmd));
+	ret = write(fd, cmd, cmd_len);
 	if (ret == -1) {
 		fprintf(stderr, "Unable to write '%s': %s\n", dev, strerror(errno));
 		close(fd);
 		return 1;
 	}
+	free(cmd);
 
 	close(fd);
 

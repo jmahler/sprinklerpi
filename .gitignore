@@ -2,3 +2,4 @@ datasheets
 *.swp
 log.txt
 TODO.txt
+*.o

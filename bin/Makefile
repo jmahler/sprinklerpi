@@ -2,4 +2,5 @@
 all: water
 
 water: water.c
-	gcc -Wall -Wextra $< -o $@
+	cd ..; make
+	gcc -Wall -Wextra -I../include ../lib/sprinklerpi.o $< -o $@
