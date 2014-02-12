@@ -5,9 +5,10 @@ int encode_cmd(char* incmd, unsigned char inlen,
 				char** enccmd, unsigned char* enclen) {
 	unsigned char i, j;
 	unsigned char n;
+	char _enccmd[(MAXGRP /2) + (MAXGRP % 2)];
 
 	*enclen = (inlen / 2) + (inlen % 2);  // each cmd is 4-bits
-	*enccmd = (char *) malloc(*enclen);
+	*enccmd = _enccmd;  // point to our static buffer
 
 	j = 0;  // outcmd index, 1/2 of incmd index (i)
 	for (i = 0; i < inlen; i++) {
@@ -15,7 +16,6 @@ int encode_cmd(char* incmd, unsigned char inlen,
 
 		// only commands from 0 to 7 are allowed
 		if (n > 7) {
-			free(*enccmd);
 			*enccmd = NULL;
 			return -1;  // invalid command
 		}

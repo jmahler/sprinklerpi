@@ -6,6 +6,10 @@
 
 #define evenp(n) (0 == (n & 1))
 
+// maximum number of groups,
+// each group can control 8 valves
+#define MAXGRP 3
+
 /*
  * encode_cmd()
  *
@@ -29,8 +33,8 @@
  *
  * "30"
  *
- * Memory is automatically allocated to store the encoded
- * command and must be freed after its use.
+ * Memory for storing the encoded command is from a static buffer.
+ * Subsequent calls will overwrite this buffer.
  *
  * char* incmd = "24";
  * unsigned char inlen;
@@ -41,15 +45,12 @@
  * ret = encode_cmd(incmd, inlen, &enccmd, &enclen);
  * if (ret < 0) {
  *   // error!
- *   // (don't need to free memory)
  *   return 1;
  * }
  *
  * // ...
  * ret = write(fd, enccmd, enclen);
  * // ...
- *
- * free(enccmd);
  *
  */
 int encode_cmd(char* incmd, unsigned char inlen,

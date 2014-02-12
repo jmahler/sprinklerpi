@@ -83,7 +83,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	// encode the ASCII command
-	// cmd will be malloc'ed with cmd_len bytes.
 	len = strlen(argv[1]);
 	ret = encode_cmd(argv[1], len, &cmd, &cmd_len);
 	if (ret < 0) {
@@ -97,7 +96,6 @@ int main(int argc, char* argv[]) {
 		close(fd);
 		return 1;
 	}
-	free(cmd);
 
 	close(fd);
 
