@@ -16,33 +16,38 @@
  * To turn off all the sprinklers specify the circuit zero,
  * which is an unused circuit.
  *
- *   $ water "0"
+ *   $ water -c "0"
  *
  * If there are two control groups two zeros should be given, and so on.
  *
- *   $ water "00"
- *
- * Note, it is good practice to enclose the command in quotes to ensure
- * the shell does not misinterpret the command.
+ *   $ water -c "00"
  *
  * To water circuit 6 in group 1 and 3 in group 5.
  *
- *   $ water 65
+ *   $ water -c "65"
+ *
+ * To to see what the command is doing use the '-v' option.
+ * And for other usage see the '-h' option.
+ *
+ *   $ water -v -c "65"
+ *   $ water -v  # shows defaults
+ *
+ *   $ water -h
  *
  * With just this command a simple timer can be created using
  * the `sleep` command.
  * This example has one control group and waters circuit 3 for 5 minutes.
  * Notice that it has to be explicitly turned off.
  *
- *   $ water 3; sleep 5m; water 0
+ *   $ water -c 3; sleep 5m; water -c 0
  *
  * Several of these commands could be combined in a file
  * to create a shell script which runs a full schedule.
  *
  *   #!/bin/sh
- *   water 3; sleep 5m;
- *   water 4; sleep 7m;
- *   water 0
+ *   water -c 3; sleep 5m;
+ *   water -c 4; sleep 7m;
+ *   water -c 0
  *
  */
 
@@ -61,21 +66,37 @@ int main(int argc, char* argv[]) {
 
 	int fd;
 	// choose device for your chip enable (CE0, CE1) 
-	char dev[] = "/dev/spidev0.0";
-	//char dev[] = "/dev/spidev0.1";
+	char *dev = "/dev/null";
 	ssize_t ret;
 	size_t len;
 	unsigned char cmd_len;
-	char *cmd = NULL;
+	char *incmd = "000";
+	char *cmd;
+	int opt;
+	int verbose = 0;
 
 	// Get arguments, valve number
-	if (2 == argc) {
-		// one command argument, OK
-	} else {
-		fprintf(stderr, "usage: %s 0-8...\n", argv[0]);
-		return 1;
+	while ((opt = getopt(argc, argv, "c:d:vh")) != -1) {
+		switch (opt) {
+		case 'c':
+			incmd = optarg;
+			break;
+		case 'd':
+			dev = optarg;
+			break;
+		case 'v':
+			verbose = 1;
+			break;
+		case 'h':
+		default: /* '?' */
+			fprintf(stderr, "usage: %s [-c 0-8...] [-d /dev/name]\n", argv[0]);
+			exit(EXIT_FAILURE);
+		}
 	}
 
+	if (verbose) {
+		printf("device = \"%s\"\n", dev);
+	}
 	fd = open(dev, O_WRONLY);
 	if (-1 == fd) {
 		fprintf(stderr, "Unable to open '%s': %s\n", dev, strerror(errno));
@@ -83,10 +104,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	// encode the ASCII command
-	len = strlen(argv[1]);
-	ret = encode_cmd(argv[1], len, &cmd, &cmd_len);
+	len = strlen(incmd);
+	if (verbose) {
+		printf("cmd = \"%s\" (%li)\n", incmd, len);
+	}
+	ret = encode_cmd(incmd, len, &cmd, &cmd_len);
 	if (ret < 0) {
-		fprintf(stderr, "Command error, are command numbers less than 8?\n");
+		fprintf(stderr, "Command error, commands 0-8, max groups?\n");
 		return 1;
 	}
 

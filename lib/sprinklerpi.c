@@ -10,6 +10,11 @@ int encode_cmd(char* incmd, unsigned char inlen,
 	*enclen = (inlen / 2) + (inlen % 2);  // each cmd is 4-bits
 	*enccmd = _enccmd;  // point to our static buffer
 
+	if (inlen > MAXGRP) {
+		*enccmd = NULL;
+		return -1;  // invalid command
+	}
+
 	j = 0;  // outcmd index, 1/2 of incmd index (i)
 	for (i = 0; i < inlen; i++) {
 		n = incmd[i] - 48;  // ASCII to integer
@@ -17,7 +22,7 @@ int encode_cmd(char* incmd, unsigned char inlen,
 		// only commands from 0 to 7 are allowed
 		if (n > 7) {
 			*enccmd = NULL;
-			return -1;  // invalid command
+			return -2;  // invalid command
 		}
 
 		//       command, 1 group
