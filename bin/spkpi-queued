@@ -1,0 +1,133 @@
+#!/usr/bin/perl
+use strict;
+
+=head1 NAME
+
+spkpi-queued - SprinklerPI queue daemon.
+
+=head1 DESCRIPTION
+
+The queue daemon monitors a queue file where each line consists of
+a instruction to turn on a valve for a particular period of time.
+
+The format of a command is as follows:
+
+  <group>:<valve>  <time minutes>
+
+A sample queue might look like:
+
+  1:1 5
+  2:1 3
+  1:2 15
+
+Only one valve can be on at a time for one specific group.
+In the previous example both 1:1 and 2:1 could be started immediately
+since they are part of different groups but 1:2 would have to wait.
+
+The queue daemon is limited to one SPI device.
+To start the daemon run it with a device and queue file.
+Notice that the number of groups must be specified.
+This is necessary because it effects the command format.
+
+  $ spkpi-queued <device> <queue file> <# groups>
+  $ spkpi-queued /dev/spidev0.0 queue 3
+
+For testing the null device can be used.
+
+  $ spkpi-queued /dev/null queue
+
+The queue daemon will turn on a valve by using the water command.
+
+  $ water -d <device> <valves>
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    https://plus.google.com/+JeremiahMahler/about
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
+
+=cut
+
+my $VERBOSE = 1;
+
+# Limits of group and valve numbers
+my $MIN_GROUP = 1;
+my $MAX_GROUP = 3;
+my $MIN_VALVE = 1;
+my $MAX_VALVE = 8;
+
+#
+# Check arguments, setup file descriptors
+#
+
+if (@ARGV != 3) {
+	die "$0 <device> <queue file> <# groups>\n";
+}
+
+my ($dev_file, $queue_file, $num_groups) = @ARGV;
+
+if ($num_groups < $MIN_GROUP or $num_groups > $MAX_GROUP) {
+	die "Number of groups must be between $MIN_GROUP and $MAX_GROUP.";
+}
+
+open(my $dev_fd, ">", $dev_file)
+	or die "Unable to open '$dev_file': $!";
+
+open(my $queue_fd, "+<", $queue_file)
+	or die "Unable to open '$queue_file': $!";
+
+#
+# Read queue and execute instructions
+#
+
+while (1) {
+	my $cmd = <$queue_fd>;
+	chomp($cmd);
+
+	if ($cmd eq '') {
+		# EOF, waste some time and try again
+		sleep 1;
+		next;
+	}
+
+	# Parse the instruction group, valve and time
+	my ($group_valve, $time_min) = split /\s+/, $cmd;
+	my $time_sec = $time_min * 60;
+
+	my ($group, $valve) = split /\:/, $group_valve;
+
+	# Check for invalid values
+	if ($group < $MIN_GROUP or $group > $MAX_GROUP) {
+		print STDERR "Invalid group '$group' in command: '$cmd'\n";
+		next;
+	}
+	if ($group > $num_groups) {
+		print STDERR "Command group '$group' exceeds number '$num_groups'\n";
+		next;
+	}
+
+	# Construct the watering command
+	my $water_cmd;
+
+	my @water_cmd = ("0") x $num_groups;
+	$water_cmd[$group - 1] = $valve;
+
+	$water_cmd = join "", @water_cmd;
+
+	# turn on the valve
+	print "$water_cmd, $time_sec\n" if $VERBOSE;
+	`water -c \"$water_cmd\" -d $dev_file`;
+
+	sleep $time_sec;
+
+	# turn off valve
+	$water_cmd[$group - 1] = "0";
+	$water_cmd = join "", @water_cmd;
+
+	`water -c \"$water_cmd\" -d $dev_file`;
+}
