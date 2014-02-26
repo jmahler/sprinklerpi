@@ -6,8 +6,8 @@
 
 #define evenp(n) (0 == (n & 1))
 
-// maximum number of groups,
-// each group can control 8 valves
+/* maximum number of groups,
+ * each group can control 8 valves */
 #define MAXGRP 3
 
 /*

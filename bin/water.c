@@ -65,7 +65,7 @@
 int main(int argc, char* argv[]) {
 
 	int fd;
-	// choose device for your chip enable (CE0, CE1) 
+	/* choose device for your chip enable (CE0, CE1) */
 	char *dev = "/dev/null";
 	ssize_t ret;
 	size_t len;
@@ -75,7 +75,7 @@ int main(int argc, char* argv[]) {
 	int opt;
 	int verbose = 0;
 
-	// Get arguments, valve number
+	/* Get arguments, valve number */
 	while ((opt = getopt(argc, argv, "c:d:vh")) != -1) {
 		switch (opt) {
 		case 'c':
@@ -103,7 +103,7 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	// encode the ASCII command
+	/* encode the ASCII command */
 	len = strlen(incmd);
 	if (verbose) {
 		printf("cmd = \"%s\" (%li)\n", incmd, len);
