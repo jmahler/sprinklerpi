@@ -1,4 +1,4 @@
-Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Tue 07 Jan 2014 09:29:03 PM PST
+Cmp-Mod V01 Created by CvPcb (2013-jul-07)-stable date = Sat 01 Mar 2014 12:48:35 AM PST
 
 BeginCmp
 TimeStamp = /52C723E7;
@@ -11,7 +11,7 @@ BeginCmp
 TimeStamp = /52C723F7;
 Reference = C2;
 ValeurCmp = 470 pF;
-IdModule  = Elko_vert_DM10_RM5_CopperClear;
+IdModule  = C2;
 EndCmp
 
 BeginCmp
@@ -25,7 +25,7 @@ BeginCmp
 TimeStamp = /52C72452;
 Reference = C4;
 ValeurCmp = 1.0 uF;
-IdModule  = Elko_vert_DM10_RM5_CopperClear;
+IdModule  = C2;
 EndCmp
 
 BeginCmp
@@ -74,7 +74,7 @@ BeginCmp
 TimeStamp = /52C02A8A;
 Reference = K1;
 ValeurCmp = CONN_3;
-IdModule  = bornier3_V;
+IdModule  = bornier3;
 EndCmp
 
 BeginCmp
