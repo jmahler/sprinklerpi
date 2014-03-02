@@ -32,7 +32,7 @@
   )
 
   (setup
-    (last_trace_width 0.381)
+    (last_trace_width 0.254)
     (user_trace_width 0.254)
     (user_trace_width 0.3048)
     (user_trace_width 0.381)
@@ -64,7 +64,7 @@
     (aux_axis_origin 0 0)
     (visible_elements FFFFFFBF)
     (pcbplotparams
-      (layerselection 3178497)
+      (layerselection 284196865)
       (usegerberextensions true)
       (excludeedgelayer true)
       (linewidth 0.150000)
@@ -86,7 +86,7 @@
       (subtractmaskfromsilk false)
       (outputformat 1)
       (mirror false)
-      (drillshape 1)
+      (drillshape 0)
       (scaleselection 1)
       (outputdirectory ""))
   )
@@ -2637,7 +2637,7 @@
   )
 
   (segment (start 176.276 169.164) (end 174.752 167.64) (width 0.381) (layer B.Cu) (net 1))
-  (segment (start 185.928 140.208) (end 187.96 142.24) (width 0.381) (layer B.Cu) (net 1) (tstamp 53134490) (status 800000))
+  (segment (start 185.928 140.208) (end 187.96 142.24) (width 0.381) (layer B.Cu) (net 1) (tstamp 53134490))
   (segment (start 180.848 140.208) (end 185.928 140.208) (width 0.381) (layer B.Cu) (net 1) (tstamp 5313448F))
   (segment (start 174.752 146.304) (end 180.848 140.208) (width 0.381) (layer B.Cu) (net 1) (tstamp 5313448E))
   (segment (start 174.752 167.64) (end 174.752 146.304) (width 0.381) (layer B.Cu) (net 1) (tstamp 5313448D))
@@ -2834,8 +2834,8 @@
   (segment (start 233.68 202.946) (end 238.76 202.946) (width 0.381) (layer B.Cu) (net 25))
   (segment (start 228.6 202.946) (end 233.68 202.946) (width 0.381) (layer B.Cu) (net 25))
   (segment (start 223.52 202.946) (end 228.6 202.946) (width 0.381) (layer B.Cu) (net 25))
-  (segment (start 180.975 157.48) (end 184.404 157.48) (width 0.381) (layer F.Cu) (net 26) (status 400000))
-  (segment (start 187.96 153.924) (end 187.96 149.86) (width 0.381) (layer F.Cu) (net 26) (tstamp 53134497) (status 800000))
+  (segment (start 180.975 157.48) (end 184.404 157.48) (width 0.381) (layer F.Cu) (net 26))
+  (segment (start 187.96 153.924) (end 187.96 149.86) (width 0.381) (layer F.Cu) (net 26) (tstamp 53134497))
   (segment (start 184.404 157.48) (end 187.96 153.924) (width 0.381) (layer F.Cu) (net 26) (tstamp 53134495))
   (segment (start 180.975 157.48) (end 180.975 159.385) (width 0.381) (layer B.Cu) (net 26))
   (segment (start 180.975 159.385) (end 182.88 161.29) (width 0.381) (layer B.Cu) (net 26) (tstamp 53134265))
