@@ -24,6 +24,9 @@ at least 15 mil (0.015") clearance from traces to the edge of board
 13 mil (0.013") minimum drill size
 7 mil (0.007") minimum annular ring
 
+1 ounce copper on external layer
+0.5 ounce copper on internal layer
+
 These values were configured in the Kicad PCB design rules.
 
 Pad Sizes
