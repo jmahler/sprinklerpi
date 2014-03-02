@@ -30,13 +30,14 @@ LIBS:atmel
 LIBS:contrib
 LIBS:valves
 LIBS:local
+LIBS:power-cache
 EELAYER 27 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "Control Logic"
-Date "6 jan 2014"
+Date "2 mar 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -434,7 +435,7 @@ $EndComp
 Wire Wire Line
 	8050 4950 9000 4950
 Wire Wire Line
-	9600 4950 10750 4950
+	9600 4950 10850 4950
 Connection ~ 9900 4950
 $Comp
 L GND #PWR014
@@ -544,17 +545,6 @@ Connection ~ 5000 900
 Wire Wire Line
 	4900 1050 4900 900 
 Connection ~ 4900 900 
-$Comp
-L CONN_3X2 P2
-U 1 1 52C76BB5
-P 10700 5450
-F 0 "P2" H 10700 5700 50  0000 C CNN
-F 1 "CONN_3X2" V 10700 5500 40  0000 C CNN
-F 2 "~" H 10700 5450 60  0000 C CNN
-F 3 "~" H 10700 5450 60  0000 C CNN
-	1    10700 5450
-	0    -1   -1   0   
-$EndComp
 Wire Wire Line
 	10750 4950 10750 5050
 Wire Wire Line
@@ -568,7 +558,7 @@ Wire Wire Line
 Wire Wire Line
 	10750 5950 10750 5850
 Wire Wire Line
-	10550 5950 10750 5950
+	10550 5950 10850 5950
 Connection ~ 10650 5950
 Wire Wire Line
 	10550 5850 10550 5950
@@ -622,4 +612,21 @@ Wire Wire Line
 	8450 4450 8450 5150
 Wire Wire Line
 	8450 5550 8450 5850
+$Comp
+L CONN_4X2 P2
+U 1 1 53137A3A
+P 10700 5450
+F 0 "P2" V 10700 5750 50  0000 C CNN
+F 1 "CONN_4X2" V 10700 5450 40  0000 C CNN
+F 2 "~" H 10700 5450 60  0000 C CNN
+F 3 "~" H 10700 5450 60  0000 C CNN
+	1    10700 5450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	10850 4950 10850 5050
+Connection ~ 10750 4950
+Wire Wire Line
+	10850 5950 10850 5850
+Connection ~ 10750 5950
 $EndSCHEMATC
