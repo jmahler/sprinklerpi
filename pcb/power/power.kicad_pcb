@@ -879,7 +879,7 @@
     (fp_text reference C2 (at 0 0) (layer F.SilkS)
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
-    (fp_text value "470 pF" (at 0 0) (layer F.SilkS) hide
+    (fp_text value "1000 pF" (at 0 0) (layer F.SilkS) hide
       (effects (font (size 1.016 1.016) (thickness 0.2032)))
     )
     (fp_line (start -3.556 -1.016) (end 3.556 -1.016) (layer F.SilkS) (width 0.3048))

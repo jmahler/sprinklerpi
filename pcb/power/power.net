@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/jeri/sprinklerpi/pcb/power/power.sch)
-    (date "Sun 02 Mar 2014 10:36:21 AM PST")
+    (date "Sun 02 Mar 2014 02:20:49 PM PST")
     (tool "eeschema (2013-jul-07)-stable"))
   (components
     (comp (ref K1)
@@ -45,7 +45,7 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 52C723E7))
     (comp (ref C2)
-      (value "470 pF")
+      (value "1000 pF")
       (libsource (lib device) (part CP))
       (sheetpath (names /) (tstamps /))
       (tstamp 52C723F7))

@@ -11,10 +11,14 @@
 % http://www.youtube.com/watch?v=qGp82xhybs4
 %
 
+clear;
+
 display('PARAMETERS:');
 
 % Nominal input voltage
-Vin = 15  % (volt)
+% 12 VAC input (RMS)
+% V_peak = V_RMS*sqrt(2) ~= 17 V
+Vin = 17.0  % (volt)
 % Minimum input voltage
 Vin_min = Vin - Vin*0.1  % -10%
 % Desired output voltage
@@ -26,8 +30,9 @@ Iout = 600e-3  % (amp)
 % Minimum desired output frequency
 % 100 kHz max
 % Higher frequency -> smaller inductor
-fmin = 33e3  % (Hz)
+% lowever frequence -> larger timing capacitor (CT)
 %fmin = 100e3  % (Hz)  % max
+fmin = 15.1e3  % (Hz)
 % Desired peak-to-peak output ripple voltage
 Vripple = Vout*0.005  % (volt)
 %Vripple = 0.1
