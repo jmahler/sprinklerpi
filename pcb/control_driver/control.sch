@@ -37,7 +37,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 2 10
 Title ""
-Date "2 mar 2014"
+Date "3 mar 2014"
 Rev ""
 Comp ""
 Comment1 ""
@@ -157,7 +157,6 @@ Text HLabel 4000 1750 0    60   Input ~ 0
 CE0
 Wire Wire Line
 	4000 1450 4200 1450
-NoConn ~ 4200 1450
 Text HLabel 6900 5900 3    60   Output ~ 0
 VD_1
 Text HLabel 6800 5900 3    60   Output ~ 0
