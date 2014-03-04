@@ -1,4 +1,11 @@
 
-# Remove Gerber generated files
+all: power24.zip
+
+# Package up Gerbers for manufacturer
+power24.zip:
+	../package-gerbers.sh power24
+
+# Remove package
 clean:
-	-rm -f *.gbr *.gtk *.gts *.gto *.drl *.gtl *.gbo *.gbs *.gbl
+	-rm -fr power24
+	-rm -f power24.zip
