@@ -2589,7 +2589,7 @@
   (gr_line (start 268.732 209.804) (end 268.732 139.7) (angle 90) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 169.672 209.804) (end 268.732 209.804) (angle 90) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 169.672 139.7) (end 169.672 209.804) (angle 90) (layer Edge.Cuts) (width 0.1))
-  (gr_text "github.com/jmahler/sprinklerpi  (20140303)" (at 234.696 141.732) (layer F.SilkS)
+  (gr_text "github.com/jmahler/sprinklerpi  (20140304)" (at 234.696 141.732) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text 5V (at 172.72 162.814) (layer F.SilkS)
