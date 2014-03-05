@@ -32,7 +32,7 @@
   )
 
   (setup
-    (last_trace_width 0.889)
+    (last_trace_width 0.254)
     (user_trace_width 0.254)
     (user_trace_width 0.3048)
     (user_trace_width 0.381)
@@ -980,7 +980,7 @@
   (gr_line (start 193.04 115.316) (end 145.288 115.316) (angle 90) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 193.04 51.308) (end 193.04 115.316) (angle 90) (layer Edge.Cuts) (width 0.1))
   (gr_line (start 145.288 51.308) (end 193.04 51.308) (angle 90) (layer Edge.Cuts) (width 0.1))
-  (gr_text "(20130304)" (at 153.924 93.98 90) (layer F.SilkS)
+  (gr_text "(20140304)" (at 153.924 93.98 90) (layer F.SilkS)
     (effects (font (size 1.5 1.5) (thickness 0.3)))
   )
   (gr_text 5V (at 191.008 73.406 90) (layer F.SilkS)
