@@ -119,9 +119,8 @@ Figure \ref{fig:archoview} gives an overview.
 \end{figure}
 
 There are many subcomponents of the SprinklerPI system.
-The power supply must take 110 volts AC from a residential outlet
-The power supply must take 110 volts AC from a residential outlet
-and convert it to 24 volts AC and 5 volts DC.
+The power supply must take 24 volts AC and convert it to 5 volts DC.
+It must also provide a fused path for the 24 volts AC as a safety measure.
 The 24 volts AC is needed to drive the sprinkler valves.
 The 5 volts DC is needed for the Linux computer and the digital logic (control).
 The digital logic (control) must take accept a command over SPI
@@ -150,7 +149,7 @@ inside the SprinklerPI system.
 
 There are three main hardware components in this system.
 First is the power supply.
-It takes 110 volts AC and outputs both 5 volts DC and 24 volts AC.
+It takes 24 volts AC and outputs both 5 volts DC and fused 24 volts AC.
 The sprinkler valves require 24 volts AC.
 The Linux computer and digital logic require 5 volts DC.
 Second is the Linux computer which is a standard RasberryPI model B.
@@ -393,12 +392,10 @@ The Linux computer and other digital logic require 5 volts DC with a
 maximum draw of 600 mA
 \footnote{The current draw of the RasberryPI was determined
 experimentally to be approximately 500 mA.}.
-These voltages must be created from a 110 volt AC input.
-
-The 24 volts AC can be achieved using a split pole transformer
-with two 12 volt AC outputs.
-By bridging the center of these two 12 volt AC outputs
-a combined 24 volt AC output is available.
+These voltages must be created from a 24 volt AC input.
+The 24 volts AC is converted from 110 volts AC using a transformer.
+Plug mounted 110 to 24 volts AC transformers are commonly available
+as most sprinkler controllers use these.
 
 A switching voltage regulator, the MC34063A, was chosen for
 the 5 volt supply.
