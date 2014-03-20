@@ -5,7 +5,7 @@ int encode_cmd(char* incmd, unsigned char inlen,
 				char** enccmd, unsigned char* enclen) {
 	unsigned char i, j;
 	unsigned char n;
-	char _enccmd[(MAXGRP /2) + (MAXGRP % 2)];
+	static char _enccmd[(MAXGRP / 2) + (MAXGRP % 2)];
 
 	*enclen = (inlen / 2) + (inlen % 2);  /* each cmd is 4-bits */
 	*enccmd = _enccmd;  /* point to our static buffer */

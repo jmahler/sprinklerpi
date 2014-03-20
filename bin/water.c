@@ -66,7 +66,7 @@ int main(int argc, char* argv[]) {
 
 	int fd;
 	/* choose device for your chip enable (CE0, CE1) */
-	char *dev = "/dev/null";
+	char *dev = "/dev/spidev0.0";
 	ssize_t ret;
 	size_t len;
 	unsigned char cmd_len;
@@ -106,7 +106,7 @@ int main(int argc, char* argv[]) {
 	/* encode the ASCII command */
 	len = strlen(incmd);
 	if (verbose) {
-		printf("cmd = \"%s\" (%li)\n", incmd, len);
+		printf("cmd = \"%s\" (%lu)\n", incmd, (long unsigned int) len);
 	}
 	ret = encode_cmd(incmd, len, &cmd, &cmd_len);
 	if (ret < 0) {
