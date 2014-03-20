@@ -86,7 +86,7 @@ Not applicable at this time.
 \subsection{Equipment/Supplies}
 
 \begin{itemize}
-\item 110 volts AC power outlet.
+\item 110 volts AC power supply.
 \item Digital volt meter.
 \item One Sprinkler valve, residential 270 mA.
 \end{itemize}
@@ -120,55 +120,64 @@ damage to the equipment or that can lead to erroneous test results.
 
 \begin{figure}[hbp!]
 \begin{center}
-\begin{tabular}{c c}
-\includegraphics[scale=0.8]{img/power_pcb-20140304-top.png} &
-\includegraphics[scale=0.8]{img/power_pcb-20140304-bottom.png}
-\end{tabular}
-\caption{Unpopulated power supply module PCB.}
+\includegraphics[scale=0.15,angle=0]{img/power_pcb-assembled-02.jpg}
 \end{center}
+\caption{Assembled power supply module PCB.
+The 24 volts AC input is in the top left.
+The green power LED is on the bottom right.
+The headers for the 24 volts AC output and 5 volts DC
+output are on the bottom.
+}\label{fig:psm2}
 \end{figure}
 
 \begin{enumerate}
 \item Equipment Required
 	\begin{itemize}
-	\item 110 volts AC, standard U.S. residential output.
+	\item SprinklerPI power supply module (revision 20140304).
+	\item 110 volts AC power supply (standard U.S.)
+	\item 110 volts AC to 24 volts AC power adapter.
 	\item Digital multi meter.
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item 110 volts AC
+	\item 24 volts AC from 110 to 24 volts AC adapter.
 	\end{itemize}
 \item Output
 	\begin{itemize}
-	\item 24 volts AC
-	\item 5 volts DC
-	\item Pass: 24$\pm1.2$ volts AC measured (5\%).
-		5$\pm0.15$ volts DC measured (3\%).
-	\item Fail: voltages measured out of range.
+	\item Green power LED on.
+	\item 24$\pm4.8$ (20\%) volts AC output.
+	\item 5$\pm0.5$ (10\%) volts DC output.
 	\end{itemize}
 \item Test Description \\
 
-With the 110 volts AC applied the voltage supply should
-produce both a 25 volts AC output and a 5 volts DC output.
-These values are measured using a digital multi meter.
-The test passes if they are within the tolerance range,
-otherwise the test fails.
+The 110 volt to 24 volt AC power adapter should be connected to the
+two pin input header (Figure \ref{fig:psm2}, top left) and screwed down.
+With the power adapter plugged in to a 110 volts AC power supply the
+green power LED should come on.
+Using a DMM to measure voltage, there should be 5 volts DC output on
+the ``5V'' header pins and 24 volts AC output on the ``24 VAC'' header pins.
+Be sure to switch from AC to DC modes on the DMM as necessary.
+The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
 
+\pagebreak
 \item Test Results \\
 	\vspace{0.2in}
 	\begin{tabular}{|l|l|l|l|}
 		\hline
 		& Value & Pass/Fail & Results/Data\hspace{2in} \\
 		\hline
-		24 volts AC &&& \\
+		Power LED on? &&& \\
 		\hline
-		5 volts DC &&& \\
+		$24\pm4.8$ volts AC &&& \\
+		\hline
+		$5\pm0.5$ volts DC &&& \\
 		\hline
 	\end{tabular}
 \end{enumerate}
 % }}}
 
 % {{{ Control
+\clearpage
 \subsection{Control}
 
 \begin{enumerate}
