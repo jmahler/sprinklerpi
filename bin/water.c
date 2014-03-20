@@ -53,6 +53,8 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <linux/types.h>
+#include <linux/spi/spidev.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -62,6 +64,10 @@
 
 #include "sprinklerpi.h"
 
+void usage(char *proc) {
+	fprintf(stderr, "usage: %s -c \"0-8...\" [-d /dev/name]\n", proc);
+}
+
 int main(int argc, char* argv[]) {
 
 	int fd;
@@ -70,7 +76,7 @@ int main(int argc, char* argv[]) {
 	ssize_t ret;
 	size_t len;
 	unsigned char cmd_len;
-	char *incmd = "000";
+	char *incmd = NULL;
 	char *cmd;
 	int opt;
 	int verbose = 0;
@@ -89,9 +95,15 @@ int main(int argc, char* argv[]) {
 			break;
 		case 'h':
 		default: /* '?' */
-			fprintf(stderr, "usage: %s [-c 0-8...] [-d /dev/name]\n", argv[0]);
+			usage(argv[0]);
 			exit(EXIT_FAILURE);
 		}
+	}
+
+	if (NULL == incmd) {
+		usage(argv[0]);
+		fprintf(stderr, "  A command (-c) must be specified.\n");
+		exit(EXIT_FAILURE);
 	}
 
 	if (verbose) {
