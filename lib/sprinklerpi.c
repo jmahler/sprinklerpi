@@ -19,8 +19,11 @@ int encode_cmd(char* incmd, unsigned char inlen,
 	for (i = 0; i < inlen; i++) {
 		n = incmd[i] - 48;  /* ASCII to integer */
 
-		/* only commands from 0 to 7 are allowed */
-		if (n > 7) {
+		/* only commands from 0 to 8 are allowed
+		 *   0 : off
+		 * 1-8 : valve on
+		 */
+		if (n > 8) {
 			*enccmd = NULL;
 			return -2;  /* invalid command */
 		}
