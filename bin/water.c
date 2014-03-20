@@ -51,6 +51,7 @@
  *
  */
 
+#include <sys/ioctl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <linux/types.h>
@@ -80,6 +81,7 @@ int main(int argc, char* argv[]) {
 	char *cmd;
 	int opt;
 	int verbose = 0;
+	unsigned char spi_mode;
 
 	/* Get arguments, valve number */
 	while ((opt = getopt(argc, argv, "c:d:vh")) != -1) {
@@ -114,6 +116,10 @@ int main(int argc, char* argv[]) {
 		fprintf(stderr, "Unable to open '%s': %s\n", dev, strerror(errno));
 		return 1;
 	}
+
+	/* set SPI MODE */
+	spi_mode = SPI_MODE_0;
+	ioctl(fd, SPI_IOC_WR_MODE, &spi_mode);
 
 	/* encode the ASCII command */
 	len = strlen(incmd);
