@@ -28,12 +28,12 @@ AUTHOR
 ------
 
 Jeremiah Mahler <jmmahler@gmail.com><br>
-<https://plus.google.com/+JeremiahMahler/about>
+<http://github.com/jmahler>
 
 COPYRIGHT
 ---------
 
-Copyright &copy; 2013, Jeremiah Mahler All Rights Reserved.<br>
+Copyright &copy; 2014, Jeremiah Mahler All Rights Reserved.<br>
 This project is free software and released under
 the [GNU General Public License][gpl].
 
