@@ -29,8 +29,10 @@ Iout = 600e-3  % (amp)
 %Iout = 1
 % Minimum desired output frequency
 % 100 kHz max
-% Higher frequency -> smaller inductor
-% lowever frequence -> larger timing capacitor (CT)
+% higher frequency -> smaller inductor
+% lower frequency -> larger timing capacitor (CT)
+% audible hearing range is 12 Hz to 20 kHz
+%  (should be increased, noise is noticeable)
 %fmin = 100e3  % (Hz)  % max
 fmin = 10.1e3  % (Hz)
 % Desired peak-to-peak output ripple voltage
