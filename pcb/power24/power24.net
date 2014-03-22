@@ -1,7 +1,7 @@
 (export (version D)
   (design
     (source /home/jeri/sprinklerpi/pcb/power24/power24.sch)
-    (date "Tue 04 Mar 2014 02:11:04 PM PST")
+    (date "Sat 22 Mar 2014 09:50:12 AM PDT")
     (tool "eeschema (2013-jul-07)-stable"))
   (components
     (comp (ref D2)
@@ -60,12 +60,12 @@
       (sheetpath (names /) (tstamps /))
       (tstamp 52C72412))
     (comp (ref R3)
-      (value 2.2k)
+      (value 3k)
       (libsource (lib device) (part R))
       (sheetpath (names /) (tstamps /))
       (tstamp 52C7241F))
     (comp (ref R4)
-      (value 6.6k)
+      (value 5k)
       (libsource (lib device) (part R))
       (sheetpath (names /) (tstamps /))
       (tstamp 52C72425))
