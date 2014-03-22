@@ -13,14 +13,15 @@
 /*
  * encode_cmd()
  *
- * Encodes an ASCII string representation of commands for
- * a variable number of control groups and encodes in to a
- * format suitable for a SprinklerPI device.
+ * Encodes an ASCII string representation of a command
+ * for one to three groups in to a format suitable for
+ * a SprinklerPI device.
  *
  * The input format consists of 1 character which specifies
  * the number of the valve to turn on for that group.
  * For example, the following command would turn on valve 2
- * in group 1 and valve 4 in group 2.
+ * in group 1 and valve 4 in group 2.  Notice that the leftmost
+ * number is the first group which is the first in the daisy chain.
  *
  * "24"
  *
@@ -29,12 +30,14 @@
  *
  * "3"
  *
- * If there is a group 2 a zero should be specified to keep it off.
+ * If there was a group two and it was desired to turn it off
+ * while keeping valve three in group one on, a zero should be
+ * given.
  *
  * "30"
  *
- * Memory for storing the encoded command is from a static buffer.
- * Subsequent calls will overwrite this buffer.
+ * The result is an encoded command along with the encoded length
+ * in bytes.  This buffer is overwritten in subsequent calls.
  *
  * char* incmd = "24";
  * unsigned char inlen;
