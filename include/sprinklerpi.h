@@ -40,9 +40,9 @@
  * in bytes.  This buffer is overwritten in subsequent calls.
  *
  * char* incmd = "24";
- * unsigned char inlen;
- * unsigned *char enccmd = NULL;
- * unsigned char enclen;
+ * char inlen;
+ * *char enccmd = NULL;
+ * char enclen;
  *
  * inlen = strlen(incmd);
  * ret = encode_cmd(incmd, inlen, &enccmd, &enclen);
@@ -56,7 +56,7 @@
  * // ...
  *
  */
-int encode_cmd(char* incmd, unsigned char inlen,
-				char** enccmd, unsigned char* enclen);
+int encode_cmd(char* incmd, char inlen,
+				char** enccmd, char* enclen);
 
 #endif

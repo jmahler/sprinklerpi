@@ -1,21 +1,24 @@
 
 #include "sprinklerpi.h"
 
-int encode_cmd(char* incmd, unsigned char inlen,
-				char** enccmd, unsigned char* enclen) {
+int encode_cmd(char* incmd, char inlen,
+				char** enccmd, char* enclen) {
 	unsigned char i, j;
-	unsigned char n;
+	char n;
 	static char _enccmd[(MAXGRP / 2) + (MAXGRP % 2)];
 
-	*enclen = (inlen / 2) + (inlen % 2);  /* each cmd is 4-bits */
-	*enccmd = _enccmd;  /* point to our static buffer */
+	/* Each controller requires 4-bits but each command (char)
+	 * is 8-bits.  `enclen` is the number of 4-bit (nibbles) needed
+	 * to store `inlen` commands, possibly with a zero padded entry.
+	 */
+	*enclen = (inlen / 2) + (inlen % 2);	/* each cmd is 4-bits */
+	*enccmd = _enccmd;						/* point to our static buffer */
 
 	if (inlen > MAXGRP) {
-		*enccmd = NULL;
-		return -1;  /* invalid command */
+		return -1;
 	}
 
-	j = 0;  /* outcmd index, 1/2 of incmd index (i) */
+	j = 0;  /* enccmd index, 1/2 of incmd index (i) */
 	for (i = 0; i < inlen; i++) {
 		n = incmd[i] - 48;  /* ASCII to integer */
 
@@ -24,32 +27,39 @@ int encode_cmd(char* incmd, unsigned char inlen,
 		 * 1-8 : valve on
 		 */
 		if (n > 8) {
-			*enccmd = NULL;
-			return -2;  /* invalid command */
+			return -2;
 		}
 
 		/*       command, 1 group
 		 *  7      4 3     1      0
 		 * +--------+-------+------+
-		 * |  ...   | valve | en_n |
+		 * | unused | valve | en_n |
 		 * +--------+-------+------+
 		 */
 		if (0 == n) {
-			n = 1;  /* disable all, en_n = 1 */
+			/* disable all, en_n = 1 */
+			n = 1;
 		} else {
-			n = (n - 1) << 1;  /* valve # (0 offset), en_n = 0 */
+			/* valve #, 0 offset, en_n = 0 */
+			n = (n - 1) << 1;
 		}
 
+		/* save this command to a nibble */
 		if (evenp(i)) {
-			/* save to lowest 4-bits */
-			(*enccmd)[j] = 0x0F & n;
+			/* MSB first, first in daisy chain gets last (lowest) bits */
+			(*enccmd)[j] = (0x0F & n);
 		} else {
-			/* move lo 4-bits to hi */
-			(*enccmd)[j] = (*enccmd)[j] << 4;
-			/* save new to lowest 4-bits */
-			(*enccmd)[j] |= (0x0F & n);
+			/* MSB first, second in daisy chain gets first (highest) bits */
+			(*enccmd)[j] |= (n << 4);
 			j++;
 		}
+	}
+
+	/* reverse bytes */
+	for (i = 0; i < ((*enclen) / 2); i++) {
+		n = (*enccmd)[i];
+		(*enccmd)[i] = (*enccmd)[((*enclen) - 1) - i];
+		(*enccmd)[((*enclen) - 1) - i] = n;
 	}
 
 	return 0;

@@ -81,12 +81,12 @@ int main(int argc, char* argv[]) {
 	char *dev = "/dev/spidev0.0";
 	ssize_t ret;
 	size_t len;
-	unsigned char cmd_len;
+	char cmd_len;
 	char *incmd = NULL;
 	char *cmd;
 	int opt;
 	int verbose = 0;
-	unsigned char spi_mode;
+	char spi_mode;
 
 	/* Get arguments, valve number */
 	while ((opt = getopt(argc, argv, "c:d:vh")) != -1) {
