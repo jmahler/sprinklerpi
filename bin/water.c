@@ -7,24 +7,29 @@
  * DESCRIPTION
  * -----------
  *
- * Control watering by turning on/off sprinklers.
+ * The 'water' program turns on on the sprinklers.
+ * It does not control the duration.  This must be
+ * done by some other program.  Once a sprinkler is
+ * turned on it will remain on until it is turned off.
  *
- * The duration is not controlled by this program,
- * once a circuit is turned on it will remain on
- * until turned off.
+ * To turn on valve three simply give its number.
  *
- * To turn off all the sprinklers specify the circuit zero,
- * which is an unused circuit.
+ *   $ water -c "3"
+ *
+ * And to turn it off use the number zero.
  *
  *   $ water -c "0"
  *
- * If there are two control groups two zeros should be given, and so on.
+ * But there can also be multiple groups.
+ * Use "12" to * turn on valve one in group one and valve
+ * two in group two.  Notice that the first group is the leftmost
+ * number.
  *
- *   $ water -c "00"
+ *   $ water -c "12"
  *
- * To water circuit 6 in group 1 and 3 in group 5.
+ * And this syntax can also be expanded to three groups.
  *
- *   $ water -c "65"
+ *   $ water -c "123"
  *
  * To to see what the command is doing use the '-v' option.
  * And for other usage see the '-h' option.
@@ -34,7 +39,7 @@
  *
  *   $ water -h
  *
- * With just this command a simple timer can be created using
+ * With just this command a simple timer can be constructed using
  * the `sleep` command.
  * This example has one control group and waters circuit 3 for 5 minutes.
  * Notice that it has to be explicitly turned off.
