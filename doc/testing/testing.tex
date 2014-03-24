@@ -8,6 +8,7 @@
 \usepackage{parskip}
 \usepackage{fancyvrb}
 \usepackage{amsmath}
+\usepackage{framed}
 
 \usepackage{listings}
 \lstset{numbers=left,
@@ -30,10 +31,12 @@
 % {{{ title page
 \vspace*{1.0in}
 
-\centerline{\Large \textbf{SprinklerPI}}
-\centerline{(Product Test Plan)}
+\centerline{\LARGE \textbf{SprinklerPI}}
+%\centerline{(Product Test Plan)}
+\vspace{0.3in}
+\centerline{\LARGE Product Test Plan}
 
-\vspace{0.5in}
+\vfill
 
 \begin{center}
 \begin{tabular}{c}
@@ -43,9 +46,11 @@ EECE 490B, CSU Chico \\
 \end{tabular}
 \end{center}
 
+\vspace{1in}
+
 \thispagestyle{empty}
 
-\vfill
+%\vfill
 
 \pagebreak
 % }}}
@@ -93,9 +98,9 @@ Not applicable at this time.
 
 \subsection{Precautions \& Warnings}
 
-This test plan contains certain warnings and cautions designed to alert the
-test engineer while performing tests. The following illustrates each of
-these messages and how to recognize them.
+This test plan contains certain warnings, cautions and important
+notes that the test engineer must be aware of while performing these tests.
+The following illustrates each of these messages and how to recognize them.
 
 \fbox{
 \textbf{WARNING: \textless message\textgreater}
@@ -111,12 +116,31 @@ the highest importance, such as possible injury to the operator.
 The ``CAUTION: Message'' alerts the user to issues concerning possible
 damage to the equipment or that can lead to erroneous test results.
 
+\fbox{
+\textbf{IMPORTANT: \textless message\textgreater}
+}
+
+The ``IMPORTANT: Message'' alerts the user to important design changes.
+
 % }}}
 
 \section{Testing Features and Functions}
 
+This system has a modular design with a power supply module and from
+one to three control/driver modules.
+The following test procedure tests each module individually.
+After an individual module has been tested and shown to be in working
+order it can be used to construct a full system.
+
 % {{{ Power Supply Module
 \subsection{Power Supply Module}
+
+\begin{framed}
+\textbf{IMPORTANT}: The DC voltage has been changed
+from 5V to 3.3V.
+The label on version 20140304 of the power supply PCB still
+refers to 5V despite this change.
+\end{framed}
 
 \begin{figure}[hbp!]
 \begin{center}
@@ -125,7 +149,7 @@ damage to the equipment or that can lead to erroneous test results.
 \caption{Assembled power supply module PCB.
 The 24 volts AC input is in the top left.
 The green power LED is on the bottom right.
-The headers for the 24 volts AC output and 5 volts DC
+The headers for 24 volts AC output and 3.3 volts DC
 output are on the bottom.
 }\label{fig:psm2}
 \end{figure}
@@ -134,7 +158,7 @@ output are on the bottom.
 \item Equipment Required
 	\begin{itemize}
 	\item SprinklerPI power supply module (revision 20140304).
-	\item 110 volts AC power supply (standard U.S.)
+	\item 110 volts AC power supply (standard U.S.).
 	\item 110 volts AC to 24 volts AC power adapter.
 	\item Digital multi meter.
 	\end{itemize}
@@ -146,20 +170,20 @@ output are on the bottom.
 	\begin{itemize}
 	\item Green power LED on.
 	\item 24$\pm4.8$ (20\%) volts AC output.
-	\item 5$\pm0.5$ (10\%) volts DC output.
+	\item 3.3$\pm0.3$ (10\%) volts DC output.
 	\end{itemize}
+\pagebreak
 \item Test Description \\
 
 The 110 volt to 24 volt AC power adapter should be connected to the
 two pin input header (Figure \ref{fig:psm2}, top left) and screwed down.
 With the power adapter plugged in to a 110 volts AC power supply the
 green power LED should come on.
-Using a DMM to measure voltage, there should be 5 volts DC output on
+Using a DMM to measure voltage, there should be 3.3 volts DC output on
 the ``5V'' header pins and 24 volts AC output on the ``24 VAC'' header pins.
 Be sure to switch from AC to DC modes on the DMM as necessary.
 The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
 
-\pagebreak
 \item Test Results \\
 	\vspace{0.2in}
 	\begin{tabular}{|l|l|l|l|}
@@ -170,124 +194,115 @@ The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
 		\hline
 		$24\pm4.8$ volts AC &&& \\
 		\hline
-		$5\pm0.5$ volts DC &&& \\
+		$3.3\pm0.3$ volts DC &&& \\
 		\hline
 	\end{tabular}
 \end{enumerate}
 % }}}
 
-% {{{ Control
+% {{{ Control/Driver
 \clearpage
-\subsection{Control}
+\subsection{Control/Driver}
+
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[scale=0.6]{img/control_driver_tb_02.jpg}
+\end{center}
+\caption{Control driver with test bridge (bottom) installed.}
+\label{fig:cdbridge}
+\end{figure}
+
+\begin{framed}
+\textbf{IMPORTANT}: The DC voltage has been changed
+from 5V to 3.3V.
+The label on version 20140304 of the control driver PCB still
+refers to 5V despite this change.
+\end{framed}
 
 \begin{enumerate}
 \item Equipment Required
 	\begin{itemize}
-	\item 110 volts AC, standard U.S. residential output
+	\item SprinklerPI power supply module (revision 20140304).
+	\item 110 volts AC power supply (standard U.S.).
+	\item 110 volts AC to 24 volts AC power adapter.
+	\item Digital multi meter.
+	\item RasberryPI.
+	\item Jumper wires.
+	\item Control/Driver test bridge (25 $\Omega$, 5 Watt)
+			(Figure \ref{fig:cdbridge}).
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item Input command, through user interface, to turn valve on.
+	\item User turns valves on using command line interface.
 	\end{itemize}
+\pagebreak
 \item Output
 	\begin{itemize}
-	\item LED indicator for valve circuit when sprinkler valve on.
-	\item Pass: LED goes on less than one second after on command.
-		LED goes off less than one second after off command.
-	\item Fail: LED does not respond.  LED for wrong circuit responds.
+	\item Green LED on for valve which is on.
+	\item $9.5\pm0.5$ volts AC across test bridge resistor when on.
 	\end{itemize}
 \item Test Description \\
 
-With the full system powered on a command signal
-given through the user interface should turn
-on the corresponding driver circuit which should illuminate
-the corresponding LED indicator.
-This process should be repeated for each of the
-eight circuits of the control/driver.
+These tests verify that each of the eight circuits can be turned
+on and that they can adequately drive a load.
+The operation of each circuit can be seen by the green LED indicator
+which is on when that valve is on.
+The load is checked by measuring the voltage drop across the
+resistor of the test bridge (Figure \ref{fig:cdbtest}).
+The voltage drop should be $9.5\pm0.5$ volts AC which corresponds
+to a current draw of $380$ mA for the $25 \Omega$ load.
 
+\begin{figure}[htbp!]
+\begin{center}
+\includegraphics[scale=0.6]{img/control_driver_tb_03.jpg}
+\end{center}
+\caption{Voltage test point for control driver test bridge.}\label{fig:cdbtest}
+\end{figure}
+
+Once logged in to the RasberryPI each valve can be turned on by
+running the \verb+water+ command.
+
+\begin{verbatim}
+rasberrypi:~$ water -c "1"
+rasberrypi:~$ water -c "2"
+rasberrypi:~$ water -c "3"
+rasberrypi:~$ water -c "0"  # turn off
+\end{verbatim}
+
+See \verb+water -h+ for more info.
+
+\pagebreak
 \item Test Results \\
 	\vspace{0.2in}
-	\begin{tabular}{|l|l|l|}
+	\begin{tabular}{|l|l|l|l|l|}
 		\hline
-		& Pass/Fail & Results/Data\hspace{2in} \\
+		& LED on? & Voltage Drop    & Pass/Fail & Results/Data\hspace{2in} \\
+		&         & $9.5\pm0.5$ VAC & & \\
 		\hline
-		1 && \\
+		1 &&&& \\
 		\hline
-		2 && \\
+		2 &&&& \\
 		\hline
-		3 && \\
+		3 &&&& \\
 		\hline
-		4 && \\
+		4 &&&& \\
 		\hline
-		5 && \\
+		5 &&&& \\
 		\hline
-		6 && \\
+		6 &&&& \\
 		\hline
-		7 && \\
+		7 &&&& \\
 		\hline
-		8 && \\
+		8 &&&& \\
 		\hline
 	\end{tabular}
 \end{enumerate}
 % }}}
 
-% {{{ Driver
-\subsection{Driver}
-
-\begin{enumerate}
-\item Equipment Required
-	\begin{itemize}
-	\item 110 volts AC, standard U.S. residential output
-	\item Sprinkler valve, 270 mA residential
-	\end{itemize}
-\item Input
-	\begin{itemize}
-	\item Input command, through user interface, to turn valve on.
-	\end{itemize}
-\item Output
-	\begin{itemize}
-	\item Detected operation of sprinkler valve.
-	\item Pass: Valve switches on less than one second after command.
-		Valve switches off less than one second after command.
-	\item Fail: No response or slow response of valve.
-	\end{itemize}
-\item Test Description \\
-
-With the full system powered on a command signal
-given through the user interface should turn
-the corresponding sprinkler valve on.
-This process should be repeated for each of the
-eight circuits of the control/driver.
-
-\item Test Results \\
-	\vspace{0.2in}
-	\begin{tabular}{|l|l|l|}
-		\hline
-		Valve & Pass/Fail & Results/Data\hspace{2in} \\
-		\hline
-		1 && \\
-		\hline
-		2 && \\
-		\hline
-		3 && \\
-		\hline
-		4 && \\
-		\hline
-		5 && \\
-		\hline
-		6 && \\
-		\hline
-		7 && \\
-		\hline
-		8 && \\
-		\hline
-	\end{tabular}
-\end{enumerate}
-% }}}
-
-\section{Other Testing}
+%\section{Other Testing}
 
 % {{{ User Interface
+\clearpage
 \subsection{User Interface}
 
 \begin{enumerate}
