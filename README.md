@@ -2,25 +2,30 @@
 NAME
 ----
 
-sprinklerpi - Sprinkler control with Linux using a RasberryPI
+SprinklerPI - Web based sprinkler controller using Linux
 
 DESCRIPTION
 -----------
 
-The task of watering a lawn is conceptually simple.
-Turn on certain sprinklers at certain times and run them for
-a certain duration.
+An web based sprinkler controller using Linux that is
+open source and highly customizable.
 
-The well known UNIX/Linux program `cron` can run any program
-on any schedule: every day, every other day, every third Friday,
-every day during the month of august.  The possible combinations
-are endless.
+The hardware design (PCBs) is modular with a power supply
+and control/drivers.  Each control/driver can control eight
+valves and there can be three of these control/drivers
+for a maximum of 24 valves.
 
-Using the power of `cron` on a [RasberryPI][rpi] running Linux with
-a small amount interface hardware to control the sprinkler
-valves and the result is a very powerful sprinkler control system.
+The system is controlled using a Linux computer.
+The current design uses a [RasberryPI][rpi] but any computer capable
+of communication using SPI will work.
 
   [rpi]: http://www.rasberrypi.org
+
+The user interface is currently only accessible from the command line.
+Watering can be performed using shell scripts which are scheduled
+using `cron(8)`.
+
+A web based user interface is in development.
 
 Refer to the full documentation ([doc/design/design.pdf](https://github.com/jmahler/sprinklerpi/blob/build/doc/design/design.pdf?raw=true)) for more info.
 
