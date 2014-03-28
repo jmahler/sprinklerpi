@@ -1,0 +1,43 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          sprinklerpi
+# Required-Start:    $syslog
+# Required-Stop:     $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Web based sprinkler controller.
+# Description:       Sprinkler controller for turning on sprinkler valves
+#                    on manually or at a regular schedule.
+#
+#                    http://github.com/jmahler/sprinklerpi
+### END INIT INFO
+
+# Author: Jeremiah Mahler <jmmahler@gmail.com>
+
+# Currently there is no "daemon". This script just makes
+# sure the valves are off during start up.
+
+DESC="sprinklerpi daemon"
+NAME=sprinklerpi
+
+. /lib/lsb/init-functions
+
+case "$1" in
+	start)
+		log_daemon_msg "Starting SprinklerPI" "sprinklerpi"
+		water -c "000"  # all off
+		status=$?
+		log_end_msg $status
+		;;
+	stop)
+		log_daemon_msg "Stopping SprinklerPI" "sprinklerpi"
+		status=0
+		log_end_msg $status
+		;;
+	*)
+		echo "Usage: sprinklerpi [start|stop]" >&2
+		exit 3
+		;;
+esac
+
+exit 0
