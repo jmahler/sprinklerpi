@@ -121,7 +121,7 @@ while (1) {
 
 	# turn on the valve
 	print "$water_cmd, $time_sec\n" if $VERBOSE;
-	`water -c \"$water_cmd\" -d $dev_file`;
+	`water -d $dev_file \"$water_cmd\"`;
 
 	sleep $time_sec;
 
@@ -129,5 +129,5 @@ while (1) {
 	$water_cmd[$group - 1] = "0";
 	$water_cmd = join "", @water_cmd;
 
-	`water -c \"$water_cmd\" -d $dev_file`;
+	`water -d $dev_file \"$water_cmd\"`;
 }

@@ -14,27 +14,27 @@
  *
  * To turn on valve three simply give its number.
  *
- *   $ water -c "3"
+ *   $ water "3"
  *
  * And to turn it off use the number zero.
  *
- *   $ water -c "0"
+ *   $ water "0"
  *
  * But there can also be multiple groups.
  * Use "12" to * turn on valve one in group one and valve
  * two in group two.  Notice that the first group is the leftmost
  * number.
  *
- *   $ water -c "12"
+ *   $ water "12"
  *
  * And this syntax can also be expanded to three groups.
  *
- *   $ water -c "123"
+ *   $ water "123"
  *
  * To to see what the command is doing use the '-v' option.
  * And for other usage see the '-h' option.
  *
- *   $ water -v -c "65"
+ *   $ water -v "65"
  *   $ water -v  # shows defaults
  *
  *   $ water -h
@@ -44,15 +44,15 @@
  * This example has one control group and waters circuit 3 for 5 minutes.
  * Notice that it has to be explicitly turned off.
  *
- *   $ water -c 3; sleep 5m; water -c 0
+ *   $ water "3"; sleep 5m; water "0"
  *
  * Several of these commands could be combined in a file
  * to create a shell script which runs a full schedule.
  *
  *   #!/bin/sh
- *   water -c 3; sleep 5m;
- *   water -c 4; sleep 7m;
- *   water -c 0
+ *   water "3"; sleep 5m;
+ *   water "4"; sleep 7m;
+ *   water "0"
  *
  */
 
@@ -71,7 +71,7 @@
 #include "sprinklerpi.h"
 
 void usage(char *proc) {
-	fprintf(stderr, "usage: %s -c \"0-8...\" [-d /dev/name]\n", proc);
+	fprintf(stderr, "usage: %s [-d /dev/name] [-v] \"0-8...\"\n", proc);
 }
 
 int main(int argc, char* argv[]) {
@@ -87,13 +87,11 @@ int main(int argc, char* argv[]) {
 	int opt;
 	int verbose = 0;
 	char spi_mode;
+	extern int optind;
 
 	/* Get arguments, valve number */
-	while ((opt = getopt(argc, argv, "c:d:vh")) != -1) {
+	while ((opt = getopt(argc, argv, "d:vh")) != -1) {
 		switch (opt) {
-		case 'c':
-			incmd = optarg;
-			break;
 		case 'd':
 			dev = optarg;
 			break;
@@ -105,6 +103,13 @@ int main(int argc, char* argv[]) {
 			usage(argv[0]);
 			exit(EXIT_FAILURE);
 		}
+	}
+	/* first non-option is the input command (valve numbers) */
+	if (optind < argc) {
+		incmd = argv[optind];
+	} else {
+		usage(argv[0]);
+		exit(EXIT_FAILURE);
 	}
 
 	if (NULL == incmd) {

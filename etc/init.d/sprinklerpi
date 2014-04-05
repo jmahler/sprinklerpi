@@ -25,7 +25,7 @@ NAME=sprinklerpi
 case "$1" in
 	start)
 		log_daemon_msg "Starting SprinklerPI" "sprinklerpi"
-		water -c "000"  # all off
+		water "000"  # all off
 		status=$?
 		log_end_msg $status
 		;;
