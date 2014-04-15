@@ -3,11 +3,26 @@ use strict;
 
 use Time::HiRes qw(usleep);
 
-=head2
+=head1 NAME
+
+waterpi-demo - Demostrate operation with entertaining displays.
+
+=head1 DESCRIPTION
 
 Demonstrates the operation of the system by displaying
 entertaining patterns on the LEDs of the control/driver
 boards.
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    http://github.com/jmahler
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
 
 =cut
 

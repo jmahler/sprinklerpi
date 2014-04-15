@@ -1,5 +1,13 @@
 <?php
 /**
+ * NAME
+ * ----
+ *
+ * sprinklerpi.php - SprinklerPI class library.
+ *
+ * DESCRIPTION
+ * -----------
+ *
  * The SprinklerPI class is used to read and store the
  * state of the sprinklerpi files.
  *
@@ -17,6 +25,20 @@
  *   	echo "<p>" . $spkpi->errmsg . "</p>";
  *   	$spkpi->read_state();  # read previous state
  *   }
+ *
+ * AUTHOR
+ * ------
+ *
+ *  Jeremiah Mahler <jmmahler@gmail.com>
+ *  http://github.com/jmahler
+ *
+ * COPYRIGHT
+ * --------
+ *
+ * Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+ * This module is free software.  It may be used, redistributed
+ * and/or modified under the same terms as Perl itself.
+ *
  */
 class SprinklerPI {
 	public $mode = 'off';

@@ -54,6 +54,19 @@
  *   water "4"; sleep 7m;
  *   water "0"
  *
+ * AUTHOR
+ * ------
+ *
+ *  Jeremiah Mahler <jmmahler@gmail.com>
+ *  http://github.com/jmahler
+ *
+ * COPYRIGHT
+ * --------
+ *
+ * Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+ * This module is free software.  It may be used, redistributed
+ * and/or modified under the same terms as Perl itself.
+ *
  */
 
 #include <sys/ioctl.h>
