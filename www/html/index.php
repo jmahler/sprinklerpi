@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <?php #set_include_path(get_included_path() . PATH_SEPARATOR . 'lib/'; ?>
 <head>
@@ -75,4 +76,3 @@ for ($group = 1; $group <= 3; $group++) {
 
 </body>
 </html>
-
