@@ -26,9 +26,16 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
+sub water {
+	my $cmd = shift;
+
+	system('water', '-d', '/dev/spidev0.0', $cmd)
+		and die "Execution of 'water' failed.\n";
+}
+
 # Turn off valves during Ctrl-C quit
 $SIG{INT} = sub {
-	`water "000"`;
+	water("000");
 	exit(0);
 };
 
@@ -46,11 +53,11 @@ while (1) {
 	my $sleep = $T/$steps;
 	for (my $n = 0; $n < 3; $n++) {
 		for (my $i = 1; $i <= 8; $i++) {
-			`water "$i$i$i"`;
+			water("$i$i$i");
 			usleep($sleep*1e6);
 		}
 		for (my $i = 8; $i >= 1; $i--) {
-			`water "$i$i$i"`;
+			water("$i$i$i");
 			usleep($sleep*1e6);
 		}
 	}
@@ -63,37 +70,37 @@ while (1) {
 
 		for (my $i = 0; $i <= 8; $i++) {
 			my $cmd = "00" . "$i";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 
 		for (my $i = 0; $i <= 8; $i++) {
 			my $cmd = "0" . "$i" . "0";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 
 		for (my $i = 0; $i <= 8; $i++) {
 			my $cmd = "$i" . "00";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 
 		for (my $i = 8; $i >= 0; $i--) {
 			my $cmd = "$i" . "00";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 
 		for (my $i = 8; $i >= 0; $i--) {
 			my $cmd = "0" . "$i" . "0";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 
 		for (my $i = 8; $i >= 0; $i--) {
 			my $cmd = "00" . "$i";
-			`water "$cmd"`;
+			water($cmd);
 			usleep($sleep*1e6);
 		}
 	}
@@ -101,13 +108,13 @@ while (1) {
 	# full speed, sleep only at 4
 	for (my $n = 0; $n < 24; $n++) {
 		for (my $i = 0; $i <= 8; $i++) {
-			`water "$i$i$i"`;
+			water("$i$i$i");
 			if ((4 == $i) and (12 == $n)) {
 				usleep(0.5*1e6);
 			}
 		}
 		for (my $i = 8; $i >= 0; $i--) {
-			`water "$i$i$i"`;
+			water("$i$i$i");
 			if ((4 == $i) and (23 == $n)) {
 				usleep(0.5*1e6);
 			}
@@ -122,11 +129,11 @@ while (1) {
 		for (my $j = 0; $j <= 8; $j++) {
 			for (my $k = 0; $k <= 8; $k++) {
 				if (0 == $counter_mode) {
-					`water "$k$j$i"`;
+					water("$k$j$i");
 				} elsif (1 == $counter_mode) {
-					`water "$i$k$j"`;
+					water("$i$k$j");
 				} else {
-					`water "$j$i$k"`;
+					water("$j$i$k");
 				}
 				usleep($sleep*1e6);
 			}
@@ -137,4 +144,4 @@ while (1) {
 	}
 }
 
-`water "000"`;
+water("000");
