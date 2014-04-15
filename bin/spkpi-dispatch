@@ -131,7 +131,7 @@ while (1) {
 	if (! defined $child_pid) {
 		# error
 		print STDERR "Couldn't fork: $!";
-		continue;
+		next;
 	} elsif ($child_pid) {
 		# parent
 		print "Forked child: $child_pid\n" if $cfg->{verbose};
