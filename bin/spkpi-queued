@@ -7,10 +7,8 @@ spkpi-queued - SprinklerPI queue daemon.
 
 =head1 DESCRIPTION
 
-The queue daemon monitors a queue file where each line consists of
-a instruction to turn on a valve for a particular period of time.
-
-The format of a command is as follows:
+The queue daemon monitors a queue file where each line describes
+a valve to turn on and for how long.
 
   <group>:<valve>  <time minutes>
 
