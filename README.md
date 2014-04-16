@@ -29,6 +29,35 @@ A web based user interface is in development.
 
 Refer to the full documentation ([doc/design/design.pdf](https://github.com/jmahler/sprinklerpi/blob/build/doc/design/design.pdf?raw=true)) for more info.
 
+CONTENTS
+--------
+
+There are various components to this system each arranged in their
+own directory as described below.
+
+  bin/ - Binaries and daemons.
+
+  doc/ - All documentation including: design manual, testing manual, etc.
+
+  etc/ - Daemon init.d files and configuration for [Nginx][nginx] web server.
+
+  include/ - Libraries and headers for programs in bin/.
+
+  lib/ - Associated libraries for headers in `include/`.
+
+  pcb/ - Printed circuit board (PCB) designs using [Kicad][kicad].
+
+  www/ - Web interface written in [PHP][php].
+
+  www/sprinklerpi/ - SprinklerPI files.  Both the web interface and daemons
+    read and modify these files.
+
+  [kicad]:http://www.kicad-pcb.org
+
+  [PHP]:http://www.php.net
+
+  [nginx]:http://www.nginx.org
+
 AUTHOR
 ------
 
