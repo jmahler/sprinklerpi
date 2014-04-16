@@ -39,6 +39,7 @@ my $cfg = {
 	mode_prog => {
 		'manual' => 'spkpi-manual',
 		'demo'	 => 'water-demo',
+		'off'	 => 'true',
 	},
 };
 $cfg->{mode_file} = $cfg->{spkpi_dir} . "/mode";
