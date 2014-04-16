@@ -15,16 +15,21 @@
  *   
  *   $err = $spkpi->read_state();
  *   if ($err) {
- *   	echo "<p>" . $spkpi->errmsg . "</p>";
+ *   	exit($spkpi->errmsg);
  *   }
- *   
- *   $err = $spkpi->process_post_state();
- *   if (! $err) {
- *   	$spkpi->set_state();
- *   } else {
- *   	echo "<p>" . $spkpi->errmsg . "</p>";
- *   	$spkpi->read_state();  # read previous state
+ *
+ *   $new_spkpi = clone $spkpi;
+ *   $err = $new_spkpi->process_post_state();
+ *   if ($err) {
+ *   	exit($spkpi->errmsg);
  *   }
+ *
+ *   $err = $new_spkpi->write_state_diff($spkpi);
+ *   if ($err) {
+ *   	exit($spkpi->errmsg);
+ *   }
+ *
+ *   $spkpi = $new_spkpi;
  *
  * AUTHOR
  * ------
@@ -106,16 +111,16 @@ class SprinklerPI {
 	 *
 	 *   Returns: -1 on error, 0 on success
 	 *
-	 *   $err = $spkpi->set_state();
+	 *   $err = $spkpi->write_state();
 	 *   if (-1 == $err) {
 	 *		echo $spkpi->errmsg;
 	 *   }
 	 */
-	public function set_state() {
-
+	public function write_state()
+	{
 		# mode
 		$mode = $this->mode;
-		$file  = $this->spkpi_dir . "/mode";
+		$file = $this->spkpi_dir . "/mode";
 		exec("echo $mode > $file");
 
 		# valves
@@ -123,6 +128,35 @@ class SprinklerPI {
 		foreach ($this->valves as $group => $valve) {
 			$file = "$dir/valve-$group";
 			exec("echo $valve > $file");
+		}
+	}
+
+	/**
+	 * Write the differences between two objects to the files.
+	 *
+	 *   Returns: -1 on error, 0 on success
+	 *
+	 *   $err = $new->write_state_diff($old);
+	 *   if (-1 == $err) {
+	 *		echo $spkpi->errmsg;
+	 *   }
+	 */
+	public function write_state_diff($old)
+	{
+		# mode
+		if ($this->mode != $old->mode) {
+			$mode = $this->mode;
+			$file = $this->spkpi_dir . "/mode";
+			exec("echo $mode > $file");
+		}
+
+		# valves
+		$dir = $this->spkpi_dir . "/manual";
+		foreach ($this->valves as $group => $valve) {
+			if ($valve != $old->valves[$group]) {
+				$file = "$dir/valve-$group";
+				exec("echo $valve > $file");
+			}
 		}
 	}
 

@@ -13,16 +13,21 @@ $spkpi = new SprinklerPI($spkpi_dir);
 
 $err = $spkpi->read_state();
 if ($err) {
-	echo "<p>" . $spkpi->errmsg . "</p>";
+	exit($spkpi->errmsg);
 }
 
-$err = $spkpi->process_post_state();
-if (! $err) {
-	$spkpi->set_state();
-} else {
-	echo "<p>" . $spkpi->errmsg . "</p>";
-	$spkpi->read_state();  # read previous state
+$new_spkpi = clone $spkpi;
+$err = $new_spkpi->process_post_state();
+if ($err) {
+	exit($spkpi->errmsg);
 }
+
+$err = $new_spkpi->write_state_diff($spkpi);
+if ($err) {
+	exit($spkpi->errmsg);
+}
+
+$spkpi = $new_spkpi;
 
 $self = "index.php";
 $modes = ["manual", "off", "demo"];
