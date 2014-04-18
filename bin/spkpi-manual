@@ -1,2 +1,133 @@
 #!/usr/bin/perl
 use strict;
+
+use Linux::Inotify2;
+
+=head1 NAME
+
+spki-manual - Manual mode SprinklerPI daemon.
+
+=head1 DESCRIPTION
+
+This daemon supports manual operation of the sprinkler valves
+by monitoring files which represent each group of valves.
+
+  sprinklerpi/manual/
+    valve-1
+    valve-2
+    valve-3
+
+When a valve number is changed it will run the `water` command
+to turn on the valve.
+
+  (sprinklerpi/manual)
+  $ echo 5 > valve-2    # turn valve 5 in group 2 on
+  $ echo 0 > valve-2    # turn all in group 2 off
+  $ echo 2 > valve-3    # turn valve 1 in group 3 on
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    http://github.com/jmahler
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
+
+=cut
+
+my $cfg = {
+	verbose		=> 1,
+	spkpi_dir	=> '../sprinklerpi',
+	valves		=> [],
+	dev			=> '/dev/null',
+#	dev			=> '/dev/spidev0.0',
+};
+for (my $i = 1; $i <= 3; $i++) {
+	my $file = $cfg->{spkpi_dir} . "/manual/valve-$i";
+	push @{$cfg->{valves}}, $file;
+}
+
+(-e $cfg->{spkpi_dir})
+	or die "Directory '" . $cfg->{spkpi_dir} . "' does not exist!";
+
+sub water {
+	my $cmd = shift;
+
+	print "water: \"$cmd\"\n" if $cfg->{verbose};
+
+	if (system('water', '-d', $cfg->{dev}, $cmd)) {
+		print STDERR "Execution of 'water' failed.\n";
+		return -1;
+	}
+}
+
+sub read_valve_files {
+	my @valves;
+
+	while (my $file = shift @_) {
+		unless (open(FH, "< $file")) {
+			print STDERR "Unable to open '$file': $!\n";
+			return ();
+		}
+		my $x = <FH>;
+		chomp($x);
+
+		if ($x < 0 or $x > 8) {
+			print STDERR "Out of range valve ($x) in '$file'\n";
+			return ();
+		}
+
+		push @valves, $x;
+		close(FH)
+	}
+
+	return @valves;
+}
+
+# Turn off valves during Ctrl-C quit
+$SIG{INT} = sub {
+	water("000");
+	exit(0);
+};
+
+# setup file notifications
+
+my $watch_cb = sub {
+	my $e = shift;
+	
+	my $file = $e->fullname;
+
+	print "file $file\n" if ($cfg->{verbose});
+};
+
+my $inotify = new Linux::Inotify2
+	or die "Unable to create inotify object: $!";
+
+foreach my $file (@{$cfg->{valves}}) {
+	$inotify->watch($file, IN_CLOSE_WRITE, $watch_cb)
+		or die "Unable to watch '$file': $!";
+}
+
+my ($v1, $v2, $v3) = read_valve_files(@{$cfg->{valves}})
+	or die "Unable to read valve files";
+
+water("$v1$v2$v3")
+	and die "water() failed";
+
+while (1) {
+	print "Waiting for file changes\n" if $cfg->{verbose};
+	$inotify->poll;
+
+	unless (($v1, $v2, $v3) = read_valve_files(@{$cfg->{valves}})) {
+		print STDERR "Error reading valve files\n";
+		next;
+	}
+
+	if (water("$v1$v2$v3")) {
+		print STDERR "water() failed\n";
+		next;
+	}
+}
