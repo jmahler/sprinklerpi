@@ -18,7 +18,8 @@ by monitoring files which represent each group of valves.
     valve-3
 
 When a valve number is changed it will run the `water` command
-to turn on the valve.
+to turn on the valve.  To test the operation you set the valve
+number from the command line.
 
   (sprinklerpi/manual)
   $ echo 5 > valve-2    # turn valve 5 in group 2 on
