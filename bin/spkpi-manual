@@ -2,6 +2,7 @@
 use strict;
 
 use Linux::Inotify2;
+use YAML qw(LoadFile);
 
 =head1 NAME
 
@@ -26,6 +27,12 @@ number from the command line.
   $ echo 0 > valve-2    # turn all in group 2 off
   $ echo 2 > valve-3    # turn valve 1 in group 3 on
 
+The sprinklerpi files directory must be known.
+The default is "../sprinklerpi" but this can be overriden
+by specifying it as the first argument.
+
+    spkpi-dispatch "../sprinklerpi"
+
 =head1 AUTHOR
 
     Jeremiah Mahler <jmmahler@gmail.com>
@@ -39,21 +46,25 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
+}
 
-my $cfg = {
-	verbose		=> 1,
-	spkpi_dir	=> '../sprinklerpi',
-	valves		=> [],
-	dev			=> '/dev/null',
-#	dev			=> '/dev/spidev0.0',
-};
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
 
-(-e $cfg->{spkpi_dir})
-	or die "Directory '" . $cfg->{spkpi_dir} . "' does not exist!";
+my $conf_file = "$dir/sprinklerpi.conf";
+
+(-e "$conf_file")
+	or die "Configuration file '$conf_file' does not exist!";
+
+my $cfg = LoadFile($conf_file);
 
 # add the valve files to the config
+$cfg->{valves} = [];
 for (my $i = 1; $i <= 3; $i++) {
-	my $file = $cfg->{spkpi_dir} . "/manual/valve-$i";
+	my $file = "$dir/manual/valve-$i";
 
 	(-e $file)
 		or die "Valve file '$file' does not exist!";

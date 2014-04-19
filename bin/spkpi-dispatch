@@ -2,6 +2,7 @@
 use strict;
 
 use Linux::Inotify2;
+use YAML qw(LoadFile);
 
 =head1 NAME
 
@@ -17,6 +18,12 @@ running daemon before starting a new one.
 
     sprinklerpi/mode
 
+The sprinklerpi files directory must be known.
+The default is "../sprinklerpi" but this can be overriden
+by specifying it as the first argument.
+
+    spkpi-dispatch "../sprinklerpi"
+
 =head1 AUTHOR
 
     Jeremiah Mahler <jmmahler@gmail.com>
@@ -30,19 +37,23 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
-# Configuration defaults
-#   Assumed to be running from www/html
-my $cfg = {
-	verbose	  => 1,
-	spkpi_dir => '../sprinklerpi',
-	mode_file => "(undef)",
-	mode_prog => {
-		'manual' => 'spkpi-manual',
-		'demo'	 => 'water-demo',
-		'off'	 => 'true',
-	},
-};
-$cfg->{mode_file} = $cfg->{spkpi_dir} . "/mode";
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
+}
+
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
+
+my $conf_file = "$dir/sprinklerpi.conf";
+
+(-e "$conf_file")
+	or die "Configuration file '$conf_file' does not exist!";
+
+my $cfg = LoadFile($conf_file);
+$cfg->{dir} = $dir;
+
+$cfg->{mode_file} = $cfg->{dir} . "/mode";
 
 # make sure the mode file exists and can be read
 (-e $cfg->{mode_file})
@@ -51,8 +62,8 @@ $cfg->{mode_file} = $cfg->{spkpi_dir} . "/mode";
 	or die "Mode file '" . $cfg->{mode_file} . "' cannot be read.!";
 
 # make sure the mode programs are valid and can be executed
-foreach my $mode (keys %{$cfg->{mode_prog}}) {
-	my $_prog = $cfg->{mode_prog}{$mode};
+foreach my $mode (keys %{$cfg->{modes}}) {
+	my $_prog = $cfg->{modes}{$mode};
 
 	my $prog = `which $_prog`;
 	chomp($prog);
@@ -117,10 +128,10 @@ while (1) {
 
 	# make sure the mode is valid
 	my $prog;
-	if (exists $cfg->{mode_prog}{$mode}) {
-		$prog = $cfg->{mode_prog}{$mode};
+	if (exists $cfg->{modes}{$mode}) {
+		$prog = $cfg->{modes}{$mode};
 	} else {
-		my $modes = join ", ", (keys $cfg->{mode_prog});
+		my $modes = join ", ", (keys $cfg->{modes});
 		print STDERR "Unsupported mode '$mode'\n";
 		print STDERR "  Valid modes are: $modes\n";
 		print STDERR "  skipping\n";

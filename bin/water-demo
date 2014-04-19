@@ -2,6 +2,7 @@
 use strict;
 
 use Time::HiRes qw(usleep);
+use YAML qw(LoadFile);
 
 =head1 NAME
 
@@ -12,6 +13,12 @@ waterpi-demo - Demostrate operation with entertaining displays.
 Demonstrates the operation of the system by displaying
 entertaining patterns on the LEDs of the control/driver
 boards.
+
+The sprinklerpi files directory must be known.
+The default is "../sprinklerpi" but this can be overriden
+by specifying it as the first argument.
+
+    water-demo "../sprinklerpi"
 
 =head1 AUTHOR
 
@@ -26,10 +33,27 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
+}
+
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
+
+my $conf_file = "$dir/sprinklerpi.conf";
+
+(-e $conf_file)
+	or die "Configuration file '$conf_file' does not exist!";
+
+my $cfg = LoadFile($conf_file);
+
+my $dev = $cfg->{dev};
+
 sub water {
 	my $cmd = shift;
 
-	system('water', '-d', '/dev/spidev0.0', $cmd)
+	system('water', '-d', $dev, $cmd)
 		and die "Execution of 'water' failed.\n";
 }
 
@@ -48,6 +72,7 @@ while (1) {
 	# time is calculated according to the number of steps.
 
 	# all same, forward then backward
+	print "forward <-> backward #1\n" if $cfg->{verbose};
 	my $steps = 3*(8 + 8);
 	my $T = 2;  # time period, seconds
 	my $sleep = $T/$steps;
@@ -63,6 +88,7 @@ while (1) {
 	}
 
 	# end to end, forward then backward
+	print "forward <-> backward #2\n" if $cfg->{verbose};
 	my $steps = 3*9*6;
 	my $T = 2;  # time period, seconds
 	my $sleep = $T/$steps;
@@ -106,6 +132,7 @@ while (1) {
 	}
 
 	# full speed, sleep only at 4
+	print "full speed\n" if $cfg->{verbose};
 	for (my $n = 0; $n < 24; $n++) {
 		for (my $i = 0; $i <= 8; $i++) {
 			water("$i$i$i");
@@ -122,6 +149,7 @@ while (1) {
 	}
 
 	# counter
+	print "counter\n" if $cfg->{verbose};
 	my $steps = 9*9*9;
 	my $T = 3;  # time period, seconds
 	my $sleep = $T/$steps;
