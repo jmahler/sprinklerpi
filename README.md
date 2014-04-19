@@ -58,6 +58,45 @@ own directory as described below.
 
   [nginx]:http://www.nginx.org
 
+FAQ
+---
+
+Q. Why does this design use files to communicate between daemons
+and the web server?  Doesn't this make it more complex?
+
+A. There are several reasons why a file system interface was used:
+
+  - transparent - The files can be viewed using standard command
+  line tools (`cat`).  This makes it simple to verify the operation
+  of a daemon, web interface or any other program.
+
+  - debugging - The files can be viewed and modified using standard
+  command line tools and this makes it is easy to test and verify
+  operation.
+
+  - history - The current state of the system can be saved by
+  simply saving the files.
+  A version control system such as [Git][git] can even
+  be used to record the history.
+
+  - interoperable - Any program in any language can interface files
+  and no special libraries are required.
+  This system uses programs written in C, Perl, PHP, and they all
+  communicate with each other using these files.
+
+  - One alternative would be to use sockets.
+  This would allow communication between daemons.
+  But the state of the system cannot be easily examined.
+  Also, the state cannot be saved unless it is dumped to some
+  intermediate format.
+  Sockets programming is also more complex than file operations.
+
+  - Another alternative is to create a monolithic program which does
+  everything.  This shares all the shortcomings of a socket interface.
+  And since the system is not modular it is also difficult to debug.
+
+  [git]:http://git-scm.org
+
 AUTHOR
 ------
 
