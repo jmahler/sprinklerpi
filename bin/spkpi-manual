@@ -39,6 +39,7 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
+
 my $cfg = {
 	verbose		=> 1,
 	spkpi_dir	=> '../sprinklerpi',
@@ -46,13 +47,21 @@ my $cfg = {
 	dev			=> '/dev/null',
 #	dev			=> '/dev/spidev0.0',
 };
-for (my $i = 1; $i <= 3; $i++) {
-	my $file = $cfg->{spkpi_dir} . "/manual/valve-$i";
-	push @{$cfg->{valves}}, $file;
-}
 
 (-e $cfg->{spkpi_dir})
 	or die "Directory '" . $cfg->{spkpi_dir} . "' does not exist!";
+
+# add the valve files to the config
+for (my $i = 1; $i <= 3; $i++) {
+	my $file = $cfg->{spkpi_dir} . "/manual/valve-$i";
+
+	(-e $file)
+		or die "Valve file '$file' does not exist!";
+	(-r $file)
+		or die "Valve file '$file' is not readable!";
+
+	push @{$cfg->{valves}}, $file;
+}
 
 sub water {
 	my $cmd = shift;
@@ -112,12 +121,15 @@ foreach my $file (@{$cfg->{valves}}) {
 		or die "Unable to watch '$file': $!";
 }
 
+# on startup, write the current valve configuration
+
 my ($v1, $v2, $v3) = read_valve_files(@{$cfg->{valves}})
 	or die "Unable to read valve files";
 
 water("$v1$v2$v3")
 	and die "water() failed";
 
+# loop forever, wating for changes, and update watering
 while (1) {
 	print "Waiting for file changes\n" if $cfg->{verbose};
 	$inotify->poll;
