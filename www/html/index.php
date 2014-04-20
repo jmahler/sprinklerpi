@@ -3,7 +3,7 @@
 include '_config.inc';
 
 $self = "index.php";
-$modes = ["manual", "off", "demo"];
+$modes = ["off", "manual", "schedule", "demo"];
 
 $spkpi = new SprinklerPI($spkpi_dir);
 
@@ -17,13 +17,13 @@ if ($err) {
 $new_spkpi = clone $spkpi;
 $err = $new_spkpi->process_post_state();
 if ($err) {
-  exit($spkpi->errmsg);
+  exit($new_spkpi->errmsg);
 }
 
 # write any differences to the files
 $err = $new_spkpi->write_state_diff($spkpi);
 if ($err) {
-  exit($spkpi->errmsg);
+  exit($new_spkpi->errmsg);
 }
 
 # use the new object for rest of script
@@ -57,11 +57,14 @@ $spkpi = $new_spkpi;
 
 <div class="focus center">
   <?php switch ($spkpi->mode) {
+    case "off":
+      include 'body_off.php';
+      break;
     case "manual":
       include 'body_manual.php';
       break;
-    case "off":
-      include 'body_off.php';
+    case "schedule":
+      include 'body_schedule.php';
       break;
     case "demo":
       include 'body_demo.php';
