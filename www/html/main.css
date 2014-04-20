@@ -60,13 +60,18 @@ div.focus {
 	background: #FFFFFF;  /* white */
 }
 
-.focus table {
+div.subfocus {
+	margin-top: 40px;
+	border: 1px solid black;
 	background: #CCE6FF;
 }
 
 table.group_valve {
+	margin-top: 40px;
 	border-collapse: collapse;
 	text-align: center;
+
+	background: #CCE6FF;
 }
 
 table.group_valve tr td, table.group_valve tr th {

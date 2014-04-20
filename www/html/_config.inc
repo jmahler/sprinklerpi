@@ -1,7 +1,7 @@
 <?php
 
-$lib_path = '../lib';
-set_include_path(get_include_path() . PATH_SEPARATOR . $lib_path);
+$inc_path = '../inc';
+set_include_path(get_include_path() . PATH_SEPARATOR . $inc_path);
 
 include 'sprinklerpi.php';
 
