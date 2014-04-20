@@ -74,6 +74,11 @@ A. There are several reasons why a file system interface was used:
   command line tools and this makes it is easy to test and verify
   operation.
 
+  - security - The daemons which control watering need permissions to
+  write to the SPI device.  But the web server and other user
+  programs don't since these use the files.  This reduces the
+  potential magnitude of any privilege escalation bugs.
+
   - history - The current state of the system can be saved by
   simply saving the files.
   A version control system such as [Git][git] can even
