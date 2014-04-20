@@ -1,0 +1,78 @@
+
+* {
+	font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+html, body {
+	background: #fff;
+}
+
+div {
+	margin-bottom: 0.7em;
+}
+
+.bold {
+	font-weight: bold;
+}
+
+.left {
+	margin-left: 15px;
+	margin-right: auto;
+	float: left;
+}
+
+.right {
+	margin-left: auto;
+	margin-right: 15px;
+	float: right;
+}
+
+.center {
+	margin: auto;
+}
+
+.header {
+	width: 100%;
+	height: 3.5em;
+	line-height: 3.5em;
+
+	background: #0066CC;
+	color: #FFFFFF;  /* white */
+}
+
+.header .title {
+	font-size: 1.75em;
+	font-weight: bold;
+	font-style: normal;
+	color: #FFFFFF;
+}
+
+.header span {
+	display: inline-block;
+	height: 20px;
+}
+
+div.focus {
+	text-align: center;
+	border-style: none;
+	width: 80%;
+
+	background: #FFFFFF;  /* white */
+}
+
+.focus table {
+	background: #CCE6FF;
+}
+
+table.group_valve {
+	border-collapse: collapse;
+	text-align: center;
+}
+
+table.group_valve tr td, table.group_valve tr th {
+	border: 1px solid black;
+}
+
+table.group_valve tr td *, table.group_valve tr th p, table.group_valve tr th * {
+	margin: 0.7em;
+}
