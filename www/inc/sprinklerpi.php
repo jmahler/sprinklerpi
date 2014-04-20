@@ -82,7 +82,7 @@ class SprinklerPI {
 			if (in_array($mode, $this->modes)) {
 				$this->mode = $mode;
 			} else {
-				$errmsg = "Invalid mode.";
+				$this->errmsg = "Mode '$mode' not supported by library.\n" . "file: " . __FILE__ . ", line: " . __LINE__;
 				return -1; # error
 			}
 		}
@@ -98,7 +98,7 @@ class SprinklerPI {
 					$this->valves[$group] = $valve;
 				} else {
 					$err = -1;
-					$this->errmsg = "Invalid valve from post";
+					$this->errmsg = "Invalid valve '$valve'\n" . "file: " . __FILE__ . ", line: " . __LINE__;
 				}
 			}
 		}
@@ -186,7 +186,7 @@ class SprinklerPI {
 				$this->valves[$group] = $valve;
 			} else {
 				$err = -1;
-				$this->errmsg = "Invalid valve specification '$file'";
+				$this->errmsg = "Invalid valve specification in file '$file'.\n" . "file: " . __FILE__ . ", line: " . __LINE__;
 			}
 		}
 
