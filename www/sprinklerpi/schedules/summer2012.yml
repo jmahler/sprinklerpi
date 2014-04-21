@@ -1,0 +1,20 @@
+---
+name: Summer schedule 2012
+enabled: 0
+entries:
+- group: "1"
+  valve: "4"
+  days: MWF
+  start_time: "12:32"
+  run_time: "15"
+- group: "1"
+  valve: "3"
+  days: MWFSu
+  start_time: "12:02"
+  run_time: "5"
+- group: "3"
+  valve: "5"
+  days: MWSaSu
+  start_time: "21:02"
+  run_time: "1:03"
+...

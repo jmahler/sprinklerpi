@@ -28,7 +28,8 @@ div {
 }
 
 .center {
-	margin: auto;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .header {
@@ -66,16 +67,29 @@ div.subfocus {
 	background: #CCE6FF;
 }
 
+div.subfocus table {
+	background: #FAFAFA;
+}
+
+table {
+	margin: 1.0em;
+	border-collapse: collapse;
+}
+
+table tr td, table tr th {
+	padding: 0.3em;
+	border-collapse: collapse;
+}
+
+table tr td, table tr th {
+	border: 1px solid black;
+}
+
 table.group_valve {
 	margin-top: 40px;
-	border-collapse: collapse;
 	text-align: center;
 
 	background: #CCE6FF;
-}
-
-table.group_valve tr td, table.group_valve tr th {
-	border: 1px solid black;
 }
 
 table.group_valve tr td *, table.group_valve tr th p, table.group_valve tr th * {
