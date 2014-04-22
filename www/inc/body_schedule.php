@@ -11,6 +11,11 @@ if (! $dh) {
 }
 
 while (($file = readdir($dh)) !== false) {
+
+  if (preg_match("/\.swp$/", $file)) {
+    continue;
+  }
+
   $id = $file;
   $file = "$sched_dir/$file";
   if (is_file($file)) {
