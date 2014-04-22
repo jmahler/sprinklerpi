@@ -1,0 +1,204 @@
+#!/usr/bin/perl
+use strict;
+
+use Linux::Inotify2;
+use YAML::Syck;
+
+=head1 NAME
+
+spki-scheduled - Scheduler daemon for SprinklerPI system.
+
+=head1 DESCRIPTION
+
+This daemon monitors the current schedules and adds entries
+to the queue at the appropriate time on the appropriate day.
+
+  sprinklerpi/queue
+
+  sprinklerpi/schedules
+    sched1.yml
+    ...
+
+The queue is in the format as shown below with new entries
+added to the end of the file.
+
+  <group#> <valve#> <run time mm:ss>
+
+The schedule files can have any names but they must be in YAML format.
+Example schedules are included with this project under www/sprinklerpi.
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    http://github.com/jmahler
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
+
+=cut
+
+# {{{ load_schedules
+sub load_schedules {
+	my $sched_dir = shift;
+
+	unless (opendir(DIR, $sched_dir)) {
+		print "Unable to open schedule directory '$sched_dir': $!\n";
+		return;
+	}
+
+	my $entries = {
+		'M'  => [],
+		'T'  => [],
+		'W'  => [],
+		'Th' => [],
+		'F'  => [],
+		'S'	 => [],
+		'Su' => [],
+	};
+
+	while (my $file = readdir(DIR)) {
+		next if ($file eq "..");
+		next if ($file eq ".");
+		next if ($file =~ /\.swp$/);
+
+		$file = "$sched_dir/$file";
+
+		my $sched = LoadFile($file);
+
+		next unless $sched->{'enabled'};
+
+		# split each entry up according to its days
+		foreach my $e (@{$sched->{'entries'}}) {
+			my $rec = {%$e};
+			my $days = $e->{'days'};
+			delete $rec->{'days'};
+
+			# Patterns for some days are ambiguous (S or Su)
+			# so do them first and remove them from the days list.
+			if ($days =~ 'Su') {
+				push @{$entries->{'Su'}}, $rec;
+				$days =~ s/Su//;
+			}
+
+			if ($days =~ 'Th') {
+				push @{$entries->{'Th'}}, $rec;
+				$days =~ s/Th//;
+			}
+
+			foreach my $d (qw(M T W F S)) {
+				if ($days =~ /$d/) {
+					push @{$entries->{$d}}, $rec;
+				}
+			}
+		}
+	}
+	closedir(DIR);
+
+	# foreach day, sort based on start time
+	foreach my $day (keys %$entries) {
+		my @s = sort {
+			$a->{'start_time'} cmp $b->{'start_time'}
+	   		} @{$entries->{$day}};
+		$entries->{$day} = [@s];
+	}
+
+	return $entries;
+}
+# }}}
+
+# {{{ minutes
+sub minutes {
+	my $hm = shift;
+
+	my ($hour, $min) = split /:/, $hm;
+
+	$min = $hour*60 + $min;
+
+	return $min;
+}
+# }}}
+
+# {{{ cur_day_minute
+sub cur_day_minute {
+
+	my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday) = localtime(time);
+
+	my $minutes = $hour*60 + $min;
+
+	my @day_map = qw(Su M T W Th F S);
+	my $day = $day_map[$wday];
+
+	return ($day, $minutes);
+}
+# }}}
+
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
+}
+
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
+
+my $conf_file = "$dir/sprinklerpi.conf";
+
+(-e "$conf_file")
+	or die "Configuration file '$conf_file' does not exist!";
+
+my $cfg = LoadFile($conf_file);
+
+my $queue_file = "$dir/queue";
+open(my $queue_fh, ">>", "$queue_file")
+	or die "Unable to open queue '$queue_file': $!";
+
+# autoflush on
+select((select($queue_fh), $| = 1)[0]);
+
+my $inotify = new Linux::Inotify2
+	or die "Unable to create inotify object: $!";
+
+# Watch the directory for any changes in the files
+my $sched_dir = "$dir/schedules";
+$inotify->watch($sched_dir, IN_CLOSE_WRITE)
+	or die "Unable to watch '$sched_dir': $!";
+$inotify->blocking(0);  # non-blocking for read/poll
+
+my $sched = load_schedules($sched_dir);
+my ($last_day, $last_min) = cur_day_minute();
+
+# loop forever, wating for changes, and adding to queue
+while (1) {
+
+	my ($day, $min) = cur_day_minute();
+
+	# reset minutes when day changes
+	if ($day != $last_day) {
+		$last_min = 0;
+	}
+
+	my $day_sched = $sched->{$day};
+	foreach my $entry (@$day_sched) {
+		my $start_min = minutes($entry->{start_time});
+
+		if ($start_min > $last_min and $start_min <= $min) {
+			my $group = $entry->{'group'};
+			my $valve = $entry->{'valve'};
+			my $run_time = $entry->{'run_time'};
+			print "group=$group, valve=$valve, time=$run_time\n" if $cfg->{verbose};
+			print $queue_fh "$group $valve $run_time\n";
+		}
+	}
+
+	($last_day, $last_min) = ($day, $min);
+
+	sleep 5;
+
+	if ($inotify->read) {
+		print "Loading schedules\n" if $cfg->{verbose};
+		$sched = load_schedules($sched_dir);
+	}
+}
+
