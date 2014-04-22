@@ -1,4 +1,5 @@
 ---
+id: summer2014.yml
 name: Summer schedule 2014
 enabled: 0
 entries:
@@ -11,7 +12,7 @@ entries:
   valve: "3"
   days: MWFSu
   start_time: "12:02"
-  run_time: "5"
+  run_time: "7"
 - group: "2"
   valve: "7"
   days: FSu
@@ -21,5 +22,5 @@ entries:
   valve: "5"
   days: MWSaSu
   start_time: "21:02"
-  run_time: "1:03"
+  run_time: "1:15"
 ...

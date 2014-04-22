@@ -7,10 +7,6 @@ html, body {
 	background: #fff;
 }
 
-div {
-	margin-bottom: 0.7em;
-}
-
 .bold {
 	font-weight: bold;
 }
@@ -26,10 +22,14 @@ div {
 	margin-right: 15px;
 	float: right;
 }
-
 .center {
 	margin-left: auto;
 	margin-right: auto;
+}
+
+.err {
+	color: #FF0000;
+	font-style: italic;
 }
 
 .header {
@@ -37,15 +37,17 @@ div {
 	height: 3.5em;
 	line-height: 3.5em;
 
-	background: #0066CC;
+	background: #0066CC;  /* dark blue */
 	color: #FFFFFF;  /* white */
+
+	margin-bottom: 1em;
 }
 
 .header .title {
 	font-size: 1.75em;
 	font-weight: bold;
 	font-style: normal;
-	color: #FFFFFF;
+	color: #FFFFFF;  /* white */
 }
 
 .header span {
@@ -61,10 +63,24 @@ div.focus {
 	background: #FFFFFF;  /* white */
 }
 
+input.iheader {
+	font-weight: bold;
+	text-align: center;
+	background: #CCE6FF;  /* light blue */
+	margin-top: 1.0em;
+	font-size: 105%;
+}
+
+.mtb {
+	margin-top: 1.0em;
+	margin-bottom: 1.0em;
+}
+
 div.subfocus {
-	margin-top: 40px;
+	margin-top: 1em;
+	margin-bottom: 1em;
 	border: 1px solid black;
-	background: #CCE6FF;
+	background: #CCE6FF;  /* light blue */
 }
 
 div.subfocus table {
@@ -88,8 +104,7 @@ table tr td, table tr th {
 table.group_valve {
 	margin-top: 40px;
 	text-align: center;
-
-	background: #CCE6FF;
+	background: #CCE6FF;  /* light blue */
 }
 
 table.group_valve tr td *, table.group_valve tr th p, table.group_valve tr th * {
