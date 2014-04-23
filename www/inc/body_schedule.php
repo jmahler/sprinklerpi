@@ -63,6 +63,7 @@ while (($file = readdir($dh)) !== false) {
   }
 }
 closedir($dh);
+unset($sched);
 # }}}
 
 # {{{ $_POST -> select, new schedule
@@ -180,8 +181,8 @@ if (!isset($sel_sched)) {
     $sel_sched = $_SESSION['selsched'];
 
     $found = 0;
-    foreach ($schedules as $s) {
-      if ($sel_sched === $sched['id']) {
+    foreach ($schedules as $_sched) {
+      if ($sel_sched === $_sched['id']) {
         $found = 1;
         break;
       }
@@ -196,6 +197,16 @@ if (!isset($sel_sched)) {
     if (! empty($schedules)) {
       $_sched = array_values($schedules)[0];
       $sel_sched = $_sched['id'];
+    }
+  }
+}
+# }}}
+
+# {{{ set $sched if unset
+if (!isset($sched)) {
+  foreach ($schedules as $sched) {
+    if ($sched['id'] === $sel_sched) {
+      break;
     }
   }
 }
