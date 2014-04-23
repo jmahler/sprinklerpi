@@ -107,6 +107,17 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
       exit("yaml emit failed");
     }
   }
+
+  # The select menu displays the loaded $schedules
+  # but the updated schedule here is not automatically
+  # updated so it must be done manually.
+  foreach ($schedules as &$s) {
+    if ($s['id'] === $sched['id']) {
+      $s = $sched;
+      break;
+    }
+  }
+
 } else {
   # check if a schedule is selected, otherwise use default
 
