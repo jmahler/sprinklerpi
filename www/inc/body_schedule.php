@@ -1,6 +1,38 @@
 
 <?php
 
+# {{{ new_blank_schedule()
+/**
+ * Create a new blank schedule object along
+ * with a new unique id.
+ */
+function new_blank_schedule() {
+
+  $sched_id = date("Ymdhis");
+  $sched_id = $sched_id . ".yml";
+  # unique id is also the file name
+
+  $sched = array(
+    'id' => $sched_id,
+    'enabled' => 0,
+    'name' => "New Schedule",
+    'entries' => array(
+      array(  'group' => "1",
+              'valve' => "1",
+              'days'  => "MTWThFSSu",
+              'start_time' => date("h:i"),
+              'run_time' => "5:00"),
+    ),
+  );
+
+  return $sched;
+}
+# }}}
+
+$sched_dir = "$spkpi_dir/schedules/";
+$err = 0;
+$errmsg = '';
+
 # {{{ load all the schedules
 $schedules = array();
 
@@ -33,39 +65,50 @@ while (($file = readdir($dh)) !== false) {
 closedir($dh);
 # }}}
 
-# {{{ process $_POST, validate, update schedule else load default
+# {{{ $_POST -> select, new schedule
+if (isset($_POST['form'])
+      and $_POST['form'] === 'select'
+      and $_POST['selsched'] === 'new') {
 
-# Find a ($sched) to select ($sel_sched) either from the
-# $_POST data or by loading it from a file.
+  $sched     = new_blank_schedule();
+}
+# }}}
 
-if (isset($_POST['form']) and $_POST['form'] === 'update')
-{
-  # Build a schedule object from the submitted data.
-  # If it is valid, write it, oherwise set $err = 1.
-  # It can be displayed using the $sched object.
+# {{{ $_POST -> select existing schedule
+if (isset($_POST['form'])
+      and $_POST['form'] === 'select'
+      and $_POST['selsched'] !== 'new') {
 
-  $sched_dir = "$spkpi_dir/schedules/";
+  $sel_sched = htmlspecialchars($_POST['selsched']);
 
-  $err = 0;
-  $errmsg = '';
+  # make sure it exists
+  $found = 0;
+  foreach ($schedules as $s) {
+    if ($s['id'] === $sel_sched) {
+      $found = 1;
+      $sched = $s;
+      break;
+    }
+  }
+  if (! $found) {
+    unset($sched);
+    unset($sel_sched);
+  }
+
+  if (isset($sel_sched)) {
+    $_SESSION['selsched'] = $sel_sched;
+  }
+}
+# }}}
+
+# {{{ $_POST -> update/new schedule
+
+if (isset($_POST['form']) and $_POST['form'] === 'update') {
 
   $sched = array();
 
-  if (! isset($_POST['id'])) {
-    exit("POST id missing");
-  }
   $sched['id'] = htmlspecialchars($_POST['id']);
-
-  $file = "$sched_dir/" . $sched['id'];
-  # id is also used as the file name
-
-  if (isset($_POST['name'])) {
-    $sched['name'] = htmlspecialchars($_POST['name']);
-  } else {
-    $err = 1;
-    $sched['name'] = "!(unkown)";
-  }
-
+  $sched['name'] = htmlspecialchars($_POST['name']);
   $sched['enabled'] = (isset($_POST['enabled']) and $_POST['enabled']) ? 1 : 0;
 
   $xgroups     = $_POST['group'];
@@ -79,11 +122,13 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
   $entries = array();
   for ($i = 0; ; $i++) {
 
+    # end when these values are empty
     if (empty($xdays[$i]) and empty($xstart_time[$i])
           and empty($xrun_time[$i])) {
       break;
     }
 
+    # delete entries by skipping
     if (isset($xdel[$i]) and $xdel[$i]) {
       continue;
     }
@@ -96,11 +141,12 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
 
     array_push($entries, $entry);
   }
-
   $sched['entries'] = $entries;
+
   $sel_sched = $sched['id'];
 
   if (!$err) {
+    $file = "$sched_dir/" . $sched['id'];
     if (yaml_emit_file($file, $sched)) {
       # success
     } else {
@@ -108,51 +154,55 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
     }
   }
 
-  # The select menu displays the loaded $schedules
-  # but the updated schedule here is not automatically
-  # updated so it must be done manually.
-  foreach ($schedules as &$s) {
-    if ($s['id'] === $sched['id']) {
-      $s = $sched;
+  if (isset($sel_sched)) {
+    $_SESSION['selsched'] = $sel_sched;
+  }
+
+  # update the previously loaded $schedules
+  $found = 0;
+  foreach ($schedules as &$_sched) {
+    if ($_sched['id'] === $sel_sched) {
+      $found = 1;
+      $_sched = $sched;
       break;
     }
   }
-
-} else {
-  # check if a schedule is selected, otherwise use default
-
-  if (isset($_POST['selsched'])) {
-    $sel_sched = htmlspecialchars($_POST['selsched']);
-  } elseif (isset($_SESSION['selsched'])) {
-    $sel_sched = ($_SESSION['selsched']);
+  if (!$found) {
+    array_push($schedules, $sched);
   }
-  unset($sched);
-  if (isset($sel_sched)) {
+}
+# }}}
+
+# {{{ set $sel_sched if unset
+if (!isset($sel_sched)) {
+
+  if (isset($_SESSION['selsched'])) {
+    $sel_sched = $_SESSION['selsched'];
+
+    $found = 0;
     foreach ($schedules as $s) {
-      if ($s['id'] === $sel_sched) {
-        $sched = $s;
+      if ($sel_sched === $sched['id']) {
+        $found = 1;
         break;
       }
     }
-  }
-  if (isset($sched)) {
-    $_SESSION['selsched'] = $sel_sched;
-  } else {
-    if (!empty($schedules)) {
-      # default: select first
-      $sched = array_values($schedules)[0];
-      $sel_sched = $sched['id'];
-    } else {
+    if (! $found) {
       unset($sel_sched);
       unset($_SESSION['selsched']);
     }
   }
-}
 
+  if(!isset($sel_sched)) {
+    if (! empty($schedules)) {
+      $_sched = array_values($schedules)[0];
+      $sel_sched = $_sched['id'];
+    }
+  }
+}
 # }}}
 
+# {{{ view
 ?>
-
 <div class="subfocus center" style="width: 450px">
   <form action="" method="POST">
   <input type="hidden" name="form" value="update">
@@ -186,7 +236,7 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
               <select name="group[]">
                 <?php for ($i = 1; $i <= 3; $i++) {
                   $sel = ($entry['group'] == $i) ? 'selected' : '';
-                  echo "<option value=\"$i\" $sel>$i</option>\n";
+                  echo "<option value=\"$i\" $sel>$i</option>";
                 } ?>
               </select>
             </td>
@@ -194,7 +244,7 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
               <select name="valve[]">
                 <?php for ($i = 1; $i <= 8; $i++) {
                   $sel = ($entry['valve'] == $i) ? 'selected' : '';
-                  echo "<option value=\"$i\" $sel>$i</option>\n";
+                  echo "<option value=\"$i\" $sel>$i</option>";
                 } ?>
               </select>
             </td>
@@ -228,7 +278,7 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
           <td>
             <select name=valve[]>
               <?php for ($i = 1; $i <= 8; $i++) {
-                echo "<option value=\"$i\">$i</option>\n";
+                echo "<option value=\"$i\">$i</option>";
               } ?>
             </select>
           </td>
@@ -240,7 +290,7 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
       </table>
       <div style="height: 40px">
       <?php if ($err) { ?>
-      <span class="err">*Errors in submission</span>
+        <span class="err">*Errors in submission</span>
       <?php } ?>
       <span class="right" style="margin-right: 40px">
       <input type="submit" value="Submit" />
@@ -257,19 +307,19 @@ if (isset($_POST['form']) and $_POST['form'] === 'update')
   <input type="hidden" name="form" value="select">
   Select:&nbsp;
   <select name="selsched" onchange="this.form.submit()">
+    <option value="new">New Schedule</option>
     <?php foreach ($schedules as $sched) {
       $name = $sched['name'];
       $en = ($sched['enabled']) ? 'enabled' : 'disabled';
       $id = $sched['id'];
       $selected = ($id === $sel_sched) ? 'selected' : '';
-      echo "<option value=\"$id\" $selected>$name ($en)</option>\n";
+      echo "<option value=\"$id\" $selected>$name ($en)</option>";
     } ?>
-    <option value="new">New Schedule</option>
   </select>
   </form>
   </span>
 </div>
+<?php # }}}
 
-<?php
 # vim:ts=2 sw=2 expandtab
 ?>
