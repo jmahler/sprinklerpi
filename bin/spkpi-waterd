@@ -1,0 +1,108 @@
+#!/usr/bin/perl
+use strict;
+
+use Linux::Inotify2;
+use YAML::Syck;
+
+=head1 NAME
+
+spki-waterd - Water control daemon.
+
+=head1 DESCRIPTION
+
+This daemon monitors the valve files and executes the
+water command to physically turn on the valves.
+
+  valves/group-1
+  valves/group-2
+  valves/group-3
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    http://github.com/jmahler
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
+
+=cut
+
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
+}
+
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
+
+my $conf_file = "$dir/sprinklerpi.conf";
+
+(-e "$conf_file")
+	or die "Configuration file '$conf_file' does not exist!";
+
+my $cfg = LoadFile($conf_file);
+
+my $inotify = new Linux::Inotify2
+	or die "Unable to create inotify object: $!";
+
+# Watch the directory for any changes in the files
+my $sched_dir = "$dir/schedules";
+for (my $i = 1; $i <= 3; $i++) {
+	my $valve_file = "$dir/valves/group-$i";
+	$inotify->watch($valve_file, IN_CLOSE_WRITE)
+		or die "Unable to watch '$valve_file': $!";
+}
+
+sub water {
+	my $cmd = shift;
+
+	print "water: \"$cmd\"\n" if $cfg->{verbose};
+
+	if (system('water', '-d', $cfg->{dev}, $cmd)) {
+		print STDERR "Execution of 'water' failed.\n";
+		return -1;
+	}
+}
+
+sub read_command {
+	my ($dir) = @_;
+
+	my @cmd = (0, 0, 0);
+
+	for (my $i = 1; $i <= 3; $i++) {
+		my $valve_file = "$dir/valves/group-$i";
+		unless (open(IN, "<", $valve_file)) {
+			print STDERR "Unable to open '$valve_file': $!";
+			next;
+		}
+		my $v = <IN>;
+		chomp($v);
+		$cmd[$i-1] = $v;
+		close(IN);
+	}
+
+	my $cmd = join '', @cmd;
+
+	return $cmd;
+}
+
+# Ctrl-C quit -> turn off all the valves
+$SIG{'INT'} = sub {
+	water("000");
+	exit();
+};
+
+my $cmd = read_command($dir);
+water($cmd);
+
+while (1) {
+	print "Waiting for file changes\n" if $cfg->{verbose};
+	$inotify->poll;
+
+	my $cmd = read_command($dir);
+	water($cmd);
+}
+
