@@ -2,7 +2,7 @@
 use strict;
 
 use Linux::Inotify2;
-use YAML qw(LoadFile);
+use YAML::Syck;
 
 =head1 NAME
 

@@ -2,7 +2,7 @@
 use strict;
 
 use Time::HiRes qw(usleep);
-use YAML qw(LoadFile);
+use YAML::Syck;
 
 =head1 NAME
 
