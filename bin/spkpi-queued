@@ -1,42 +1,45 @@
 #!/usr/bin/perl
 use strict;
 
+use YAML::Syck;
+
 =head1 NAME
 
 spkpi-queued - SprinklerPI queue daemon.
 
 =head1 DESCRIPTION
 
-The queue daemon monitors a queue file where each line describes
-a valve to turn on and for how long.
+The queue daemon monitors a the queue files where each line describes
+a valve to turn on and for how long.  There is a queue for each group.
 
-  <group>:<valve>  <time minutes>
+  <valve> <time seconds>
 
 A sample queue might look like:
 
-  1:1 5
-  2:1 3
-  1:2 15
+  1 60
+  1 900
+  2 15
 
-Only one valve can be on at a time for one specific group.
-In the previous example both 1:1 and 2:1 could be started immediately
-since they are part of different groups but 1:2 would have to wait.
+As commands arrive in the group specifici queue
 
-The queue daemon is limited to one SPI device.
-To start the daemon run it with a device and queue file.
-Notice that the number of groups must be specified.
-This is necessary because it effects the command format.
+  queue/group-1
+  queue/group-2
+  queue/group-3
 
-  $ spkpi-queued <device> <queue file> <# groups>
-  $ spkpi-queued /dev/spidev0.0 queue 3
+the valves for a particular group will be turned on by writing
+the valve number to the group file.
 
-For testing the null device can be used.
+  valves/group-1
+  valves/group-2
+  valves/group-3
 
-  $ spkpi-queued /dev/null queue
+For example, to manually turn on valve 4 in group 2.
 
-The queue daemon will turn on a valve by using the water command.
+  echo 4 > valves/group-2
 
-  $ water -d <device> <valves>
+Also, to manually add a queue entry.
+
+  echo "1 60" >> queue/group-2
 
 =head1 AUTHOR
 
@@ -51,81 +54,119 @@ and/or modified under the same terms as Perl itself.
 
 =cut
 
-my $VERBOSE = 1;
+# {{{ valve_on
+sub valve_on {
+	my ($valve_file, $valve) = @_;
 
-# Limits of group and valve numbers
-my $MIN_GROUP = 1;
-my $MAX_GROUP = 3;
-my $MIN_VALVE = 1;
-my $MAX_VALVE = 8;
+	unless (open(FILE, ">", $valve_file)) {
+		print STDERR "Error opening '$valve_file': $!";
+		return;
+	}
 
-#
-# Check arguments, setup file descriptors
-#
+	print FILE $valve;
 
-if (@ARGV != 3) {
-	die "$0 <device> <queue file> <# groups>\n";
+	close(FILE);
+}
+# }}}
+
+# {{{ pop_queue
+sub pop_queue {
+	my ($queue_file) = @_;
+
+	unless (open(IN, "<", $queue_file)) {
+		print STDERR "Error opening '$queue_file': $!";
+		return;
+	}
+
+	my @queue = <IN>;
+
+	close(IN);
+
+	my $first_line = shift @queue;
+	chomp($first_line);
+
+	unless (open(OUT, ">", $queue_file)) {
+		print STDERR "Error opening '$queue_file': $!";
+		return;
+	}
+
+	print OUT @queue;
+
+	close(OUT);
+
+	unless (defined $first_line and $first_line ne '') {
+		return ();
+	}
+
+	print "line = '$first_line'\n";
+	my ($valve, $time) = split /\s+/, $first_line;
+	print "valve=$valve, time=$time\n";
+
+	return ($valve, $time);
+}
+# }}}
+
+my $dir = '../sprinklerpi';  # default
+if (@ARGV) {
+	$dir = shift @ARGV;
 }
 
-my ($dev_file, $queue_file, $num_groups) = @ARGV;
+(-e $dir)
+	or die "Required directory '$dir' does not exist!";
 
-if ($num_groups < $MIN_GROUP or $num_groups > $MAX_GROUP) {
-	die "Number of groups must be between $MIN_GROUP and $MAX_GROUP.";
-}
+my $conf_file = "$dir/sprinklerpi.conf";
 
-open(my $dev_fd, ">", $dev_file)
-	or die "Unable to open '$dev_file': $!";
+(-e "$conf_file")
+	or die "Configuration file '$conf_file' does not exist!";
 
-open(my $queue_fd, "+<", $queue_file)
-	or die "Unable to open '$queue_file': $!";
+my $cfg = LoadFile($conf_file);
 
-#
-# Read queue and execute instructions
-#
+# Turn off valves after a Ctrl-C quit
+$SIG{'INT'} = sub {
+	for (my $i = 1; $i <= 3; $i++) {
+		my $valve_file = "$dir/valves/group-$i";
+		valve_on($valve_file, "0");
+	}
 
+	exit();
+};
+
+my $time_left = {
+	'group-1' => 0,
+	'group-2' => 0,
+	'group-3' => 0,
+};
+
+my $last_time = time;
 while (1) {
-	my $cmd = <$queue_fd>;
-	chomp($cmd);
 
-	if ($cmd eq '') {
-		# EOF, waste some time and try again
-		sleep 1;
-		next;
+	my $cur_time = time;
+	my $dt = $cur_time - $last_time;
+	for (my $i = 1; $i <= 3; $i++) {
+		my $queue_file = "$dir/queue/group-$i";
+		my $valve_file = "$dir/valves/group-$i";
+
+		# update time left
+		my $t = $time_left->{"group-$i"};
+		$t = ($t > $dt) ? ($t - $dt) : 0;
+		$time_left->{"group-$i"} = $t;
+		print "[$i] time left = $t\n" if $cfg->{verbose};
+
+		# if time zero, check queue
+		if (0 == $t) {
+			my ($valve, $time) = pop_queue($queue_file);
+			if (defined $valve and $valve ne '') {
+				print "valve_on('$valve_file', '$valve')\n" if $cfg->{verbose};
+				valve_on($valve_file, $valve);
+				$t = $time;
+				print "[$i] time left = $t\n" if $cfg->{verbose};
+				$time_left->{"group-$i"} = $t;
+			} else {
+				print "queue for group $i empty\n" if $cfg->{verbose};
+			}
+		}
 	}
+	$last_time = $cur_time;
 
-	# Parse the instruction group, valve and time
-	my ($group_valve, $time_min) = split /\s+/, $cmd;
-	my $time_sec = $time_min * 60;
-
-	my ($group, $valve) = split /\:/, $group_valve;
-
-	# Check for invalid values
-	if ($group < $MIN_GROUP or $group > $MAX_GROUP) {
-		print STDERR "Invalid group '$group' in command: '$cmd'\n";
-		next;
-	}
-	if ($group > $num_groups) {
-		print STDERR "Command group '$group' exceeds number '$num_groups'\n";
-		next;
-	}
-
-	# Construct the watering command
-	my $water_cmd;
-
-	my @water_cmd = ("0") x $num_groups;
-	$water_cmd[$group - 1] = $valve;
-
-	$water_cmd = join "", @water_cmd;
-
-	# turn on the valve
-	print "$water_cmd, $time_sec\n" if $VERBOSE;
-	`water -d $dev_file \"$water_cmd\"`;
-
-	sleep $time_sec;
-
-	# turn off valve
-	$water_cmd[$group - 1] = "0";
-	$water_cmd = join "", @water_cmd;
-
-	`water -d $dev_file \"$water_cmd\"`;
+	sleep 5;
 }
