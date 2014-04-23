@@ -7,20 +7,20 @@ entries:
   valve: "4"
   days: MWF
   start_time: "12:32"
-  run_time: "15"
+  run_time: "15:00"
 - group: "1"
   valve: "3"
   days: MWFSu
   start_time: "12:02"
-  run_time: "7"
+  run_time: 07:00
 - group: "2"
   valve: "7"
   days: FSu
   start_time: "12:02"
-  run_time: "5:30"
+  run_time: 05:30
 - group: "3"
   valve: "5"
   days: MWSaSu
   start_time: "21:02"
-  run_time: "1:15"
+  run_time: 01:15
 ...

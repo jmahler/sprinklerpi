@@ -104,6 +104,22 @@ if (isset($_POST['form'])
 
 # {{{ $_POST -> update/new schedule
 
+function format_time($x) {
+  $parts = split(":", $x, 2);
+
+
+  $pos =strpos($x, ":");
+  if (FALSE === $pos) {
+    $x = sprintf("%02d:00", $x);
+  } else {
+    $a = substr($x, 0, $pos);
+    $b = substr($x, $pos + 1);
+    $x = sprintf("%02d:%02d", $a, $b);
+  }
+
+  return $x;
+}
+
 if (isset($_POST['form']) and $_POST['form'] === 'update') {
 
   $sched = array();
@@ -139,6 +155,9 @@ if (isset($_POST['form']) and $_POST['form'] === 'update') {
     $entry['days']        = htmlspecialchars($xdays[$i]);
     $entry['start_time']  = htmlspecialchars($xstart_time[$i]);
     $entry['run_time']    = htmlspecialchars($xrun_time[$i]);
+
+    $entry['start_time']  = format_time($entry['start_time']);
+    $entry['run_time']    = format_time($entry['run_time']);
 
     array_push($entries, $entry);
   }
