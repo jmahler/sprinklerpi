@@ -207,5 +207,3 @@ while (1) {
 	}
 	next if ('demo' ne get_mode($dir));
 }
-
-water("000");
