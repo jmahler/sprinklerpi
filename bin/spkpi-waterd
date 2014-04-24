@@ -3,6 +3,7 @@ use strict;
 
 use Linux::Inotify2;
 use YAML::Syck;
+use Fcntl qw(:flock);
 
 =head1 NAME
 
@@ -78,10 +79,13 @@ sub read_command {
 			print STDERR "Unable to open '$valve_file': $!";
 			next;
 		}
+		flock(IN, LOCK_EX);
 		my $v = <IN>;
+		flock(IN, LOCK_UN);
+		close(IN);
+
 		chomp($v);
 		$cmd[$i-1] = $v;
-		close(IN);
 	}
 
 	my $cmd = join '', @cmd;

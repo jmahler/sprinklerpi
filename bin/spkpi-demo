@@ -3,10 +3,11 @@ use strict;
 
 use Time::HiRes qw(usleep);
 use YAML::Syck;
+use Fcntl qw(:flock);
 
 =head1 NAME
 
-waterpi-demo - Demostrate operation with entertaining displays.
+spkpi-demo - Demostrate operation with entertaining displays.
 
 =head1 DESCRIPTION
 
@@ -18,7 +19,7 @@ The sprinklerpi files directory must be known.
 The default is "../sprinklerpi" but this can be overriden
 by specifying it as the first argument.
 
-    water-demo "../sprinklerpi"
+    spkpi-demo "../sprinklerpi"
 
 =head1 AUTHOR
 
@@ -50,12 +51,26 @@ my $cfg = LoadFile($conf_file);
 
 my $dev = $cfg->{dev};
 
+# {{{ water
 sub water {
 	my $cmd = shift;
 
-	system('water', '-d', $dev, $cmd)
-		and die "Execution of 'water' failed.\n";
+	my @vs = split //, $cmd;
+
+	for (my $i = 1; $i <= 3; $i++) {
+		my $file = "$dir/valves/group-$i";
+		unless (open(OUT, ">>", $file)) {
+			print STDERR "Unable to open '$file': $!";
+			next;
+		}
+		flock(OUT, LOCK_EX);
+		truncate OUT, 0;
+		print OUT $vs[$i-1];
+		flock(OUT, LOCK_UN);
+		close(OUT);
+	}
 }
+# }}}
 
 # Turn off valves during Ctrl-C quit
 $SIG{INT} = sub {
