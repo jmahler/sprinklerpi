@@ -105,6 +105,18 @@ sub pop_queue {
 }
 # }}}
 
+# {{{ get_mode
+sub get_mode {
+	my ($dir) = @_;
+
+	my $mode_file = "$dir/mode";
+	my $mode = `cat $mode_file`;
+	chomp($mode);
+
+	return $mode;
+}
+# }}}
+
 my $dir = '../sprinklerpi';  # default
 if (@ARGV) {
 	$dir = shift @ARGV;
@@ -136,37 +148,43 @@ my $time_left = {
 	'group-3' => 0,
 };
 
+my $mode = get_mode($dir);
+
 my $last_time = time;
 while (1) {
 
-	my $cur_time = time;
-	my $dt = $cur_time - $last_time;
-	for (my $i = 1; $i <= 3; $i++) {
-		my $queue_file = "$dir/queue/group-$i";
-		my $valve_file = "$dir/valves/group-$i";
+	if ($mode eq 'schedule') {
+		my $cur_time = time;
+		my $dt = $cur_time - $last_time;
+		for (my $i = 1; $i <= 3; $i++) {
+			my $queue_file = "$dir/queue/group-$i";
+			my $valve_file = "$dir/valves/group-$i";
 
-		# update time left
-		my $t = $time_left->{"group-$i"};
-		$t = ($t > $dt) ? ($t - $dt) : 0;
-		$time_left->{"group-$i"} = $t;
-		print "[$i] time left = $t\n" if $cfg->{verbose};
+			# update time left
+			my $t = $time_left->{"group-$i"};
+			$t = ($t > $dt) ? ($t - $dt) : 0;
+			$time_left->{"group-$i"} = $t;
+			print "[$i] time left = $t\n" if $cfg->{verbose};
 
-		# if time zero, add from the queue
-		if (0 == $t) {
-			my ($valve, $time) = pop_queue($queue_file);
-			if (defined $valve and $valve ne '') {
-				print "valve_on('$valve_file', '$valve')\n" if $cfg->{verbose};
-				valve_on($valve_file, $valve);
-				$t = $time;
-				print "[$i] time left = $t\n" if $cfg->{verbose};
-				$time_left->{"group-$i"} = $t;
-			} else {
-				valve_on($valve_file, "0");
-				print "queue for group $i empty\n" if $cfg->{verbose};
+			# if time zero, add from the queue
+			if (0 == $t) {
+				my ($valve, $time) = pop_queue($queue_file);
+				if (defined $valve and $valve ne '') {
+					print "valve_on('$valve_file', '$valve')\n" if $cfg->{verbose};
+					valve_on($valve_file, $valve);
+					$t = $time;
+					print "[$i] time left = $t\n" if $cfg->{verbose};
+					$time_left->{"group-$i"} = $t;
+				} else {
+					valve_on($valve_file, "0");
+					print "queue for group $i empty\n" if $cfg->{verbose};
+				}
 			}
 		}
+		$last_time = $cur_time;
 	}
-	$last_time = $cur_time;
 
 	sleep 5;
+
+	$mode = get_mode($dir);
 }
