@@ -20,6 +20,8 @@ NAME=sprinklerpi
 DIR=/home/jeri/sprinklerpi/www/sprinklerpi
 BIN=/home/jeri/sprinklerpi/bin
 DAEMONS=("spkpi-waterd" "spkpi-queued" "spkpi-scheduled" "spkpi-demo")
+USER=jeri
+GROUP=jeri
 
 . /lib/lsb/init-functions
 
@@ -27,7 +29,7 @@ case "$1" in
 	start)
 		for DAEMON in ${DAEMONS[@]}; do
 			log_daemon_msg "Starting $DAEMON" "$DAEMON";
-			start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$DAEMON.pid --background --exec $BIN/$DAEMON -- $DIR
+			start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$DAEMON.pid --background --exec $BIN/$DAEMON --chuid $USER:$GROUP -- $DIR
 			status=$?
 			log_end_msg $status
 		done
