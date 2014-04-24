@@ -51,6 +51,18 @@ my $cfg = LoadFile($conf_file);
 
 my $dev = $cfg->{dev};
 
+# {{{ get_mode
+sub get_mode {
+	my ($dir) = @_;
+
+	my $mode_file = "$dir/mode";
+	my $mode = `cat $mode_file`;
+	chomp($mode);
+
+	return $mode;
+}
+# }}}
+
 # {{{ water
 sub water {
 	my $cmd = shift;
@@ -82,6 +94,11 @@ my $counter_mode = 0;
 
 while (1) {
 
+	if ('demo' ne get_mode($dir)) {
+		sleep 5;
+		next;
+	}
+
 	# Each of the different demos is run in sequence.
 	# To make the time of each demo the same, the sleep
 	# time is calculated according to the number of steps.
@@ -101,6 +118,7 @@ while (1) {
 			usleep($sleep*1e6);
 		}
 	}
+	next if ('demo' ne get_mode($dir));
 
 	# end to end, forward then backward
 	print "forward <-> backward #2\n" if $cfg->{verbose};
@@ -145,6 +163,7 @@ while (1) {
 			usleep($sleep*1e6);
 		}
 	}
+	next if ('demo' ne get_mode($dir));
 
 	# full speed, sleep only at 4
 	print "full speed\n" if $cfg->{verbose};
@@ -162,6 +181,7 @@ while (1) {
 			}
 		}
 	}
+	next if ('demo' ne get_mode($dir));
 
 	# counter
 	print "counter\n" if $cfg->{verbose};
@@ -185,6 +205,7 @@ while (1) {
 	if (++$counter_mode > 2) {
 		$counter_mode = 0;	
 	}
+	next if ('demo' ne get_mode($dir));
 }
 
 water("000");
