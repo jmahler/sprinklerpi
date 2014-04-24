@@ -9,37 +9,36 @@ spkpi-queued - SprinklerPI queue daemon.
 
 =head1 DESCRIPTION
 
-The queue daemon monitors a the queue files where each line describes
-a valve to turn on and for how long.  There is a queue for each group.
-
-  <valve> <time seconds>
-
-A sample queue might look like:
-
-  1 60
-  1 900
-  2 15
-
-As commands arrive in the group specifici queue
+The queue daemon monitors a the queue files and controls which valve
+to turn on by writing the valve number to the valve file for that group.
 
   queue/group-1
   queue/group-2
   queue/group-3
 
-the valves for a particular group will be turned on by writing
-the valve number to the group file.
-
   valves/group-1
   valves/group-2
   valves/group-3
 
-For example, to manually turn on valve 4 in group 2.
+The format of the queue file is as follows with each entry on one line.
 
-  echo 4 > valves/group-2
+  <valve> <time seconds>
 
-Also, to manually add a queue entry.
+An example queue might look like:
+
+  1 60
+  1 900
+  2 15
+
+To check the operation of this daemon queue entries can be written
+from the command line.
 
   echo "1 60" >> queue/group-2
+
+If nothing else is running, the valve should be turned on.
+
+  cat valves/group-2
+  1
 
 =head1 AUTHOR
 
@@ -152,7 +151,7 @@ while (1) {
 		$time_left->{"group-$i"} = $t;
 		print "[$i] time left = $t\n" if $cfg->{verbose};
 
-		# if time zero, check queue
+		# if time zero, add from the queue
 		if (0 == $t) {
 			my ($valve, $time) = pop_queue($queue_file);
 			if (defined $valve and $valve ne '') {
