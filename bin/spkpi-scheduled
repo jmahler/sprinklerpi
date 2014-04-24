@@ -11,18 +11,20 @@ spki-scheduled - Scheduler daemon for SprinklerPI system.
 =head1 DESCRIPTION
 
 This daemon monitors the current schedules and adds entries
-to the queue at the appropriate time on the appropriate day.
+to the queues at the appropriate time on the appropriate day.
 
-  sprinklerpi/queue
+  sprinklerpi/queue/group-1
+  sprinklerpi/queue/group-2
+  sprinklerpi/queue/group-3
 
   sprinklerpi/schedules
     sched1.yml
     ...
 
-The queue is in the format as shown below with new entries
-added to the end of the file.
+The queue for a group is in the format as shown below with
+new entries added to the end of the file.
 
-  <group#> <valve#> <run time mm:ss>
+  <valve> <run time seconds>
 
 The schedule files can have any names but they must be in YAML format.
 Example schedules are included with this project under www/sprinklerpi.
@@ -121,6 +123,18 @@ sub minutes {
 }
 # }}}
 
+# {{{ seconds
+sub seconds {
+	my $ms = shift;
+
+	my ($min, $sec) = split /:/, $ms;
+
+	$sec = $min*60 + $sec;
+
+	return $sec;
+}
+# }}}
+
 # {{{ cur_day_minute
 sub cur_day_minute {
 
@@ -132,6 +146,33 @@ sub cur_day_minute {
 	my $day = $day_map[$wday];
 
 	return ($day, $minutes);
+}
+# }}}
+
+# {{{ get_mode
+sub get_mode {
+	my ($dir) = @_;
+
+	my $mode_file = "$dir/mode";
+	my $mode = `cat $mode_file`;
+	chomp($mode);
+
+	return $mode;
+}
+# }}}
+
+# {{{ enqueue
+sub enqueue {
+	my ($queue_file, $valve, $sec) = @_;
+
+	unless (open(OUT, ">>", $queue_file)) {
+		print STDERR "Unable to open '$queue_file: $!";
+		return;
+	}
+
+	print OUT "$valve $sec\n";
+
+	close(OUT);
 }
 # }}}
 
@@ -150,13 +191,6 @@ my $conf_file = "$dir/sprinklerpi.conf";
 
 my $cfg = LoadFile($conf_file);
 
-my $queue_file = "$dir/queue";
-open(my $queue_fh, ">>", "$queue_file")
-	or die "Unable to open queue '$queue_file': $!";
-
-# autoflush on
-select((select($queue_fh), $| = 1)[0]);
-
 my $inotify = new Linux::Inotify2
 	or die "Unable to create inotify object: $!";
 
@@ -169,11 +203,8 @@ $inotify->blocking(0);  # non-blocking for read/poll
 my $sched = load_schedules($sched_dir);
 my ($last_day, $last_min) = cur_day_minute();
 
-my $mode_file = "$dir/mode";
-my $mode = `cat $mode_file`;
-chomp($mode);
+my $mode = get_mode($dir);
 
-# loop forever, wating for changes, and adding to queue
 while (1) {
 
 	if ($mode eq 'schedule') {
@@ -193,7 +224,8 @@ while (1) {
 				my $valve = $entry->{'valve'};
 				my $run_time = $entry->{'run_time'};
 				print "group=$group, valve=$valve, time=$run_time\n" if $cfg->{verbose};
-				print $queue_fh "$group $valve $run_time\n";
+				my $rt_sec = seconds($run_time);
+				enqueue("$dir/queue/group-$group", $valve, $rt_sec);
 			}
 		}
 
@@ -202,8 +234,7 @@ while (1) {
 
 	sleep 5;
 
-	$mode = `cat $mode_file`;
-	chomp($mode);
+	$mode = get_mode($dir);
 
 	if ($mode eq 'schedule') {
 		if ($inotify->read) {
