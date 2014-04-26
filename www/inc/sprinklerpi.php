@@ -121,13 +121,25 @@ class SprinklerPI {
 		# mode
 		$mode = $this->mode;
 		$file = $this->spkpi_dir . "/mode";
-		exec("echo $mode > $file");
+
+		$status = '';
+		$output = array();
+		$cmd = "echo $mode > $file";
+		$res = exec($cmd, $output, $status);
+		if ($status)
+			exit("exec of '$cmd' failed. Are the file permissions correct?\n");
 
 		# valves
-		$dir  = $this->spkpi_dir . "/manual";
+		$dir  = $this->spkpi_dir . "/valves";
 		foreach ($this->valves as $group => $valve) {
-			$file = "$dir/valve-$group";
-			exec("echo $valve > $file");
+			$file = "$dir/group-$group";
+
+			$status = '';
+			$output = array();
+			$cmd = "echo $valve > $file";
+			$res = exec($cmd, $output, $status);
+			if ($status)
+				exit("exec of '$cmd' failed. Are the file permissions correct?\n");
 		}
 	}
 
@@ -147,15 +159,27 @@ class SprinklerPI {
 		if ($this->mode != $old->mode) {
 			$mode = $this->mode;
 			$file = $this->spkpi_dir . "/mode";
-			exec("echo $mode > $file");
+
+			$status = '';
+			$output = array();
+			$cmd = "echo $mode > $file";
+			$res = exec($cmd, $output, $status);
+			if ($status)
+				exit("exec of '$cmd' failed. Are the file permissions correct?\n");
 		}
 
 		# valves
-		$dir = $this->spkpi_dir . "/manual";
+		$dir = $this->spkpi_dir . "/valves";
 		foreach ($this->valves as $group => $valve) {
 			if ($valve != $old->valves[$group]) {
-				$file = "$dir/valve-$group";
-				exec("echo $valve > $file");
+				$file = "$dir/group-$group";
+
+				$status = '';
+				$output = array();
+				$cmd = "echo $valve > $file";
+				$res = exec($cmd, $output, $status);
+				if ($status)
+					exit("exec of '$cmd' failed. Are the file permissions correct?\n");
 			}
 		}
 	}
@@ -177,9 +201,9 @@ class SprinklerPI {
 
 		$this->mode = exec("cat " . $this->spkpi_dir . "/mode");
 
-		$dir  = $this->spkpi_dir . "/manual";
+		$dir  = $this->spkpi_dir . "/valves";
 		foreach ($this->valves as $group => $valve) {
-			$file = "$dir/valve-$group";
+			$file = "$dir/group-$group";
 			$valve = exec("cat $file");
 
 			if (is_numeric($valve) and $valve >= 0 and $valve <= 8) {
