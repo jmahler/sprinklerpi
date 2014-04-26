@@ -91,10 +91,17 @@ $SIG{INT} = sub {
 };
 
 my $counter_mode = 0;
+my $last_mode = get_mode($dir);
 
 while (1) {
 
-	if ('demo' ne get_mode($dir)) {
+	my $cur_mode = get_mode($dir);
+	if ($last_mode eq 'demo' and $cur_mode ne 'demo') {
+		water("000");
+	}
+	$last_mode = $cur_mode;
+
+	if ('demo' ne $cur_mode) {
 		print "mode != 'demo', sleeping\n" if $cfg->{verbose};
 		sleep 5;
 		next;
