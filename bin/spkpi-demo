@@ -191,6 +191,7 @@ while (1) {
 	}
 	next if ('demo' ne get_mode($dir));
 
+=pod
 	# counter
 	print "counter\n" if $cfg->{verbose};
 	my $steps = 9*9*9;
@@ -213,4 +214,5 @@ while (1) {
 	if (++$counter_mode > 2) {
 		$counter_mode = 0;	
 	}
+=cut
 }
