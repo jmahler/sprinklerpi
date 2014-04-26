@@ -44,7 +44,10 @@ my $cfg = LoadFile($conf_file);
 
 my $port = $cfg->{'port'};
 
-my $bin = $ENV{'BIN'};
-exec("$bin/spkpi-waterd-server $port $dir")
-	or die "Unable to exec spkpi-waterd-server: $!";
+my $prog = "spkpi-waterd-server";
+if (defined $ENV{'BIN'}) {
+	$prog = $ENV{'BIN'} . "/$prog";
+}
+exec("$prog $port $dir")
+	or die "Unable to exec '$prog': $!";
 

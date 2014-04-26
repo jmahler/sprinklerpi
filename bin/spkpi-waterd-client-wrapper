@@ -46,7 +46,10 @@ my $dev  = $cfg->{'dev'};
 my $host = $cfg->{'host'};
 my $port = $cfg->{'port'};
 
-my $bin = $ENV{'BIN'};
-exec("$bin/spkpi-waterd-client $dev $host $port")
-	or die "Unable to exec spkpi-waterd-client: $!";
+my $prog = "spkpi-waterd-client";
+if (defined $ENV{'BIN'}) {
+	$prog = $ENV{'BIN'} . "/$prog";
+}
+exec("$prog $dev $host $port")
+	or die "Unable to exec '$prog': $!";
 
