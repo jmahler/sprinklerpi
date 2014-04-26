@@ -89,16 +89,20 @@ class SprinklerPI {
 
 		# group valves
 		for ($group = 1; $group <= 3; $group++) {
-			$group_name = "group" . $group;
-			$valve = 0;
-			if (isset($_POST[$group_name])) {
-				$valve = htmlspecialchars($_POST[$group_name]);
+			if ($this->mode === 'off') {
+				$this->valves[$group] = 0;
+			} else {
+				$valve = 0;
+				$group_name = "group" . $group;
+				if (isset($_POST[$group_name])) {
+					$valve = htmlspecialchars($_POST[$group_name]);
 
-				if (is_numeric($valve) and $valve >= 0 and $valve <= 8) {
-					$this->valves[$group] = $valve;
-				} else {
-					$err = -1;
-					$this->errmsg = "Invalid valve '$valve'\n" . "file: " . __FILE__ . ", line: " . __LINE__;
+					if (is_numeric($valve) and $valve >= 0 and $valve <= 8) {
+						$this->valves[$group] = $valve;
+					} else {
+						$err = -1;
+						$this->errmsg = "Invalid valve '$valve'\n" . "file: " . __FILE__ . ", line: " . __LINE__;
+					}
 				}
 			}
 		}
