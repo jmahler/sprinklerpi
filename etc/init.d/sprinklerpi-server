@@ -1,6 +1,6 @@
 #!/bin/bash
 ### BEGIN INIT INFO
-# Provides:          sprinklerpi
+# Provides:          sprinklerpi-server
 # Required-Start:    $syslog
 # Required-Stop:     $syslog
 # Default-Start:     2 3 4 5
@@ -14,37 +14,36 @@
 
 # Author: Jeremiah Mahler <jmmahler@gmail.com>
 
-DESC="sprinklerpi daemon"
-NAME=sprinklerpi
+DESC="sprinklerpi-server daemon"
+NAME=sprinklerpi-server
 
 DIR=/home/sprinklerpi/sprinklerpi/www/sprinklerpi
 BIN=/home/sprinklerpi/sprinklerpi/bin
 USER=sprinklerpi
 GROUP=sprinklerpi
+export BIN
 
-DAEMONS=("spkpi-queued" "spkpi-scheduled" "spkpi-demo")
+DAEMON="spkpi-waterd-server-wrapper"
 
-. /etc/default/sprinklerpi
+if [ -f /etc/default/sprinklerpi ] ; then
+	. /etc/default/sprinklerpi
+fi
 
 . /lib/lsb/init-functions
 
 case "$1" in
 	start)
-		for DAEMON in ${DAEMONS[@]}; do
-			log_daemon_msg "Starting $DAEMON" "$DAEMON";
-			start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$DAEMON.pid --background --exec $BIN/$DAEMON --chuid $USER:$GROUP -- $DIR
-			status=$?
-			log_end_msg $status
-		done
+		log_daemon_msg "Starting $DAEMON" "$DAEMON";
+		start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$DAEMON.pid --background --exec $BIN/$DAEMON --chuid $USER:$GROUP -- $DIR
+		status=$?
+		log_end_msg $status
 
 		;;
 	stop)
-		for DAEMON in ${DAEMONS[@]}; do
-			log_daemon_msg "Stopping $DAEMON" "$DAEMON";
-			start-stop-daemon --stop --pidfile $DIR/var/run/pid/$DAEMON.pid
-			status=$?
-			log_end_msg $status
-		done
+		log_daemon_msg "Stopping $DAEMON" "$DAEMON";
+		start-stop-daemon --stop --pidfile $DIR/var/run/pid/$DAEMON.pid
+		status=$?
+		log_end_msg $status
 
 		;;
 	*)

@@ -3,13 +3,13 @@ use strict;
 
 =head1 NAME
 
-spkpi-waterd-client-wrapper
+spkpi-waterd-server-wrapper
 
 =head1 DESCRIPTION
 
-Instead of requiring spkpi-waterd-client to use the C version
+Instead of requiring spkpi-waterd-server to use the C version
 of the YAML library, which adds complexity, this script loads
-the YAML configuration and the exec's spkpi-waterd-client with
+the YAML configuration and the exec's spkpi-waterd-server with
 the required arguments.
 
 =head1 AUTHOR
@@ -42,11 +42,9 @@ my $conf_file = "$dir/sprinklerpi.conf";
 
 my $cfg = LoadFile($conf_file);
 
-my $dev  = $cfg->{'dev'};
-my $host = $cfg->{'host'};
 my $port = $cfg->{'port'};
 
 my $bin = $ENV{'BIN'};
-exec("$bin/spkpi-waterd-client $dev $host $port")
-	or die "Unable to exec spkpi-waterd-client: $!";
+exec("$bin/spkpi-waterd-server $port $dir")
+	or die "Unable to exec spkpi-waterd-server: $!";
 

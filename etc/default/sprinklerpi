@@ -1,0 +1,9 @@
+
+# Example, installed under user 'jeri'
+
+DIR=/home/jeri/sprinklerpi/www/sprinklerpi
+BIN=/home/jeri/sprinklerpi/bin
+
+USER=jeri
+GROUP=jeri
+

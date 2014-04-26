@@ -1,11 +1,9 @@
 
-NAME
-----
+## NAME
 
 SprinklerPI - Web based sprinkler controller using Linux
 
-DESCRIPTION
------------
+## DESCRIPTION
 
 An web based sprinkler controller using Linux that is
 open source and highly customizable.
@@ -29,8 +27,7 @@ A web based user interface is in development.
 
 Refer to the full documentation ([doc/design/design.pdf](https://github.com/jmahler/sprinklerpi/blob/build/doc/design/design.pdf?raw=true)) for more info.
 
-CONTENTS
---------
+## CONTENTS
 
 There are various components to this system each arranged in their
 own directory as described below.
@@ -58,8 +55,35 @@ own directory as described below.
 
   [nginx]:http://www.nginx.org
 
-FAQ
----
+## STARTUP, /etc/init.d/
+
+Depending upon how this system is designed to be run different daemons
+will need to be started.  A set of startup scripts are provided in
+/etc/init.d for each of the situations.
+
+### situation #1: no fire wall
+
+The simplest case is just a standalone server with no need for public
+access through a fire wall.  In this case just use the `sprinklerpi`
+and `sprinklerpi-waterd` scripts.
+
+  etc/init.d/sprinklerpi
+  etc/init.d/sprinklerpi-waterd
+
+### situation #2: fire wall
+
+When it is necessary to communcate through a fire wall the client and
+server version will need to be used.  On the client the client version
+is used.
+
+  etc/init.d/sprinklerpi-client
+
+On the server the `server` and `sprinklerpi` script is used.
+
+  etc/init.d/sprinklerpi
+  etc/init.d/sprinklerpi-server
+
+## FAQ
 
 Q. Why does this design use files to communicate between daemons
 and the web server?  Doesn't this make it more complex?
@@ -102,14 +126,12 @@ A. There are several reasons why a file system interface was used:
 
   [git]:http://git-scm.org
 
-AUTHOR
-------
+## AUTHOR
 
 Jeremiah Mahler <jmmahler@gmail.com><br>
 <http://github.com/jmahler>
 
-COPYRIGHT
----------
+## COPYRIGHT
 
 Copyright &copy; 2014, Jeremiah Mahler All Rights Reserved.<br>
 This project is free software and released under
