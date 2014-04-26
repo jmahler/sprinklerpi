@@ -95,6 +95,7 @@ my $counter_mode = 0;
 while (1) {
 
 	if ('demo' ne get_mode($dir)) {
+		print "mode != 'demo', sleeping\n" if $cfg->{verbose};
 		sleep 5;
 		next;
 	}

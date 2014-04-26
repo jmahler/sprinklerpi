@@ -1,11 +1,14 @@
 
-ARGV=-Wall -Wextra -pedantic
+all: water spkpi-waterd-client spkpi-waterd-server
 
-all: water
+ARGV=-Wall -Wextra -pedantic
+INC=-I../include ../lib/sprinklerpi.o
 
 water: water.c
-	cd ..; make
-	gcc $(ARGV) -I../include ../lib/sprinklerpi.o $< -o $@
+	gcc $(ARGV) $(INC) $< -o $@
+
+%: %.c
+	gcc $(ARGV) $< -o $@
 
 clean:
 	cd ..; make clean

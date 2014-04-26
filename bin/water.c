@@ -64,8 +64,8 @@
  * --------
  *
  * Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
- * This module is free software.  It may be used, redistributed
- * and/or modified under the same terms as Perl itself.
+ * This project is free software and released under the
+ * GNU General Public License.
  *
  */
 
