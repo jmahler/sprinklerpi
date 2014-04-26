@@ -77,7 +77,7 @@ sub water {
 		}
 		flock(OUT, LOCK_EX);
 		truncate OUT, 0;
-		print OUT $vs[$i-1];
+		print OUT $vs[$i-1] . "\n";
 		flock(OUT, LOCK_UN);
 		close(OUT);
 	}
