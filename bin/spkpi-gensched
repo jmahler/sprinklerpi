@@ -52,7 +52,7 @@ my $sched = {
 };
 
 my $days = "MTWThFSSU";
-my $run_time = "00:02";  # 2 seconds
+my $run_time = "00:50";
 
 my $valve = 1;
 
