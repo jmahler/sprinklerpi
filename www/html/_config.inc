@@ -7,5 +7,5 @@ set_include_path(get_include_path() . PATH_SEPARATOR . $inc_path);
 
 include 'sprinklerpi.php';
 
-$spkpi_dir = '../sprinklerpi';
+$spkpi_dir = '../../sprinklerpi';
 ?>
