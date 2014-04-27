@@ -19,6 +19,7 @@ NAME="spkpi-waterd"
 
 DIR=/home/sprinklerpi/sprinklerpi/www/sprinklerpi
 BIN=/home/sprinklerpi/sprinklerpi/bin
+PIDIR=/home/sprinklerpi/sprinklerpi/var/run/sprinklerpi
 USER=sprinklerpi
 GROUP=sprinklerpi
 DEV="/dev/null"
@@ -30,7 +31,7 @@ if [ -f /etc/default/sprinklerpi ] ; then
 fi
 
 DAEMON="$BIN/spkpi-waterd"
-PIDFILE="$DIR/var/run/pid/$NAME.pid"
+PIDFILE="$PIDIR/$NAME.pid"
 
 if ! test -x $DAEMON; then
 	log_failure_msg "Daemon is not executable."
