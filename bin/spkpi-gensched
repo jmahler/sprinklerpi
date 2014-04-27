@@ -1,0 +1,67 @@
+#!/usr/bin/perl
+use strict;
+
+use YAML::Syck;
+
+=head1 NAME
+
+spki-gensched - Schedule generator.
+
+=head1 DESCRIPTION
+
+This program generates a very large schedule which will change
+a valve on every group every few seconds.  This probably isn't useful
+for actual watering but it is great for testing.
+
+=head1 AUTHOR
+
+    Jeremiah Mahler <jmmahler@gmail.com>
+    http://github.com/jmahler
+
+=head1 COPYRIGHT
+
+Copyright (c) 2014, Jeremiah Mahler. All Rights Reserved.
+This module is free software.  It may be used, redistributed
+and/or modified under the same terms as Perl itself.
+
+=cut
+
+$YAML::Syck::SingleQuote = 1;
+
+my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday) = localtime(time);
+$mon = $mon + 1;
+my $date = "$mon/$mday/$year";
+
+my $sched = {
+	enabled => 0,
+	name 	=> "Test Schedule ($date)",
+};
+
+my $days = "MTWThFSSU";
+my $run_time = "00:02";  # 2 seconds
+
+my $valve = 1;
+
+my @entries;
+for (my $hour = 0; $hour <= 23; $hour++) {
+	for (my $min = 0; $min < 60; $min++) {
+		$valve++;
+		if ($valve > 8) {
+			$valve = 1;
+		}
+		for (my $group = 1; $group <= 3; $group++) {
+			push @entries, {
+				group 	=> $group,
+				valve 	=> $valve,
+				days 	=> $days,
+				start_time 	=> sprintf("%02d:%02d", $hour, $min),
+				run_time 	=> $run_time,
+			}
+		}
+	}
+}
+
+$sched->{entries} = \@entries;
+
+print Dump($sched);
+
