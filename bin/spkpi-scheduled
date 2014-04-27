@@ -203,6 +203,7 @@ $inotify->watch($sched_dir, IN_CLOSE_WRITE)
 	or die "Unable to watch '$sched_dir': $!";
 $inotify->blocking(0);  # non-blocking for read/poll
 
+print "startup, loading schedules\n" if $cfg->{verbose};
 my $sched = load_schedules($sched_dir);
 my ($last_day, $last_min) = cur_day_minute();
 
@@ -213,12 +214,21 @@ while (1) {
 	if ($mode eq 'schedule') {
 		my ($day, $min) = cur_day_minute();
 
+		print "day = $day, minute = $min\n" if $cfg->{verbose};
+
 		# reset minutes when day changes
 		if ($day != $last_day) {
 			$last_min = 0;
 		}
 
-		my $day_sched = $sched->{$day};
+		unless (@{$sched->{$day}}) {
+			print "Nothing scheduled for today ($day).\n" if $cfg->{verbose};
+			my @days = keys %$sched;
+			my $days_str = join ", ", @days;
+			print "days in schedule: $days_str\n";
+		}
+
+		my $day_sched = $sched->{$day};  # schedule object for today
 		foreach my $entry (@$day_sched) {
 			my $start_min = minutes($entry->{start_time});
 
