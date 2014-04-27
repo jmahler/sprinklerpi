@@ -28,6 +28,20 @@ and/or modified under the same terms as Perl itself.
 
 $YAML::Syck::SingleQuote = 1;
 
+my $start_hour = 9;
+if (@ARGV) {
+	$start_hour = shift @ARGV;
+}
+die "Start hour '$start_hour' is too large (<= 23)" if ($start_hour > 23);
+die "Start hour '$start_hour' is too small (>= 0)" if ($start_hour < 0);
+
+my $end_hour = 12;
+if (@ARGV) {
+	$end_hour = shift @ARGV;
+}
+die "End hour '$end_hour' is too large (<= 23)" if ($end_hour > 23);
+die "End hour '$end_hour' is too small (>= 0)" if ($end_hour < 0);
+
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday) = localtime(time);
 $mon = $mon + 1;
 my $date = "$mon/$mday/$year";
@@ -43,7 +57,7 @@ my $run_time = "00:02";  # 2 seconds
 my $valve = 1;
 
 my @entries;
-for (my $hour = 0; $hour <= 23; $hour++) {
+for (my $hour = $start_hour; $hour <= $end_hour; $hour++) {
 	for (my $min = 0; $min < 60; $min++) {
 		$valve++;
 		if ($valve > 8) {
