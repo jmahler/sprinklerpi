@@ -127,6 +127,7 @@ int main(int argc, char* argv[]) {
 	int max_fd = 0;
 	struct sigaction int_act;
 	struct sigaction disc_act;
+	int firstpass;
 
 	memset(&int_act, 0, sizeof(int_act));
 	int_act.sa_handler = int_handler;
@@ -238,7 +239,7 @@ int main(int argc, char* argv[]) {
 	max_fd = max(sockfd, max_fd);
 	max_fd = max(notify, max_fd);
 
-	while (1) {
+	while (!quit) {
 		int cli_conn;
 
 		if ((cli_conn = accept(sockfd, NULL, NULL)) == -1) {
@@ -249,25 +250,28 @@ int main(int argc, char* argv[]) {
 			continue;
 		}
 
-		while (1) {
-			select(max_fd+1, &rd_set, &wr_set, &ex_set, NULL);
-			if (quit)
-				break;
+		firstpass = 1;
+		while (!quit) {
+			if (!firstpass) {
+				select(max_fd+1, &rd_set, &wr_set, &ex_set, NULL);
+				if (quit)
+					break;
 
-			/* valve file changes */
-			if (FD_ISSET(notify, &rd_set)) {
-				if ((n = read(notify, buf, BUF_LEN)) == -1) {
-					if (errno == EINTR)
+				/* valve file changes */
+				if (FD_ISSET(notify, &rd_set)) {
+					if ((n = read(notify, buf, BUF_LEN)) == -1) {
+						if (errno == EINTR)
+							break;
+
+						error(0, errno, "inotify read");
 						break;
+					}
+				}
 
-					error(0, errno, "inotify read");
+				/* client reconnect */
+				if (FD_ISSET(sockfd, &rd_set)) {
 					break;
 				}
-			}
-
-			/* client reconnect */
-			if (FD_ISSET(sockfd, &rd_set)) {
-				break;
 			}
 
 			/* read command from valve files */
@@ -284,9 +288,9 @@ int main(int argc, char* argv[]) {
 				error(0, errno, "send");
 				break;
 			}
+
+			firstpass = 0;
 		}
-		if (quit)
-			break;
 	}
 
 	close(sockfd);
