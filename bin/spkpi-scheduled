@@ -2,6 +2,7 @@
 use strict;
 
 use Linux::Inotify2;
+use YAML::Syck;
 
 =head1 NAME
 
