@@ -51,7 +51,7 @@ my $sched = {
 	name 	=> "Test Schedule ($date)",
 };
 
-my $days = "MTWThFSSU";
+my $days = "MTWThFSSu";
 my $run_time = "00:50";
 
 my $valve = 1;
