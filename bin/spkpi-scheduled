@@ -2,7 +2,6 @@
 use strict;
 
 use Linux::Inotify2;
-use YAML::Syck;
 
 =head1 NAME
 
@@ -179,17 +178,20 @@ sub enqueue {
 my $dir = '../sprinklerpi';  # default
 if (@ARGV) {
 	$dir = shift @ARGV;
+} elsif (exists $ENV{DIR}) {
+	$dir = $ENV{DIR};
 }
 
 (-e $dir)
 	or die "Required directory '$dir' does not exist!";
 
-my $conf_file = "$dir/sprinklerpi.conf";
+my $cfg = {
+	verbose => 1,
+};
 
-(-e "$conf_file")
-	or die "Configuration file '$conf_file' does not exist!";
-
-my $cfg = LoadFile($conf_file);
+if (exists $ENV{VERBOSE}) {
+	$cfg->{verbose} = $ENV{VERBOSE};
+}
 
 my $inotify = new Linux::Inotify2
 	or die "Unable to create inotify object: $!";

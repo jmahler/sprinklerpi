@@ -2,7 +2,6 @@
 use strict;
 
 use Linux::Inotify2;
-use YAML::Syck;
 use Fcntl qw(:flock);
 
 =head1 NAME
@@ -34,17 +33,25 @@ and/or modified under the same terms as Perl itself.
 my $dir = '../sprinklerpi';  # default
 if (@ARGV) {
 	$dir = shift @ARGV;
+} elsif (exists $ENV{DIR}) {
+	$dir = $ENV{DIR};
 }
 
 (-e $dir)
 	or die "Required directory '$dir' does not exist!";
 
-my $conf_file = "$dir/sprinklerpi.conf";
+my $cfg = {
+	verbose => 1,
+	dev => "/dev/null",
+};
 
-(-e "$conf_file")
-	or die "Configuration file '$conf_file' does not exist!";
+if (exists $ENV{VERBOSE}) {
+	$cfg->{verbose} = $ENV{VERBOSE};
+}
 
-my $cfg = LoadFile($conf_file);
+if (exists $ENV{DEV}) {
+	$cfg->{dev} = $ENV{DEV};
+}
 
 my $inotify = new Linux::Inotify2
 	or die "Unable to create inotify object: $!";

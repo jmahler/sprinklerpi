@@ -15,39 +15,58 @@
 # Author: Jeremiah Mahler <jmmahler@gmail.com>
 
 DESC="sprinklerpi-server daemon"
-NAME=sprinklerpi-server
+NAME="sprinklerpi-server"
 
 DIR=/home/sprinklerpi/sprinklerpi/www/sprinklerpi
 BIN=/home/sprinklerpi/sprinklerpi/bin
 USER=sprinklerpi
 GROUP=sprinklerpi
-export BIN
+PORT=5000
 
-DAEMON="spkpi-waterd-server-wrapper"
+. /lib/lsb/init-functions
 
 if [ -f /etc/default/sprinklerpi ] ; then
 	. /etc/default/sprinklerpi
 fi
 
-. /lib/lsb/init-functions
+DAEMON="$BIN/spkpi-waterd-server"
+
+if ! test -x $DAEMON; then
+	log_failure_msg "Daemon is not executable."
+	exit 1
+fi
+
+do_start() {
+	log_daemon_msg "Starting $NAME" "$NAME";
+	if start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$NAME.pid --background --exec $DAEMON --chuid $USER:$GROUP -- $PORT $DIR; then
+		log_end_msg 0
+	else
+		log_end_msg 1
+		exit 1
+	fi
+}
+
+do_stop() {
+	log_daemon_msg "Stopping $NAME" "$NAME";
+	start-stop-daemon --stop --pidfile $DIR/var/run/pid/$NAME.pid
+	status=$?
+	log_end_msg $status
+}
 
 case "$1" in
 	start)
-		log_daemon_msg "Starting $DAEMON" "$DAEMON";
-		start-stop-daemon --start --make-pidfile --pidfile $DIR/var/run/pid/$DAEMON.pid --background --exec $BIN/$DAEMON --chuid $USER:$GROUP -- $DIR
-		status=$?
-		log_end_msg $status
-
+		do_start
 		;;
 	stop)
-		log_daemon_msg "Stopping $DAEMON" "$DAEMON";
-		start-stop-daemon --stop --pidfile $DIR/var/run/pid/$DAEMON.pid
-		status=$?
-		log_end_msg $status
-
+		do_stop
+		;;
+	restart)
+		log_action_msg "Restarting $NAME" "$NAME";
+		do_stop
+		do_start
 		;;
 	*)
-		echo "Usage: sprinklerpi [start|stop]" >&2
+		echo "Usage: sprinklerpi [start|stop|restart]" >&2
 		exit 3
 		;;
 esac

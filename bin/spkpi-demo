@@ -2,7 +2,6 @@
 use strict;
 
 use Time::HiRes qw(usleep);
-use YAML::Syck;
 use Fcntl qw(:flock);
 
 =head1 NAME
@@ -37,19 +36,16 @@ and/or modified under the same terms as Perl itself.
 my $dir = '../sprinklerpi';  # default
 if (@ARGV) {
 	$dir = shift @ARGV;
+} elsif (exists $ENV{DIR}) {
+	$dir = $ENV{DIR};
 }
 
 (-e $dir)
 	or die "Required directory '$dir' does not exist!";
 
-my $conf_file = "$dir/sprinklerpi.conf";
-
-(-e $conf_file)
-	or die "Configuration file '$conf_file' does not exist!";
-
-my $cfg = LoadFile($conf_file);
-
-my $dev = $cfg->{dev};
+my $cfg = {
+	verbose => 1,
+};
 
 # {{{ get_mode
 sub get_mode {

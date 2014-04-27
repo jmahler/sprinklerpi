@@ -1,9 +1,24 @@
+#
+# SprinklerPI daemon configuration.
+#
+# These override the defaults in the /etc/init.d scripts.
+#
 
-# Example, installed under user 'jeri'
-
+# example, installed under user 'jeri'
 DIR=/home/jeri/sprinklerpi/www/sprinklerpi
 BIN=/home/jeri/sprinklerpi/bin
 
 USER=jeri
 GROUP=jeri
+
+#DEV="/dev/spidev0.0"
+#DEV="/dev/spidev0.1"
+DEV="/dev/null"
+# null is good for testing
+
+VERBOSE=0
+
+# for client/server
+HOST="localhost"
+PORT="5000"
 
