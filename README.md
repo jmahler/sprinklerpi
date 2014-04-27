@@ -230,6 +230,24 @@ To fix the problem Increase the value of `max_input_vars` in php.ini.
     ; php.ini
     max_input_vars = 5000
 
+Q.  Why does the demo continue running for a long time even after
+switching to another mode?
+
+A. When using the client/server proxy this is because of all the messages
+that have been queued up in the network buffer.  It can be seen by
+looking at the valve files on the server that they are not changing.
+
+    cat sprinklerpi/valves/*
+
+And it can be seen that not messages are being sent by monitoring the
+traffic using [Wireshark][ws].
+
+It won't stop until the entire queue on the client side has been emptied
+which can take several minutes.  Each message is only a few bytes so quite
+a few can be stored.
+
+  [ws]:http://www.wireshark.org
+
 ## AUTHOR
 
 Jeremiah Mahler <jmmahler@gmail.com><br>
