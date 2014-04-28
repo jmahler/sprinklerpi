@@ -29,6 +29,20 @@ new entries added to the end of the file.
 The schedule files can have any names but they must be in YAML format.
 Example schedules are included with this project under www/sprinklerpi.
 
+The sprinklerpi directory can be specified on the command line
+
+  spkpi-scheduled ../sprinklerpi
+
+or using the environment variable 'DIR'.
+
+  export DIR="../sprinklerpi"
+  spkpi-scheduled
+
+If the 'VERBOSE' environment variable is set verbose output will
+be produced.
+
+  export VERBOSE=1
+
 =head1 AUTHOR
 
     Jeremiah Mahler <jmmahler@gmail.com>

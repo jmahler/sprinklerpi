@@ -16,8 +16,6 @@
  *
  *   spkpi-waterd-client /dev/spidev0.0 localhost 5000
  *
- * See also: spkpi-waterd-client-wrapper
- *
  * AUTHOR
  * ------
  *

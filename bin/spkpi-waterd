@@ -17,6 +17,20 @@ water command to physically turn on the valves.
   valves/group-2
   valves/group-3
 
+The sprinklerpi directory can be specified on the command line
+
+  spkpi-waterd ../sprinklerpi
+
+or using the environment variable 'DIR'.
+
+  export DIR="../sprinklerpi"
+  spkpi-waterd
+
+If the 'VERBOSE' environment variable is set verbose output will
+be produced.
+
+  export VERBOSE=1
+
 =head1 AUTHOR
 
     Jeremiah Mahler <jmmahler@gmail.com>
