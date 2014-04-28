@@ -78,6 +78,16 @@ int main(int argc, char* argv[]) {
 	int_act.sa_handler = int_handler;
 	sigaction(SIGINT, &int_act, 0);
 
+	/* turn all valves off during startup */
+	sprintf(sysc, "water -d \"%s\" \"%s\"", dev, "000");
+	if (VERBOSE) printf("startup, turning all valves off.\n");
+	if ((n = system(sysc)) != 0) {
+		if (-1 == n)
+			error(1, errno, "system");
+		else
+			error(1, 0, "system status (%d)", n);
+	}
+
 	while (!quit) {
 
 		/* free objects each time around */
