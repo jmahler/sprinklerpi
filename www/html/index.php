@@ -70,7 +70,13 @@ $spkpi = $new_spkpi;
       include 'body_demo.php';
       break;
   } ?>
+<br>
+<br>
+<span class="tiny center">
+<a href="http://github.com/jmahler/sprinklerpi">github.com/jmahler/sprinklerpi</a>
+</span>
 </div>
+
 
 </body>
 </html>

@@ -43,6 +43,10 @@ html, body {
 	margin-bottom: 1em;
 }
 
+.tiny {
+	font-size: 0.8em;
+}
+
 .header .title {
 	font-size: 1.75em;
 	font-weight: bold;
