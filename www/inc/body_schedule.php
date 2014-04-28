@@ -20,7 +20,7 @@ function new_blank_schedule() {
       array(  'group' => "1",
               'valve' => "1",
               'days'  => "MTWThFSSu",
-              'start_time' => date("h:i"),
+              'start_time' => date("H:i"),
               'run_time' => "5:00"),
     ),
   );
