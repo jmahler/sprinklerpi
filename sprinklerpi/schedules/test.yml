@@ -1,6 +1,6 @@
 ---
 id: test.yml
-name: Test Schedule (4/27/114)
+name: Test Schedule (4/27/2014)
 enabled: 1
 entries:
 - group: "1"

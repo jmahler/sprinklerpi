@@ -44,6 +44,7 @@ die "End hour '$end_hour' is too small (>= 0)" if ($end_hour < 0);
 
 my ($sec, $min, $hour, $mday, $mon, $year, $wday, $yday) = localtime(time);
 $mon = $mon + 1;
+$year = $year + 1900;
 my $date = "$mon/$mday/$year";
 
 my $sched = {
