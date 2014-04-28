@@ -223,12 +223,19 @@ A. There are several reasons why a file system interface was used:
 Q. Schedules with lots of entries (1000+) get cutoff after making
 changes through the web interface.
 
-A. The maximum number of input variables for a POST is being exceeded.
-There will also be messages in the error.log.
-To fix the problem Increase the value of `max_input_vars` in php.ini.
+A. There is a maximum number of POST variables that PHP will allow before
+it rejects the submission.  This is likely being exceeded.
+To confirm the problem the server error.log should be checked.
+
+To get an idea of the magnitude of this form suppose every minute
+each group has a new entry (3) and this is over twelve hours
+(12 x 60 x 3 = 2160).  Now for each entry in the schedule there are
+six columns (2160 x 6 = 12960).
+
+To fix the problem increase the value of `max_input_vars` in php.ini.
 
     ; php.ini
-    max_input_vars = 5000
+    max_input_vars = 15000
 
 Q.  Why does the demo continue running for a long time even after
 switching to another mode?
