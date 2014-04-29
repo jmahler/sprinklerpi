@@ -7,10 +7,10 @@ SprinklerPI - Web based sprinkler controller.
 
 SprinklerPI is a full featured web based sprinkler controller.
 
-It provides a web interface which allows watering schedules
-to be created.  And there can be any number of schedules
-with any number of entries.  There is no practical limit on
-the size or number of schedules that can be created.
+From the web interface watering schedules can be created and edited.
+Each schedule can have any number of entries which describe when to
+turn a valve on and for how long.  Any there are no limits on the
+number of schedules or number of entries which can be created.
 
 The hardware design is modular allowing it to be scaled up
 or down for a particular install.  Each driver can drive eight
