@@ -93,7 +93,9 @@ Not applicable at this time.
 \begin{itemize}
 \item 110 volts AC power supply.
 \item Digital volt meter.
-\item One Sprinkler valve, residential 270 mA.
+\item Three test bridges (25 $\Omega$, 50 watt).
+\item Ethernet network connection.
+\item (optional) Wireless usb adapter.
 \end{itemize}
 
 \subsection{Precautions \& Warnings}
@@ -124,85 +126,91 @@ The ``IMPORTANT: Message'' alerts the user to important design changes.
 
 % }}}
 
+% {{{ Testing Features and Functions
 \section{Testing Features and Functions}
 
-This system has a modular design with a power supply module and from
-one to three control/driver modules.
-The following test procedure tests each module individually.
-After an individual module has been tested and shown to be in working
-order it can be used to construct a full system.
+This testing procedure can be used to determine if the system
+is fully operation and operating within acceptable tolerances.
 
-% {{{ Power Supply Module
-\subsection{Power Supply Module}
+This is a minimal set of tests at a high level of abstraction.
+In the event that a fault is found a technician will have to
+diagnose components at a low level.
+Low level testing is not included in this procedure.
 
-\begin{framed}
-\textbf{IMPORTANT}: The DC voltage has been changed
-from 5V to 3.3V.
-The label on version 20140304 of the power supply PCB still
-refers to 5V despite this change.
-\end{framed}
+Several assumptions are made in this test procedure.
+It is assumed that networking has already been configured as
+described in Appendix \ref{app:networking}.
+It is also assumed that a fully populated SprinklerPI system with
+three control/drivers is being tested.
+This system has a modular and the number of control/drivers can vary
+from one to three.
+A testing procedure with one or two control/drivers is not described.
 
-\begin{figure}[hbp!]
-\begin{center}
-\includegraphics[scale=0.15,angle=0]{img/power_pcb-assembled-02.jpg}
-\end{center}
-\caption{Assembled power supply module PCB.
-The 24 volts AC input is in the top left.
-The green power LED is on the bottom right.
-The headers for 24 volts AC output and 3.3 volts DC
-output are on the bottom.
-}\label{fig:psm2}
-\end{figure}
+% {{{ Power On Test
+\subsection{Power On Test}
+
+% TODO - picture and location of LEDs
 
 \begin{enumerate}
 \item Equipment Required
 	\begin{itemize}
-	\item SprinklerPI power supply module (revision 20140304).
-	\item 110 volts AC power supply (standard U.S.).
-	\item 110 volts AC to 24 volts AC power adapter.
-	\item Digital multi meter.
+		\item 110 volts AC power outlet (NEMA 5-15R).
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item 24 volts AC from 110 to 24 volts AC adapter.
+	\item (none)
 	\end{itemize}
 \item Output
 	\begin{itemize}
 	\item Green power LED on.
-	\item 24$\pm4.8$ (20\%) volts AC output.
-	\item 3.3$\pm0.3$ (10\%) volts DC output.
+	\item Activity LEDs during boot up.
+	\item Control LEDs off.
 	\end{itemize}
-\pagebreak
 \item Test Description \\
-
-The 110 volt to 24 volt AC power adapter should be connected to the
-two pin input header (Figure \ref{fig:psm2}, top left) and screwed down.
-With the power adapter plugged in to a 110 volts AC power supply the
-green power LED should come on.
-Using a DMM to measure voltage, there should be 3.3 volts DC output on
-the ``5V'' header pins and 24 volts AC output on the ``24 VAC'' header pins.
-Be sure to switch from AC to DC modes on the DMM as necessary.
-The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
-
-\item Test Results \\
-	\vspace{0.2in}
-	\begin{tabular}{|l|l|l|l|}
-		\hline
-		& Value & Pass/Fail & Results/Data\hspace{2in} \\
-		\hline
-		Power LED on? &&& \\
-		\hline
-		$24\pm4.8$ volts AC &&& \\
-		\hline
-		$3.3\pm0.3$ volts DC &&& \\
-		\hline
-	\end{tabular}
 \end{enumerate}
+
+\begin{figure}
+% TODO
+\caption{Location of LED indicators.}\label{fig:ledind}
+\end{figure}
+
+During power up the system should be seen going through several states,
+which can be seen by observing LED indicators (Figure \ref{fig:ledind}).
+When it is complete it should end in a specific state.
+
+After plugging the cord in to a 110 volt AC outlet the green LED on
+the power supply should go on.
+Then, as the computer is booting, activity should be on the LEDs.
+The control LEDs may go on/off randomly as the system boots.
+They also may may turn on valve number one during boot.
+This is normal as the output pins go through random states and
+eventually clears the chips which causes valve one to go on.
+After approximately 30 seconds the activity LEDs should stop,
+indicating the system has completed booting.
+All control/driver LEDs should be off when booting is complete.
+
+\subsubsection*{Test Results}
+\begin{tabular}{|l|l|l|l|}
+	\hline
+	\multicolumn{1}{|c|}{Test}
+	& \multicolumn{1}{|c|}{Value}
+	& \multicolumn{1}{|c|}{Pass/Fail}
+	& \multicolumn{1}{|c|}{Notes} \\
+	\hline
+	Power LED on? & on / off && \hspace{1.7in} \\
+	\hline
+	Activity LEDs during boot? & yes / no && \\
+	\hline
+	Stable activity LEDs after boot up? & yes / no && \\
+	\hline
+	Control outputs off after boot up? & yes / no && \\
+	\hline
+\end{tabular}
 % }}}
 
-% {{{ Control/Driver
+% {{{ Manual Control Test
 \clearpage
-\subsection{Control/Driver}
+\subsection{Manual Control Test}
 
 \begin{figure}[htbp!]
 \begin{center}
@@ -299,6 +307,78 @@ See \verb+water -h+ for more info.
 \end{enumerate}
 % }}}
 
+% {{{ Load Test
+\subsection{Load Test}
+
+\begin{framed}
+\textbf{IMPORTANT}: The DC voltage output of the power supply has
+been changed from 5V to 3.3V.
+The label on version 20140304 of the power supply PCB still
+refers to 5V despite this change.
+\end{framed}
+
+\begin{figure}[hbp!]
+\begin{center}
+\includegraphics[scale=0.15,angle=0]{img/power_pcb-assembled-02.jpg}
+\end{center}
+\caption{Assembled power supply module PCB.
+The 24 volts AC input is in the top left.
+The green power LED is on the bottom right.
+The headers for 24 volts AC output and 3.3 volts DC
+output are on the bottom.
+}\label{fig:psm2}
+\end{figure}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item SprinklerPI power supply module (revision 20140304).
+	\item 110 volts AC power supply (standard U.S.).
+	\item 110 volts AC to 24 volts AC power adapter.
+	\item Digital multi meter.
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item 24 volts AC from 110 to 24 volts AC adapter.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item Green power LED on.
+	\item 24$\pm4.8$ (20\%) volts AC output.
+	\item 3.3$\pm0.3$ (10\%) volts DC output.
+	\end{itemize}
+\pagebreak
+\item Test Description \\
+
+The 110 volt to 24 volt AC power adapter should be connected to the
+two pin input header (Figure \ref{fig:psm2}, top left) and screwed down.
+With the power adapter plugged in to a 110 volts AC power supply the
+green power LED should come on.
+Using a DMM to measure voltage, there should be 3.3 volts DC output on
+the ``5V'' header pins and 24 volts AC output on the ``24 VAC'' header pins.
+Be sure to switch from AC to DC modes on the DMM as necessary.
+The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
+
+\item Test Results \\
+	\vspace{0.2in}
+	\begin{tabular}{|l|l|l|l|}
+		\hline
+		& Value & Pass/Fail & Results/Data\hspace{2in} \\
+		\hline
+		Power LED on? &&& \\
+		\hline
+		$24\pm4.8$ volts AC &&& \\
+		\hline
+		$3.3\pm0.3$ volts DC &&& \\
+		\hline
+	\end{tabular}
+\end{enumerate}
+% }}}
+
+% {{{ Scheduling Test
+
+% }}}
+
 %\section{Other Testing}
 
 % {{{ User Interface
@@ -370,6 +450,17 @@ These tests verify these operations.
 	\end{tabular}
 
 \end{enumerate}
+
+% }}}
+
+% }}}
+
+\clearpage
+\appendix
+
+% {{{ Network Configuration
+\section{Network Configuration}
+\label{app:networking}
 
 % }}}
 
