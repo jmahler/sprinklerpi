@@ -1,31 +1,21 @@
 ---
-id: 20140427094542.yml
-name: Multiple Start Test
-enabled: 0
+id: 20140503124939.yml
+name: 'Schedule Test #2'
+enabled: 1
 entries:
 - group: "1"
   valve: "1"
   days: MTWThFSSu
-  start_time: "21:55"
+  start_time: 00:50
   run_time: 00:30
-- group: "1"
-  valve: "2"
+- group: "2"
+  valve: "1"
   days: MTWThFSSu
-  start_time: "21:55"
+  start_time: 00:50
   run_time: 00:30
-- group: "1"
-  valve: "3"
+- group: "3"
+  valve: "1"
   days: MTWThFSSu
-  start_time: "21:55"
-  run_time: 00:30
-- group: "1"
-  valve: "4"
-  days: MTWThFSSu
-  start_time: "21:55"
-  run_time: 00:30
-- group: "1"
-  valve: "5"
-  days: MTWThFSSu
-  start_time: "21:57"
+  start_time: 00:50
   run_time: 00:30
 ...
