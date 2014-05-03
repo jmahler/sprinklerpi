@@ -82,38 +82,108 @@ as described below.
 
   [kicad]:http://www.kicad-pcb.org
 
-  [PHP]:http://www.php.net
+  [php]:http://www.php.net
 
   [nginx]:http://www.nginx.org
 
-## BUILD
+## SYSTEM SETUP
 
-Before using the system the binaries and daemons must be built.
-First run make from the project root to build the library.
+The system needs to have various packages installed in order to function.
+
+Since some of the daemons are written in [Perl][perl] several
+Perl libraries must be installed.  Specifically YAML::Syck
+and Linux::Inotify2.
+
+  [perl]:http://www.perl.org
+
+Under [Debian][deb] Linux these can be installed using
+`apt-get install <pkg>`.
+
+  [deb]:http://www.debian.org
+
+    $ apt-get install libyaml-syck-perl
+    $ apt-get install liblinux-inotify2-perl
+
+Under [Redhat][rpm] these can be installed using `yum install <pkg>`.
+
+  [rpm]:http://www.redat.com
+
+    $ yum --enablerepo=rpmforge --enablerepo=atomic install perl-YAML-Syck
+    $ yum --enablerepo=rpmforge --enablerepo=atomic install perl-Linux-Inotify2
+
+If the packages are not available in [Redhat][rpm] the `cpan` command
+can be tried.
+
+    $ cpan -i Linux::Inotify2
+
+At this point, with the Perl libraries installed, it should be possible
+to run the queue daemon (`spkpi-queued`), scheduler
+daemon (`spkpi-scheduled`), demo daemon (`spkpi-demo`).
+
+The final daemons needed to get the system working are the water
+daemon (`spkpi-waterd`) which depends on the `water` command and/or
+the client/server daemons.  These are written in C and must be compiled.
+To build these change to the root of the project and type `make`,
+this will build the library.
 
     $ make
 
-Then run make from the bin directory to build everything else.
+Then change to the binary directory and type `make` again, this
+will build the executables.
 
     $ cd bin/
     $ make
 
-## SETUP
+Depending on whether this system is using a client/server or installed
+on the device directly may determine what can be compiled.
+For example, the `water` command cannot be compiled on systems without
+SPI headers.  For a server only system just make the server.
 
-  [deb]:http://www.debian.org
+    $ make spkpi-waterd-server
 
-Under [Debian][deb] Linux the following packages were required.
-Install in the usual `apt-get install <pkg>` way.
+The final step in setting up the system is configuring the web server.
+The YAML libraries that [PHP][php] depends on are taken care of during
+the previous instructions.  However the PHP version of YAML must
+still be installed.
 
-    libyaml-syck-perl
+  [php]:http://www.php.net
 
-The files under `www/` are setup for a web interface.
+The `pecl` command can be used to install the PHP library.
+It should build without error if libyaml libraries were correctly installed
+previously.
+
+    $ pecl install yaml
+
+When the build is complete it should tell you to add "extension=yaml.so"
+to php.ini.
+
+    ; php.ini
+    extension=yaml.so
+
+Then, after restarting the web server, it should be setup.
+
+    $ apachectl graceful
+
+or
+
+    $ /etc/init.d/nginx restart
+
+## SITE SETUP
+
+The system should be setup and have all the necessary libraries
+in order to run.  But the location of the html and [PHP][php] files
+has not been setup yet.
+
+The files in this project under `www/` are for a web interface.
 The web server being used should be configured so that
 the site root is `www/html`.  An example configuration
-for [Nginx][nginx] is in `etc/nginx`.
+for [Nginx][nginx] is in `etc/nginx`.  A similar configuration
+can be created for Apache.
 
 Since the web server must be able to modify the sprinklerpi
-files the permissions must be correct.
+files the permissions must be correct.  Here the web server
+is running under the user `www-data`.  Other configurations
+may use the `apache` user.
 
     $ sudo chown -R :www-data sprinklerpi/
     $ sudo chmod -R g+w sprinklerpi/
@@ -124,7 +194,7 @@ The `_config.inc` is where the site is configured.
 
 ## STARTUP, /etc/init.d/
 
-Depending upon how this system is designed to be run different daemons
+Depending upon how this system is designed to be run, different daemons
 will need to be started.  A set of startup scripts are provided in
 /etc/init.d for each of the situations.
 
@@ -138,8 +208,8 @@ This file can either be copied or a symbolic link can be created.
     $ sudo ln -s /home/jeri/sprinklerpi/etc/default/sprinklerpi \
         /etc/default/sprinklerpi
 
-This default configuration configures the very basic values such as the
-location of the sprinklerpi files and binaries.
+This default configuration defines values such as the location of
+the sprinklerpi files and binaries.
 
 Once this is done the scripts can be started in the usual way.
 
@@ -158,7 +228,7 @@ and `sprinklerpi-waterd` scripts.
 
 ### situation #2: fire wall
 
-When it is necessary to communcate through a fire wall the client and
+When it is necessary to communicate through a fire wall the client and
 server version will need to be used.  On the client the client version
 is used.
 
