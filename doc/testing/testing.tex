@@ -9,6 +9,7 @@
 \usepackage{fancyvrb}
 \usepackage{amsmath}
 \usepackage{framed}
+\usepackage[section]{placeins}
 
 \usepackage{listings}
 \lstset{numbers=left,
@@ -186,6 +187,7 @@ At this point all control/driver LEDs should be off.
 \begin{figure}[hbp!]
 % TODO - picture of fully populated system.
 %      - label each of the LED indicators.
+%      - group # on each control/driver
 \caption{Location of LED indicators.}\label{fig:ledind}
 \end{figure}
 
@@ -215,6 +217,7 @@ At this point all control/driver LEDs should be off.
 % {{{ Manual Control Test
 \clearpage
 \subsection{Manual Control Test}
+\label{sec:manual-control-test}
 
 \begin{enumerate}
 \item Equipment Required
@@ -225,6 +228,7 @@ At this point all control/driver LEDs should be off.
 \item Input
 	\begin{itemize}
 	\item User turns valves on using manual mode of web interface.
+	\item User actuation of valves using manual mode of web interface.
 	\end{itemize}
 \item Output
 	\begin{itemize}
@@ -258,79 +262,98 @@ used for testing is known.
 		\hline
 		Group & Valve & Value & Pass/Fail & Notes \\
 		\hline
-		1 & 1 & on / off && \hspace{20em} \\
+		1 & 0 & off && \hspace{20em} \\
 		\hline
-		1 & 2 & on / off && \\
+		1 & 1 & on && \\
 		\hline
-		1 & 3 & on / off && \\
+		1 & 2 & on && \\
 		\hline
-		1 & 4 & on / off && \\
+		1 & 3 & on && \\
 		\hline
-		1 & 5 & on / off && \\
+		1 & 4 & on && \\
 		\hline
-		1 & 6 & on / off && \\
+		1 & 5 & on && \\
 		\hline
-		1 & 7 & on / off && \\
+		1 & 6 & on && \\
 		\hline
-		1 & 8 & on / off && \\
+		1 & 7 & on && \\
 		\hline
-		\hline
-		2 & 1 & on / off && \\
-		\hline
-		2 & 2 & on / off && \\
-		\hline
-		2 & 3 & on / off && \\
-		\hline
-		2 & 4 & on / off && \\
-		\hline
-		2 & 5 & on / off && \\
-		\hline
-		2 & 6 & on / off && \\
-		\hline
-		2 & 7 & on / off && \\
-		\hline
-		2 & 8 & on / off && \\
+		1 & 8 & on && \\
 		\hline
 		\hline
-		3 & 1 & on / off && \\
+		2 & 0 & off && \\
 		\hline
-		3 & 2 & on / off && \\
+		2 & 1 & on && \\
 		\hline
-		3 & 3 & on / off && \\
+		2 & 2 & on && \\
 		\hline
-		3 & 4 & on / off && \\
+		2 & 3 & on && \\
 		\hline
-		3 & 5 & on / off && \\
+		2 & 4 & on && \\
 		\hline
-		3 & 6 & on / off && \\
+		2 & 5 & on && \\
 		\hline
-		3 & 7 & on / off && \\
+		2 & 6 & on && \\
 		\hline
-		3 & 8 & on / off && \\
+		2 & 7 & on && \\
+		\hline
+		2 & 8 & on && \\
+		\hline
+		\hline
+		3 & 0 & off && \\
+		\hline
+		3 & 1 & on && \\
+		\hline
+		3 & 2 & on && \\
+		\hline
+		3 & 3 & on && \\
+		\hline
+		3 & 4 & on && \\
+		\hline
+		3 & 5 & on && \\
+		\hline
+		3 & 6 & on && \\
+		\hline
+		3 & 7 & on && \\
+		\hline
+		3 & 8 & on && \\
 		\hline
 	\end{tabular}
 \end{enumerate}
 % }}}
 
-% {{{ Load Test  XXX TODO
+% {{{ Power Supply Load Test
 \clearpage
-\subsection{Load Test}
+\subsection{Power Supply Load Test}
 
-\begin{figure}[htbp!]
-\begin{center}
-\includegraphics[scale=0.6]{img/control_driver_tb_03.jpg}
-\end{center}
-\caption{Voltage test point for control driver test bridge.}\label{fig:cdbtest}
-\end{figure}
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item 110 volts AC power outlet (NEMA 5-15R).
+	\item PC with Internet access and a web browser.
+	\item Digital multi meter.
+	\item Three control/Driver test bridges (25 $\Omega$, 5 Watt).
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item 24 volts AC from 110 to 24 volts AC adapter.
+	\item User actuation of valves using manual mode of web interface.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item $9.5\pm0.5$ volts AC across test bridge resistor when on.
+	\item $24\pm4.8$ (20\%) volts AC output.
+	\item $3.3\pm0.3$ (10\%) volts DC output.
+	\end{itemize}
+\item Test Description \\
 
-\begin{figure}[htbp!]
-\begin{center}
-\includegraphics[scale=0.6]{img/control_driver_tb_02.jpg}
-\end{center}
-\caption{Control driver with test bridge (bottom) installed.}
-\label{fig:cdbridge}
-\end{figure}
-
+This tests the power supply under a worst case load.
+One test bridge is installed in each of the three control/drivers.
+Then one valve on each group is turned on.
+The voltage drop of the load in each test bridge is measured to
+verify it is drawing a current.
+Then the voltage output of the power supply is measured to verify
+that it is adequitely supplying the load.
 
 \begin{framed}
 \textbf{IMPORTANT}: The DC voltage output of the power supply has
@@ -340,168 +363,297 @@ refers to 5V despite this change.
 \end{framed}
 
 \begin{figure}[hbp!]
+% TODO - closeup of power supply with test points and orientation marked.
 \begin{center}
 \includegraphics[scale=0.15,angle=0]{img/power_pcb-assembled-02.jpg}
 \end{center}
-\caption{Assembled power supply module PCB.
-The 24 volts AC input is in the top left.
-The green power LED is on the bottom right.
-The headers for 24 volts AC output and 3.3 volts DC
-output are on the bottom.
-}\label{fig:psm2}
+\caption{Power supply test points for 3.3 volts DC and 24 volts AC.}
+\label{fig:ps-test}
 \end{figure}
+
+\pagebreak
+
+\item Test Results \\
+	\vspace{1em}
+	With three valves on, one in each group, the voltage drop
+	across each test bridge load should be: $9.5\pm0.5$ VAC. \\
+	\vspace{1em}
+	\begin{tabular}{|c|c|c|c|c|}
+		\hline
+		Group & Valve	& Voltage Drop		& Pass/Fail & Notes \\
+		\hline
+		1 & 1 & & & \hspace{20em} \\
+		\hline
+		2 & 1 &&& \\
+		\hline
+		3 & 1 &&& \\
+		\hline
+	\end{tabular}
+
+	\vspace{1em}
+	With the three valves on, the power supply should provide
+	$24\pm4.8$ volts AC and $3.3\pm0.3$ volts DC (Figure \ref{fig:ps-test}). \\
+	\vspace{1em}
+	\begin{tabular}{|c|c|c|c|}
+		\hline
+		Test  & Value & Pass/Fail & Notes \\
+		\hline
+		3.3 volts DC & & & \hspace{24em} \\
+		\hline
+		24 volts AC & & & \\
+		\hline
+	\end{tabular}
+
+\end{enumerate}
+% }}}
+
+% {{{ Valve Load Test
+\clearpage
+\subsection{Valve Load Test}
 
 \begin{enumerate}
 \item Equipment Required
 	\begin{itemize}
-	\item SprinklerPI power supply module (revision 20140304).
-	\item 110 volts AC power supply (standard U.S.).
-	\item 110 volts AC to 24 volts AC power adapter.
+	\item 110 volts AC power outlet (NEMA 5-15R).
+	\item PC with Internet access and a web browser.
 	\item Digital multi meter.
-	\item Control/Driver test bridge (25 $\Omega$, 5 Watt)
-			(Figure \ref{fig:cdbridge}).
+	\item Three Control/Driver test bridges (25 $\Omega$, 5 Watt).
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item 24 volts AC from 110 to 24 volts AC adapter.
+	\item User actuation of valves using manual mode of web interface.
 	\end{itemize}
 \item Output
 	\begin{itemize}
 	\item $9.5\pm0.5$ volts AC across test bridge resistor when on.
-	\item Green power LED on.
-	\item 24$\pm4.8$ (20\%) volts AC output.
-	\item 3.3$\pm0.3$ (10\%) volts DC output.
 	\end{itemize}
+
 \pagebreak
 \item Test Description \\
 
-The 110 volt to 24 volt AC power adapter should be connected to the
-two pin input header (Figure \ref{fig:psm2}, top left) and screwed down.
-With the power adapter plugged in to a 110 volts AC power supply the
-green power LED should come on.
-Using a DMM to measure voltage, there should be 3.3 volts DC output on
-the ``5V'' header pins and 24 volts AC output on the ``24 VAC'' header pins.
-Be sure to switch from AC to DC modes on the DMM as necessary.
-The polarity of DC voltages are denoted on the PCB (Figure \ref{fig:psm2}).
+In this test the valves connected to a test bridge which will place
+a load on the circuit when the valve is on.
+Then the valves are manually operated from the web interface and
+the voltage drop across the load is measured.
+Additionally, the output voltages of the power supply are measure
+when under load to verify that they are operating within an acceptable range.
 
-\item Test Results \\
-	\vspace{0.2in}
-	\begin{tabular}{|l|l|l|l|}
-		\hline
-		& Value & Pass/Fail & Results/Data\hspace{2in} \\
-		\hline
-		Power LED on? &&& \\
-		\hline
-		$24\pm4.8$ volts AC &&& \\
-		\hline
-		$3.3\pm0.3$ volts DC &&& \\
-		\hline
-	\end{tabular}
+\begin{framed}
+\textbf{IMPORTANT}: The DC voltage output of the power supply has
+been changed from 5V to 3.3V.
+The label on version 20140304 of the power supply PCB still
+refers to 5V despite this change.
+\end{framed}
 
 \item Test Results \\
 	\vspace{1em}
-	\begin{tabular}{|l|l|l|l|l|}
+	One valve should be on in each group during the entire test
+	to ensure the worst case load.
+	The voltage drop across the test bridge load should be: $9.5\pm0.5$ VAC. \\
+	\vspace{1em}
+
+	\begin{tabular}{|c|c|c|c|c|}
 		\hline
-		& LED on? & Voltage Drop    & Pass/Fail & Results/Data\hspace{2in} \\
-		&         & $9.5\pm0.5$ VAC & & \\
+		Group & Valve & Voltage Drop & Pass/Fail & Notes \\
 		\hline
-		1 &&&& \\
+		1 & 1 &  && \hspace{20em} \\
 		\hline
-		2 &&&& \\
+		1 & 2 &  && \\
 		\hline
-		3 &&&& \\
+		1 & 3 &  && \\
 		\hline
-		4 &&&& \\
+		1 & 4 &  && \\
 		\hline
-		5 &&&& \\
+		1 & 5 &  && \\
 		\hline
-		6 &&&& \\
+		1 & 6 &  && \\
 		\hline
-		7 &&&& \\
+		1 & 7 &  && \\
 		\hline
-		8 &&&& \\
+		1 & 8 &  && \\
+		\hline
+		\hline
+		2 & 1 &  && \\
+		\hline
+		2 & 2 &  && \\
+		\hline
+		2 & 3 &  && \\
+		\hline
+		2 & 4 &  && \\
+		\hline
+		2 & 5 &  && \\
+		\hline
+		2 & 6 &  && \\
+		\hline
+		2 & 7 &  && \\
+		\hline
+		2 & 8 &  && \\
+		\hline
+		\hline
+		3 & 1 &  && \\
+		\hline
+		3 & 2 &  && \\
+		\hline
+		3 & 3 &  && \\
+		\hline
+		3 & 4 &  && \\
+		\hline
+		3 & 5 &  && \\
+		\hline
+		3 & 6 &  && \\
+		\hline
+		3 & 7 &  && \\
+		\hline
+		3 & 8 &  && \\
 		\hline
 	\end{tabular}
 
 \end{enumerate}
 % }}}
 
-% {{{ Scheduling Test
-
-% }}}
-
-%\section{Other Testing}
-
-% {{{ User Interface
+% {{{ Scheduler Queuing Test
 \clearpage
-\subsection{User Interface}
+\subsection{Scheduler Queuing Test}
 
 \begin{enumerate}
 \item Equipment Required
 	\begin{itemize}
+	\item 110 volts AC power outlet (NEMA 5-15R).
 	\item Computer with web browser and network connection.
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item Turn valve on/off.
-	\item Check status of valve.
 	\item Schedule time and duration to run valve.
 	\end{itemize}
 \item Output
 	\begin{itemize}
-	\item Valves go on when commanded.
-	\item Status of operating valve shown when on.
-	\item Scheduling a time and duration works as expected.
-	\item Pass: Valves operate according to the commands.
-	\item Fail: Response is not expected.
+	\item Valves go on and runs for the expected amount of time.
 	\end{itemize}
+
 \item Test Description \\
 
-The basic commands given through the web interface are:
-on/off valve, show current status, schedule a time/duration.
-These tests verify these operations.
+This tests the scheduler queuing mechanism by starting multiple
+operations in one group simultaneously.
+Each operation should be completed and run for the expected amount
+of time although the order of operations is not guaranteed.
 
+The LED valve indicators can be used to determine when the valve is on.
+
+\pagebreak
 \item Test Results \\
-	\vspace{0.25in}
-	\begin{tabular}{|l|l|l|l|l|l|c|}
-		\hline
-		\multicolumn{7}{|c|}{Valves On/Off} \\
-		\hline
-		\# & On? & On Status? & Off? & Off Status? & Pass/Fail & \hspace{0.7in}Notes\hspace{0.7in} \\
-		\hline
-		1 &&&&&& \\
-		\hline
-		2 &&&&&& \\
-		\hline
-		3 &&&&&& \\
-		\hline
-		4 &&&&&& \\
-		\hline
-		5 &&&&&& \\
-		\hline
-		6 &&&&&& \\
-		\hline
-		7 &&&&&& \\
-		\hline
-		8 &&&&&& \\
-		\hline
-	\end{tabular}
+	\vspace{1em}
+	For a single group configure it to start three different valves
+	at the same start time as shown in Figure \ref{fig:www-schedule_test1}.
+	The start time should be adjusted to some future time relative
+	to a particular local time.
+	The run time can be any small amount such as 30 seconds. \\
 
-	\vspace{0.25in}
-	\begin{tabular}{|l|l|l|l|l|}
+	\begin{figure}[hbp!]
+	\begin{center}
+	\includegraphics[scale=0.5]{img/www-schedule_test1}
+	\end{center}
+	\caption{Schedule configured to start three valves in one group
+		simultaneously.}
+	\label{fig:www-schedule_test1}
+	\end{figure}
+
+	\vspace{1em}
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|c|}
 		\hline
-		\multicolumn{5}{|c|}{Schedule} \\
+		Group & Valve & Start Time & Run Time & Stop Time & Duration & Pass/Fail \\
 		\hline
-		\# & Time Start & Time End & Pass/Fail & \hspace{0.5in}Notes\hspace{0.5in} \\
+		1 & 1 & & 00:30 & & & \hspace{4em} \\
 		\hline
-		& now & now + 1 minute & & \\
+		1 & 2 & (same) & 00:30 & & & \\
 		\hline
-		& now & now + 5 minute & & \\
+		1 & 3 & (same) & 00:30 & & & \\
+		\hline
+		\hline
+		\multicolumn{7}{|c|}{Notes} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
 		\hline
 	\end{tabular}
+	\end{center}
 
 \end{enumerate}
 
+% }}}
+
+% {{{ Scheduler Concurrency Test
+\clearpage
+\subsection{Scheduler Concurrency Test}
+
+\begin{enumerate}
+\item Equipment Required
+	\begin{itemize}
+	\item 110 volts AC power outlet (NEMA 5-15R).
+	\item Computer with web browser and network connection.
+	\end{itemize}
+\item Input
+	\begin{itemize}
+	\item Schedule time and duration to run valve.
+	\end{itemize}
+\item Output
+	\begin{itemize}
+	\item Valves go on and runs for the expected amount of time.
+	\end{itemize}
+
+\item Test Description \\
+
+This tests the scheduler queuing mechanism by starting
+operations in different groups simultaneously.
+Each operation should be completed and run for the expected amount.
+They should run concurrently since they are in different groups.
+
+The LED valve indicators can be used to determine when the valve is on.
+
+\pagebreak
+\item Test Results \\
+	\vspace{1em}
+	For different groups configure it to start a valve 
+	at the same time as shown in Figure \ref{fig:www-schedule_test2}.
+	The start time should be adjusted to some future time relative
+	to a particular local time.
+	The run time can be any small amount such as 30 seconds. \\
+
+	\begin{figure}[hbp!]
+	\begin{center}
+	\includegraphics[scale=0.5]{img/www-schedule_test2}
+	\end{center}
+	\caption{Schedule configured to start three valves in different groups
+		simultaneously.}
+	\label{fig:www-schedule_test2}
+	\end{figure}
+
+	\vspace{1em}
+	\begin{center}
+	\begin{tabular}{|c|c|c|c|c|c|c|}
+		\hline
+		Group & Valve & Start Time & Run Time & Stop Time & Duration & Pass/Fail \\
+		\hline
+		1 & 1 & & 00:30 & & & \hspace{4em} \\
+		\hline
+		2 & 1 & (same) & 00:30 & & & \\
+		\hline
+		3 & 1 & (same) & 00:30 & & & \\
+		\hline
+		\hline
+		\multicolumn{7}{|c|}{Notes} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
+		\multicolumn{7}{|c|}{} \\
+		\hline
+	\end{tabular}
+	\end{center}
+
+\end{enumerate}
+
+\FloatBarrier
 % }}}
 
 % }}}
