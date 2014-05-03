@@ -1,0 +1,21 @@
+---
+id: test1.yml
+name: 'Schedule Test #1'
+enabled: 1
+entries:
+- group: "1"
+  valve: "1"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "2"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "3"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+...
