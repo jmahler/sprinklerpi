@@ -17,6 +17,19 @@
 		captionpos=b,
 		xleftmargin=0.3in}
 
+%
+% backend	: biber
+% style		: numeric
+% autocite	: footnote
+% citestyle	: verbose-inote
+% bibstyle	: authortitle, numeric
+%
+\usepackage[backend=biber,autocite=footnote,
+			bibstyle=authortitle,citestyle=verbose-inote]{biblatex}
+
+\addbibresource{references.bib}
+\setlength\bibitemsep{1em}
+
 \providecommand{\e}[1]{\ensuremath{\times 10^{#1}}}
 
 \VerbatimFootnotes
@@ -83,10 +96,6 @@ It is the responsibility of the assigned test engineer to execute all tests
 included herein to the best of their ability. If necessary, seek additional
 assistance to execute tasks.
 
-\subsection{References}
-
-Not applicable at this time.
-
 %\subsection{Definitions}
 
 \subsection{Equipment/Supplies}
@@ -140,8 +149,9 @@ In the event that a fault is found it is left up to an engineer to
 determine the root cause.
 
 Several assumptions are made in this test procedure.
-It is assumed that networking has already been configured as
-described in Appendix \ref{app:networking}.
+It is assumed that the SprinklerPI software has been installed
+and networking has been configured according to the \verb+README+
+included with the project\autocite{sprinklerpi}.
 It is also assumed that a fully populated SprinklerPI system with
 three control/drivers is being tested.
 This system is modular and the number of control/drivers can vary
@@ -250,10 +260,6 @@ a single valve for each group.
 The URL may be different depending on how the network is configured.}
 \label{fig:www-manual_mode}
 \end{figure}
-
-It is assumed network has already been configured
-(Appendix \ref{app:networking}) and that the URL of the server being
-used for testing is known.
 
 \pagebreak
 \item Test Results \\
@@ -658,16 +664,12 @@ The LED valve indicators can be used to determine when the valve is on.
 
 % }}}
 
+%\clearpage
+%\appendix
+
+% References
 \clearpage
-\appendix
-
-% {{{ Network Configuration
-\section{Network Configuration}
-\label{app:networking}
-
-% TODO
-
-% }}}
+\printbibliography[heading=bibintoc]
 
 \end{document}
 
