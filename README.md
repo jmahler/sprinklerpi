@@ -86,6 +86,8 @@ as described below.
 
   [nginx]:http://www.nginx.org
 
+  [apache]:http://www.apache.org
+
 ## SYSTEM SETUP
 
 The system needs to have various packages installed in order to function.
@@ -154,19 +156,22 @@ previously.
 
     $ pecl install yaml
 
-When the build is complete it should tell you to add "extension=yaml.so"
-to php.ini.
+If [Nginx][nginx] is being used as the web server several additional packages
+need to be installed.
 
-    ; php.ini
-    extension=yaml.so
+    $ apt-get install php5-fpm
 
-Then, after restarting the web server, it should be setup.
+The `extension=yaml.so` option should be added to `/etc/php5/fpm/php.ini`.
 
-    $ apachectl graceful
+A similar configuration must be performed when using [Apache][apache].
+
+Then, after restarting the web server, it should be setup and ready to run.
+
+    $ service nginx restart
 
 or
 
-    $ /etc/init.d/nginx restart
+    $ service apache2 restart
 
 ## SITE SETUP
 
