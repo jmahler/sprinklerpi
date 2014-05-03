@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 include '_config.inc';
 
@@ -29,6 +28,7 @@ if ($err) {
 # use the new object for rest of script
 $spkpi = $new_spkpi;
 ?>
+<!DOCTYPE html>
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="main.css" />
