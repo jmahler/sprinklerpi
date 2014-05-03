@@ -5,21 +5,21 @@
 #
 
 # example, installed under user 'jeri'
-DIR=/home/jeri/sprinklerpi/sprinklerpi
-BIN=/home/jeri/sprinklerpi/bin
-PIDIR=/home/jeri/sprinklerpi/var/run/sprinklerpi
+export DIR=/home/jeri/sprinklerpi/sprinklerpi
+export BIN=/home/jeri/sprinklerpi/bin
+export PIDIR=/home/jeri/sprinklerpi/var/run/sprinklerpi
 
-USER=jeri
-GROUP=jeri
+export USER=jeri
+export GROUP=jeri
 
-#DEV="/dev/spidev0.0"
-#DEV="/dev/spidev0.1"
-DEV="/dev/null"
+#export DEV="/dev/spidev0.0"
+#export DEV="/dev/spidev0.1"
+export DEV="/dev/null"
 # null is good for testing
 
-VERBOSE=0
+export VERBOSE=0
 
 # for client/server
-HOST="localhost"
-PORT="5000"
+export HOST="localhost"
+export PORT="5000"
 
