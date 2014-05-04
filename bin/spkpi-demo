@@ -47,6 +47,10 @@ my $cfg = {
 	verbose => 1,
 };
 
+if (exists $ENV{VERBOSE}) {
+	$cfg->{verbose} = $ENV{VERBOSE};
+}
+
 # {{{ get_mode
 sub get_mode {
 	my ($dir) = @_;
