@@ -170,7 +170,7 @@ if (isset($_POST['form']) and $_POST['form'] === 'update') {
     if (yaml_emit_file($file, $sched)) {
       # success
     } else {
-      exit("yaml emit failed");
+      exit("yaml emit failed, are permissions for '$file' correct?");
     }
   }
 
