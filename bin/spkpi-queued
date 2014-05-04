@@ -109,9 +109,9 @@ sub pop_queue {
 		return ();
 	}
 
-	print "line = '$first_line'\n";
+	print "line = '$first_line'\n" if ($cfg->{verbose});
 	my ($valve, $time) = split /\s+/, $first_line;
-	print "valve=$valve, time=$time\n";
+	print "valve=$valve, time=$time\n" if ($cfg->{verbose});
 
 	return ($valve, $time);
 }
