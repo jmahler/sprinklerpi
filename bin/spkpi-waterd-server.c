@@ -48,6 +48,8 @@
 
 #define MAXLINE 128
 
+#define VERBOSE 0
+
 #define S 1 /* sleep time on error */
 
 inline int max(int a, int b) {
@@ -220,7 +222,8 @@ int main(int argc, char* argv[]) {
 			exit(EXIT_FAILURE);
 		}
 
-		printf("Port: %u\n", ntohs(sin.sin_port));
+		if (VERBOSE)
+			printf("Port: %u\n", ntohs(sin.sin_port));
 	} else {
 		fprintf(stderr, "only ipv4 supported\n");
 		exit(EXIT_FAILURE);
