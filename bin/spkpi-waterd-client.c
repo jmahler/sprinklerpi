@@ -45,7 +45,7 @@
 #define MAXLINE 128
 
 #define S 1  /* sleep time on error */
-#define VERBOSE 1
+#define VERBOSE 0
 
 int quit = 0;
 void int_handler() {
