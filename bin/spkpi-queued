@@ -111,6 +111,11 @@ sub pop_queue {
 
 	close(IN);
 
+	unless (@queue) {
+		# empty queu
+		return ();
+	}
+
 	my $first_line = shift @queue;
 	chomp($first_line);
 
