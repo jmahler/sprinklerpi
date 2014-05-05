@@ -9,7 +9,6 @@
 \usepackage{fancyvrb}
 \usepackage{amsmath}
 \usepackage{framed}
-\usepackage[section]{placeins}
 
 \usepackage{listings}
 \lstset{numbers=left,
@@ -56,11 +55,11 @@
 \begin{tabular}{c}
 Jeremiah Mahler \\
 EECE 490B, CSU Chico \\
-\today
+May 6, 2014
 \end{tabular}
 \end{center}
 
-\vspace{1in}
+\vspace{2in}
 
 \thispagestyle{empty}
 
@@ -101,17 +100,16 @@ assistance to execute tasks.
 \subsection{Equipment/Supplies}
 
 \begin{itemize}
-\item 110 volts AC power supply.
+\item 110 volts AC power supply (NEMA 5-15R).
 \item Digital volt meter.
 \item Three test bridges (25 $\Omega$, 50 watt).
-\item Ethernet network connection.
-\item (optional) Wireless usb adapter.
+\item PC with internet access and a web browser.
 \end{itemize}
 
 \subsection{Precautions \& Warnings}
 
-This test plan contains certain warnings, cautions and important
-notes that the test engineer must be aware of while performing these tests.
+This test plan contains certain warnings and cautions that the test
+engineer must be aware of while performing these tests.
 The following illustrates each of these messages and how to recognize them.
 
 \fbox{
@@ -128,36 +126,33 @@ the highest importance, such as possible injury to the operator.
 The ``CAUTION: Message'' alerts the user to issues concerning possible
 damage to the equipment or that can lead to erroneous test results.
 
-\fbox{
-\textbf{IMPORTANT: \textless message\textgreater}
-}
-
-The ``IMPORTANT: Message'' alerts the user to important design changes.
-
 % }}}
+
+\pagebreak
 
 % {{{ Testing Features and Functions
 \section{Testing Features and Functions}
 
-This testing procedure can be used to determine if the system
-is fully functional and operating within acceptable tolerances.
+This test procedure is used to determine if the system,
+as shown in Figure \ref{fig:all}, is fully functional and operating
+within allowable tolerances.
 
-This is a minimal set of tests done at a high level of abstraction.
-Low level sub-tests which provide no useful increase in the test scope
-are not included.
-In the event that a fault is found it is left up to an engineer to
-determine the root cause.
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.7]{img/all-inst-03.png}
+\end{center}
+\caption{Overview of the major components of the SprinklerPI system.
+Green LEDs are used to indicate operation.
+The power supply has an LED in the top right.
+And each of the control/driver outputs has an corresponding LED.}
+\label{fig:all}
+\end{figure}
 
-Several assumptions are made in this test procedure.
 It is assumed that the SprinklerPI software has been installed
 and networking has been configured according to the \verb+README+
 included with the project\autocite{sprinklerpi}.
-It is also assumed that a fully populated SprinklerPI system with
-three control/drivers is being tested.
-This system is modular and the number of control/drivers can vary
-from one to three.
-Adapting these procedures to a reduced number of control/drivers should
-be straightforward but this reduces the scope of the tests.
+
+\pagebreak
 
 % {{{ Power On Test
 \subsection{Power On Test}
@@ -169,7 +164,7 @@ be straightforward but this reduces the scope of the tests.
 	\end{itemize}
 \item Input
 	\begin{itemize}
-	\item (none)
+	\item 110 volts AC
 	\end{itemize}
 \item Output
 	\begin{itemize}
@@ -178,30 +173,18 @@ be straightforward but this reduces the scope of the tests.
 	\item Control LEDs off.
 	\end{itemize}
 \item Test Description \\
+\vspace{0.5em}
 
-During power up the system should be seen going through several states
-which can be seen by observing LED indicators (Figure \ref{fig:ledind}).
-When it is complete it should end in a specific state.
+After plugging in the cord to a 110 volt AC outlet the green LED on
+the power supply should go on (Figure \ref{fig:all}).
+Then, as the Linux computer boots up, activity should be seen on its LEDs.
+The LEDs on the control/driver boards may go on/off randomly as the
+system boots.  Valve number one may be on during most of the boot,
+this is normal.
+After approximately 30 seconds the activity on the LEDs on the Linux
+computer should be stabilize, indicating that the system has completed booting.
+At this point all the control/driver LEDs should be off.
 
-After plugging the cord in to a 110 volt AC outlet the green LED on
-the power supply should go on.
-Then, as the computer boots up, activity should be seen on its LEDs.
-The control LEDs may go on/off randomly as the system boots.
-They also may may turn on valve number one during boot.
-This is normal as the output pins go through random states and
-is eventually cleared.
-After approximately 30 seconds the activity LEDs on the computer
-should reduce which indicates that the system has completed booting.
-At this point all control/driver LEDs should be off.
-
-\begin{figure}[hbp!]
-% TODO - picture of fully populated system.
-%      - label each of the LED indicators.
-%      - group # on each control/driver
-\caption{Location of LED indicators.}\label{fig:ledind}
-\end{figure}
-
-\pagebreak
 \item Test Results \\
 \vspace{1em}
 \begin{tabular}{|l|l|l|l|}
@@ -211,13 +194,13 @@ At this point all control/driver LEDs should be off.
 	& \multicolumn{1}{|c|}{Pass/Fail}
 	& \multicolumn{1}{|c|}{Notes} \\
 	\hline
-	Power LED on? & on / off && \hspace{1.7in} \\
+	Power LED on? & on & P \quad F & \hspace{1.7in} \\
 	\hline
-	Activity LEDs during boot? & yes / no && \\
+	Activity LEDs during boot? & yes & P \quad F & \\
 	\hline
-	Stable activity LEDs after boot up? & yes / no && \\
+	Stable activity LEDs after boot up? & yes & P \quad F & \\
 	\hline
-	Control outputs off after boot up? & yes / no && \\
+	Control outputs off after boot up? & yes & P \quad F & \\
 	\hline
 \end{tabular}
 
@@ -238,7 +221,6 @@ At this point all control/driver LEDs should be off.
 \item Input
 	\begin{itemize}
 	\item User turns valves on using manual mode of web interface.
-	\item User actuation of valves using manual mode of web interface.
 	\end{itemize}
 \item Output
 	\begin{itemize}
@@ -246,18 +228,17 @@ At this point all control/driver LEDs should be off.
 	\end{itemize}
 \item Test Description \\
 
-These tests verify that the valves can be manually operated from
+This test verifies that the valves can be manually operated from
 the web interface (Figure \ref{fig:www-manual_mode}).
 The user iterates through each possible combination and verifies
-that the LED valve indicator is correct.
+that the LED indicator for the corresponding valve is on.
 
 \begin{figure}[hbp!]
 \begin{center}
 \includegraphics[scale=0.5]{img/www-manual_mode}
 \end{center}
 \caption{Web interface in manual mode which allows operation of
-a single valve for each group.
-The URL may be different depending on how the network is configured.}
+a single valve for each group.}
 \label{fig:www-manual_mode}
 \end{figure}
 
@@ -268,61 +249,61 @@ The URL may be different depending on how the network is configured.}
 		\hline
 		Group & Valve & Value & Pass/Fail & Notes \\
 		\hline
-		1 & 0 & off && \hspace{20em} \\
+		1 & 0 & off & P \quad F & \hspace{20em} \\
 		\hline
-		1 & 1 & on && \\
+		1 & 1 & on & P \quad F & \\
 		\hline
-		1 & 2 & on && \\
+		1 & 2 & on & P \quad F & \\
 		\hline
-		1 & 3 & on && \\
+		1 & 3 & on & P \quad F & \\
 		\hline
-		1 & 4 & on && \\
+		1 & 4 & on & P \quad F & \\
 		\hline
-		1 & 5 & on && \\
+		1 & 5 & on & P \quad F & \\
 		\hline
-		1 & 6 & on && \\
+		1 & 6 & on & P \quad F & \\
 		\hline
-		1 & 7 & on && \\
+		1 & 7 & on & P \quad F & \\
 		\hline
-		1 & 8 & on && \\
-		\hline
-		\hline
-		2 & 0 & off && \\
-		\hline
-		2 & 1 & on && \\
-		\hline
-		2 & 2 & on && \\
-		\hline
-		2 & 3 & on && \\
-		\hline
-		2 & 4 & on && \\
-		\hline
-		2 & 5 & on && \\
-		\hline
-		2 & 6 & on && \\
-		\hline
-		2 & 7 & on && \\
-		\hline
-		2 & 8 & on && \\
+		1 & 8 & on & P \quad F & \\
 		\hline
 		\hline
-		3 & 0 & off && \\
+		2 & 0 & off & P \quad F & \\
 		\hline
-		3 & 1 & on && \\
+		2 & 1 & on & P \quad F & \\
 		\hline
-		3 & 2 & on && \\
+		2 & 2 & on & P \quad F & \\
 		\hline
-		3 & 3 & on && \\
+		2 & 3 & on & P \quad F & \\
 		\hline
-		3 & 4 & on && \\
+		2 & 4 & on & P \quad F & \\
 		\hline
-		3 & 5 & on && \\
+		2 & 5 & on & P \quad F & \\
 		\hline
-		3 & 6 & on && \\
+		2 & 6 & on & P \quad F & \\
 		\hline
-		3 & 7 & on && \\
+		2 & 7 & on & P \quad F & \\
 		\hline
-		3 & 8 & on && \\
+		2 & 8 & on & P \quad F & \\
+		\hline
+		\hline
+		3 & 0 & off & P \quad F & \\
+		\hline
+		3 & 1 & on & P \quad F & \\
+		\hline
+		3 & 2 & on & P \quad F & \\
+		\hline
+		3 & 3 & on & P \quad F & \\
+		\hline
+		3 & 4 & on & P \quad F & \\
+		\hline
+		3 & 5 & on & P \quad F & \\
+		\hline
+		3 & 6 & on & P \quad F & \\
+		\hline
+		3 & 7 & on & P \quad F & \\
+		\hline
+		3 & 8 & on & P \quad F & \\
 		\hline
 	\end{tabular}
 \end{enumerate}
@@ -337,8 +318,8 @@ The URL may be different depending on how the network is configured.}
 	\begin{itemize}
 	\item 110 volts AC power outlet (NEMA 5-15R).
 	\item PC with Internet access and a web browser.
-	\item Digital multi meter.
 	\item Three control/Driver test bridges (25 $\Omega$, 5 Watt).
+	\item Digital multi meter.
 	\end{itemize}
 \item Input
 	\begin{itemize}
@@ -352,47 +333,57 @@ The URL may be different depending on how the network is configured.}
 	\item $3.3\pm0.3$ (10\%) volts DC output.
 	\end{itemize}
 \item Test Description \\
+\vspace{0.5em}
 
-This tests the power supply under a worst case load.
-One test bridge is installed in each of the three control/drivers.
-Then one valve on each group is turned on.
-The voltage drop of the load in each test bridge is measured to
-verify it is drawing a current.
-Then the voltage output of the power supply is measured to verify
-that it is adequitely supplying the load.
+This tests the power supply under a load, with all groups driving a valve.
+A test bridge is installed in each of the three control/drivers
+to simulate a load (Figure \ref{fig:contdrv-load}).
+Then one valve on each control/driver is turned on.
+For each test bridge, the voltage drop across the load is measured
+to verify that it is drawing the correct amount of current.
+Then the voltage output of the power supply, both 24 volts AC and
+3.3 volts DC, is measured to verify that it is successfully
+supplying the current demands (Figure \ref{fig:ps-test}).
 
 \begin{framed}
-\textbf{IMPORTANT}: The DC voltage output of the power supply has
+\textbf{CAUTION}: The DC voltage output of the power supply has
 been changed from 5V to 3.3V.
-The label on version 20140304 of the power supply PCB still
-refers to 5V despite this change.
+Version 20140304 of the power supply PCB is still labeled 5V.
 \end{framed}
 
 \begin{figure}[hbp!]
-% TODO - closeup of power supply with test points and orientation marked.
 \begin{center}
-\includegraphics[scale=0.15,angle=0]{img/power_pcb-assembled-02.jpg}
+\includegraphics[scale=0.8]{img/contdrv-inst-03-load.png}
 \end{center}
-\caption{Power supply test points for 3.3 volts DC and 24 volts AC.}
-\label{fig:ps-test}
+\caption{Control driver with test bridge installed.
+The AC voltage drop is measured by testing at either side
+of the load.}
+\label{fig:contdrv-load}
 \end{figure}
 
-\pagebreak
+\begin{figure}[hbp!]
+\begin{center}
+\includegraphics[scale=0.5,angle=0]{img/power-inst-03.png}
+\end{center}
+\caption{Power supply test points. In the upper right is 3.3 volts DC.
+In the lower left is 24 volts AC.}
+\label{fig:ps-test}
+\end{figure}
 
 \item Test Results \\
 	\vspace{1em}
 	With three valves on, one in each group, the voltage drop
-	across each test bridge load should be: $9.5\pm0.5$ VAC. \\
+	across each test bridge load should be: $9.5\pm0.5$ volts AC. \\
 	\vspace{1em}
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		Group & Valve	& Voltage Drop		& Pass/Fail & Notes \\
 		\hline
-		1 & 1 & & & \hspace{20em} \\
+		1 & 1 & & P \quad F & \hspace{20em} \\
 		\hline
-		2 & 1 &&& \\
+		2 & 1 && P \quad F & \\
 		\hline
-		3 & 1 &&& \\
+		3 & 1 && P \quad F & \\
 		\hline
 	\end{tabular}
 
@@ -404,9 +395,9 @@ refers to 5V despite this change.
 		\hline
 		Test  & Value & Pass/Fail & Notes \\
 		\hline
-		3.3 volts DC & & & \hspace{24em} \\
+		3.3 volts DC & \hspace{5em} & P \quad F & \hspace{20em} \\
 		\hline
-		24 volts AC & & & \\
+		24 volts AC & & P \quad F & \\
 		\hline
 	\end{tabular}
 
@@ -422,8 +413,8 @@ refers to 5V despite this change.
 	\begin{itemize}
 	\item 110 volts AC power outlet (NEMA 5-15R).
 	\item PC with Internet access and a web browser.
-	\item Digital multi meter.
 	\item Three Control/Driver test bridges (25 $\Omega$, 5 Watt).
+	\item Digital multi meter.
 	\end{itemize}
 \item Input
 	\begin{itemize}
@@ -434,83 +425,76 @@ refers to 5V despite this change.
 	\item $9.5\pm0.5$ volts AC across test bridge resistor when on.
 	\end{itemize}
 
-\pagebreak
 \item Test Description \\
+\vspace{0.5em}
 
-In this test the valves connected to a test bridge which will place
-a load on the circuit when the valve is on.
-Then the valves are manually operated from the web interface and
-the voltage drop across the load is measured.
-Additionally, the output voltages of the power supply are measure
-when under load to verify that they are operating within an acceptable range.
+In this test the valve output for a control/driver is connected
+to a test bridge (Figure \ref{fig:contdrv-load}) which places
+it under a load.
+Then each valve is manually operated from the web interface and
+voltage drop across the load is measured to verify that the
+correct amount of current is being drawn.
 
-\begin{framed}
-\textbf{IMPORTANT}: The DC voltage output of the power supply has
-been changed from 5V to 3.3V.
-The label on version 20140304 of the power supply PCB still
-refers to 5V despite this change.
-\end{framed}
+One valve should be on in each group during the entire test
+to ensure the worst case load.
+The voltage drop across the test bridge load should be: $9.5\pm0.5$ volts AC. \\
 
 \item Test Results \\
-	\vspace{1em}
-	One valve should be on in each group during the entire test
-	to ensure the worst case load.
-	The voltage drop across the test bridge load should be: $9.5\pm0.5$ VAC. \\
 	\vspace{1em}
 
 	\begin{tabular}{|c|c|c|c|c|}
 		\hline
 		Group & Valve & Voltage Drop & Pass/Fail & Notes \\
 		\hline
-		1 & 1 &  && \hspace{20em} \\
+		1 & 1 &  & P \quad F & \hspace{20em} \\
 		\hline
-		1 & 2 &  && \\
+		1 & 2 &  & P \quad F & \\
 		\hline
-		1 & 3 &  && \\
+		1 & 3 &  & P \quad F & \\
 		\hline
-		1 & 4 &  && \\
+		1 & 4 &  & P \quad F & \\
 		\hline
-		1 & 5 &  && \\
+		1 & 5 &  & P \quad F & \\
 		\hline
-		1 & 6 &  && \\
+		1 & 6 &  & P \quad F & \\
 		\hline
-		1 & 7 &  && \\
+		1 & 7 &  & P \quad F & \\
 		\hline
-		1 & 8 &  && \\
-		\hline
-		\hline
-		2 & 1 &  && \\
-		\hline
-		2 & 2 &  && \\
-		\hline
-		2 & 3 &  && \\
-		\hline
-		2 & 4 &  && \\
-		\hline
-		2 & 5 &  && \\
-		\hline
-		2 & 6 &  && \\
-		\hline
-		2 & 7 &  && \\
-		\hline
-		2 & 8 &  && \\
+		1 & 8 &  & P \quad F & \\
 		\hline
 		\hline
-		3 & 1 &  && \\
+		2 & 1 &  & P \quad F & \\
 		\hline
-		3 & 2 &  && \\
+		2 & 2 &  & P \quad F & \\
 		\hline
-		3 & 3 &  && \\
+		2 & 3 &  & P \quad F & \\
 		\hline
-		3 & 4 &  && \\
+		2 & 4 &  & P \quad F & \\
 		\hline
-		3 & 5 &  && \\
+		2 & 5 &  & P \quad F & \\
 		\hline
-		3 & 6 &  && \\
+		2 & 6 &  & P \quad F & \\
 		\hline
-		3 & 7 &  && \\
+		2 & 7 &  & P \quad F & \\
 		\hline
-		3 & 8 &  && \\
+		2 & 8 &  & P \quad F & \\
+		\hline
+		\hline
+		3 & 1 &  & P \quad F & \\
+		\hline
+		3 & 2 &  & P \quad F & \\
+		\hline
+		3 & 3 &  & P \quad F & \\
+		\hline
+		3 & 4 &  & P \quad F & \\
+		\hline
+		3 & 5 &  & P \quad F & \\
+		\hline
+		3 & 6 &  & P \quad F & \\
+		\hline
+		3 & 7 &  & P \quad F & \\
+		\hline
+		3 & 8 &  & P \quad F & \\
 		\hline
 	\end{tabular}
 
@@ -539,31 +523,37 @@ refers to 5V despite this change.
 	\end{itemize}
 
 \item Test Description \\
+\vspace{0.5em}
 
 This tests the scheduler queuing mechanism by starting multiple
 operations in one group simultaneously.
 Each operation should be completed and run for the expected amount
-of time although the order of operations is not guaranteed.
+of time. Note, the order of operations is not guaranteed.
 
 The LED valve indicators can be used to determine when the valve is on.
 
-\pagebreak
+For a single group, configure it to start three different valves
+at the same start time as shown in Figure \ref{fig:www-schedule_test1}.
+The start time should be adjusted to some future time.
+The run time can be any small amount such as 30 seconds. \\
+
+\begin{framed}
+\textbf{CAUTION}: The start time is relative to the time zone where
+the server is installed and is not necessarily the same as the
+time zone where it is being accessed from.
+\end{framed}
+
+\begin{figure}[hbp!]
+\begin{center}
+\includegraphics[scale=0.5]{img/www-schedule_test1}
+\end{center}
+\caption{Schedule configured to start three valves in one group
+	simultaneously.}
+\label{fig:www-schedule_test1}
+\end{figure}
+
 \item Test Results \\
 	\vspace{1em}
-	For a single group configure it to start three different valves
-	at the same start time as shown in Figure \ref{fig:www-schedule_test1}.
-	The start time should be adjusted to some future time relative
-	to a particular local time.
-	The run time can be any small amount such as 30 seconds. \\
-
-	\begin{figure}[hbp!]
-	\begin{center}
-	\includegraphics[scale=0.5]{img/www-schedule_test1}
-	\end{center}
-	\caption{Schedule configured to start three valves in one group
-		simultaneously.}
-	\label{fig:www-schedule_test1}
-	\end{figure}
 
 	\vspace{1em}
 	\begin{center}
@@ -571,11 +561,11 @@ The LED valve indicators can be used to determine when the valve is on.
 		\hline
 		Group & Valve & Start Time & Run Time & Stop Time & Duration & Pass/Fail \\
 		\hline
-		1 & 1 & & 00:30 & & & \hspace{4em} \\
+		1 & 1 & 		& 00:30 & & & P \quad F \\
 		\hline
-		1 & 2 & (same) & 00:30 & & & \\
+		1 & 2 & (same) & 00:30 & & & P \quad F \\
 		\hline
-		1 & 3 & (same) & 00:30 & & & \\
+		1 & 3 & (same) & 00:30 & & & P \quad F \\
 		\hline
 		\hline
 		\multicolumn{7}{|c|}{Notes} \\
@@ -609,27 +599,33 @@ The LED valve indicators can be used to determine when the valve is on.
 	\begin{itemize}
 	\item Valve starts at expected time $\pm5$ seconds.
 	\item Valves run for correct duration of time $\pm1$ second.
-	\item Valves in different groups can be on concurrently.
+	\item Valves in different groups run concurrently.
 	\end{itemize}
 
 \item Test Description \\
+\vspace{0.5em}
 
 This tests the scheduler queuing mechanism by starting
 operations in different groups simultaneously.
-Each operation should be completed and run for the expected amount.
-They should run concurrently since they are in different groups.
+Each operation should be completed and run for the expected length of time.
+Valves in different groups should run concurrently.
 
 The LED valve indicators can be used to determine when the valve is on.
 
-\pagebreak
+For each group, configure it to start a valve 
+at the same time as shown in Figure \ref{fig:www-schedule_test2}.
+The start time should be adjusted to some future time relative
+to a particular local time.
+The run time can be any small amount such as 30 seconds. \\
+
+\begin{framed}
+\textbf{CAUTION}: The start time is relative to the time zone where
+the server is installed and is not necessarily the same as the
+time zone where it is being accessed from.
+\end{framed}
+
 \item Test Results \\
 	\vspace{1em}
-	For different groups configure it to start a valve 
-	at the same time as shown in Figure \ref{fig:www-schedule_test2}.
-	The start time should be adjusted to some future time relative
-	to a particular local time.
-	The run time can be any small amount such as 30 seconds. \\
-
 	\begin{figure}[hbp!]
 	\begin{center}
 	\includegraphics[scale=0.5]{img/www-schedule_test2}
@@ -645,11 +641,11 @@ The LED valve indicators can be used to determine when the valve is on.
 		\hline
 		Group & Valve & Start Time & Run Time & Stop Time & Duration & Pass/Fail \\
 		\hline
-		1 & 1 & & 00:30 & & & \hspace{4em} \\
+		1 & 1 & & 00:30 & & & P \quad F \\
 		\hline
-		2 & 1 & (same) & 00:30 & & & \\
+		2 & 1 & (same) & 00:30 & & & P \quad F \\
 		\hline
-		3 & 1 & (same) & 00:30 & & & \\
+		3 & 1 & (same) & 00:30 & & & P \quad F \\
 		\hline
 		\hline
 		\multicolumn{7}{|c|}{Notes} \\
@@ -663,7 +659,6 @@ The LED valve indicators can be used to determine when the valve is on.
 
 \end{enumerate}
 
-\FloatBarrier
 % }}}
 
 % }}}
