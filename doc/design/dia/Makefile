@@ -1,6 +1,7 @@
 
 all: hardware_state.pdf software_overview.pdf queue-daemon.pdf \
-	timer-daemon.pdf architectural_overview.pdf sprinklerpi_overview.pdf \
+	timer-daemon.pdf architectural_overview.pdf \
+	sprinklerpi_overview.pdf sprinklerpi_overview-net.pdf \
 	tester.pdf
 
 %.pdf: %.eps

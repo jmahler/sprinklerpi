@@ -145,9 +145,20 @@ Figure \ref{fig:spioview} shows an overview of the system.
 \label{fig:spioview}
 \end{figure}
 
-% TODO
-% web interface not accessible through a firewall
-%  firewall configuration
+\begin{samepage}
+When this system is installed on a private network or behind a firewall
+it cannot be accessed from the Internet.  With the addition of a
+client/server water daemon, that acts as a proxy, this system can still be
+used as shown in Figure \ref{fig:spioviewnet}.
+\end{samepage}
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.40]{dia/sprinklerpi_overview-net}
+\end{center}
+\caption{SprinklerPI system configured for access behind a firewall.}
+\label{fig:spioviewnet}
+\end{figure}
 
 % }}}
 
