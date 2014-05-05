@@ -49,7 +49,7 @@
 
 \centerline{\LARGE \textbf{SprinklerPI}}
 \vspace{0.3in}
-\centerline{\LARGE Product Requirements}
+\centerline{\LARGE Project Requirements}
 
 \vfill
 
@@ -76,32 +76,32 @@ May 6, 2014
 % {{{ Project Overview
 \section{Project Overview}
 
-This project is a sprinkler timer for watering lawns and plants
+This project is a sprinkler controller that is used for watering lawns
 on a regular schedule.
-It is network accessible and can be configured through a web browser.
-The system is also expandable.
-It can control from one valve to several hundred valves.
+It is web based and can be accessed from anywhere on the Internet.
+And it can control from 1 to 24 sprinkler valves.
 
 % users
-The primary user of this project would be a homeowner who has
+The primary user of this project is a homeowner who has
 lawns or other plants that need watering on a regular schedule.
 Businesses with landscaping that needs watering could also use
 this system.
 
 The system will need to be installed by someone familiar with
 irrigation systems (timers and valves).
-Since this system is network accessible it will need to be initially
-configured by someone familiar with Ethernet and Wireless networks.
+The networking will need to be configured by someone familiar
+with Linux who knows how to setup network interfaces from the
+command line.
 
 After installation anyone should be capable of configuring the
-water schedule through the web based interface.
+water schedules through the web based interface.
 
 % environmental impact
-This project has a positive environmental impact as a result of the
-more efficient use of water resources.
+This project has a positive environmental because it makes it possible
+to use water resources more efficiently with detailed watering schedules.
 
 It is estimated that this project will take four months to complete.
-It is estimated that the hardware will cost approximately \$225.
+And the hardware will cost approximately \$221.
 
 % }}}
 
@@ -114,9 +114,8 @@ It is estimated that the hardware will cost approximately \$225.
 \item Product shall be capable of driving residential grade sprinkler valves.
 	\begin{enumerate}
 	\item 24 volts AC control signal.
-	\item 270 mA rms current.
+	\item 270 mA RMS current.
 	\item Maximum current draw should limited to no more than 300 mA.
-	\item Residential, $1/2"$ to $1"$ NPT size.
 	\end{enumerate}
 
 \item Product shall be expandable to control more valves.
@@ -134,23 +133,20 @@ It is estimated that the hardware will cost approximately \$225.
 \section{User Interface}
 
 \begin{enumerate}
-\item Web based interface for all configuration/settings.
+\item Web based interface for scheduling and control.
 	\begin{enumerate}
 	\item Setting timer schedules.
 	\item Manually starting/stopping valves.
-	\item Viewing history of valve run times.
-	\item User authentication.
 	\end{enumerate}
 \item Network configuration.
 	\begin{enumerate}
 	\item Configuration performed on Linux based Rasberry PI.
-	\item Standard ssh terminal access.
+	\item Command line access using ssh.
 	\end{enumerate}
 \item Hardware interface.
 	\begin{enumerate}
-	\item LED indicating when valve is on.
 	\item LED indicating when power is applied.
-	\item Manual shutoff of all valves.
+	\item LED indicating when valve is on.
 	\end{enumerate}
 \end{enumerate}
 
@@ -161,7 +157,7 @@ It is estimated that the hardware will cost approximately \$225.
 \section{External Interface Requirements}
 \begin{enumerate}
 \item Communication between the Linux computer (Rasberry PI) and
-		the control groups will be done using SPI.
+		the control/drivers will be done using SPI.
 \item Expansion is supported by daisy chaining SPI.
 \end{enumerate}
 
@@ -170,10 +166,10 @@ It is estimated that the hardware will cost approximately \$225.
 % {{{ Installation Requirements
 \section{Installation Requirements}
 \begin{enumerate}
+	\item An LED should indicate when power is applied.
 	\item LEDs must be provided to indicate when a valve is on.
-	\item LEDs should indicate when power is applied.
-	\item Terminals for checking primary voltages must be available.
-	\item PCB should clearly indicate voltages.
+	\item Terminals for checking primary voltages must be accessible.
+	\item PCB labels should clearly indicate voltages.
 \end{enumerate}
 % }}}
 
@@ -187,7 +183,7 @@ It is estimated that the hardware will cost approximately \$225.
 	\end{enumerate}
 	\item All components should fit inside a standard timer box:
 		$9.25"$ x $10.75"$ x $3.25"$
-	\item On power up all sprinkler valves must remain off.
+	\item When system has booted up the valves should be in the off state.
 \end{enumerate}
 % }}}
 
@@ -197,8 +193,8 @@ It is estimated that the hardware will cost approximately \$225.
 \begin{enumerate}
 	\item 110 volt AC terminals accessible.
 	\item 24 volt AC terminals accessible.
-	\item 5 volt DC terminals accessible.
 	\item LEDs to indicate when a valve is on.
+	\item 3.3 volts DC terminals accessible.
 \end{enumerate}
 % }}}
 
@@ -228,8 +224,8 @@ It is estimated that the hardware will cost approximately \$225.
 \section{Power Supply Requirements}
 
 \begin{enumerate}
-	\item Power supply is from a 110 volts AC 15A circuit.
-	\item Provide 5 volts DC at 600 mA.
+	\item Power supply is from a 110 volts AC 15A circuit (NEMA 5-15R).
+	\item Provide 3.3 volts DC at 600 mA.
 	\begin{enumerate}
 		\item Current should be limited to no more than 1 A.
 	\end{enumerate}
@@ -237,7 +233,7 @@ It is estimated that the hardware will cost approximately \$225.
 	\begin{enumerate}
 		\item Should be fused at 1 A.
 	\end{enumerate}
-	\item RasberryPI (Linux) requires 5 volts at 500 mA.
+	\item RasberryPI (Linux) requires 3.3 volts at 500 mA.
 \end{enumerate}
 
 % }}}

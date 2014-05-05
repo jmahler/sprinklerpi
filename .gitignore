@@ -4,3 +4,5 @@ log.txt
 TODO.txt
 *.o
 BAK
+*.img
+var
