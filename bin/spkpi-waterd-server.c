@@ -252,6 +252,8 @@ int main(int argc, char* argv[]) {
 			error(0, errno, "accept");
 			continue;
 		}
+		if (VERBOSE)
+			printf("accepted connection\n");
 
 		firstpass = 1;
 		while (!quit) {
@@ -262,6 +264,8 @@ int main(int argc, char* argv[]) {
 
 				/* valve file changes */
 				if (FD_ISSET(notify, &rd_set)) {
+					if (VERBOSE)
+						printf("file changes detected\n");
 					if ((n = read(notify, buf, BUF_LEN)) == -1) {
 						if (errno == EINTR)
 							break;
@@ -273,6 +277,8 @@ int main(int argc, char* argv[]) {
 
 				/* client reconnect */
 				if (FD_ISSET(sockfd, &rd_set)) {
+					if (VERBOSE)
+						printf("client reconnect\n");
 					break;
 				}
 			}
@@ -291,6 +297,8 @@ int main(int argc, char* argv[]) {
 				error(0, errno, "send");
 				break;
 			}
+			if (VERBOSE)
+				printf("sent command \"%s\"\n", cmd);
 
 			firstpass = 0;
 		}
@@ -301,3 +309,7 @@ int main(int argc, char* argv[]) {
 
 	return EXIT_SUCCESS;
 }
+
+/*
+vim:foldmethod=marker
+*/
