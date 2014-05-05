@@ -107,39 +107,47 @@ May 6, 2014
 \clearpage
 \section{Architectural Design}
 
-At the highest level the SprinklerPI system creates a web interface
-for controlling sprinkler valves.
-Figure \ref{fig:archoview} gives an overview.
+SprinklerPI is a web based sprinkler control system.
+At the highest level it provides a web interface
+which allows watering schedules to be created and modified.
+To serve this web interface requires a web server.
+In this case a web server running on Linux is used.
+
+Each control/driver module can drive eight sprinkler valves.
+And they accepts commands sent over SPI.
+They can also be daisy chained together to drive more valves.
+Since the RasberryPI can communicate over SPI it also
+acts as the master of the SPI bus and sends these commands.
+
+Between the web server and the SPI device both queuing and scheduling
+must be performed.
+A web server is not suited for these tasks because it is request driven.
+To bridge this gap a set of daemons are provided.
+Each one handles a specific tasks such as scheduling or queuing.
+
+The communication channel between the web server and the daemons is the
+file system.
+A specific set of files at specific locations stores the entire state
+of the system.
+And these files are all in human readable format so they
+can be accessed using standard command line tools.
+
+And to power all of these devices requires a power supply capable
+of providing both 24 volts AC and 3.3 volts DC.
+
+Figure \ref{fig:spioview} shows an overview of the system.
 
 \begin{figure}[h!]
 \begin{center}
-\includegraphics[scale=0.5]{dia/architectural_overview}
-\end{center}
-\caption{Overview of SprinklerPI in system.}
-\label{fig:archoview}
-\end{figure}
-
-There are many subcomponents of the SprinklerPI system.
-The power supply must take 24 volts AC and convert it to 5 volts DC.
-It must also provide a fused path for the 24 volts AC as a safety measure.
-The 24 volts AC is needed to drive the sprinkler valves.
-The 5 volts DC is needed for the Linux computer and the digital logic (control).
-The digital logic (control) must take accept a command over SPI
-and turn on one of the sprinkler valves or turn them all off.
-The driver must take a digital logic input and drive the appropriate
-sprinkler valve using 24 volts AC.
-The web based user interface must allow the timer schedules to be
-set and for the valves to be manually operated.
-Figure \ref{fig:spioview} gives an overview of the major components
-inside the SprinklerPI system.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[scale=0.47]{dia/sprinklerpi_overview}
+\includegraphics[scale=0.40]{dia/sprinklerpi_overview}
 \end{center}
 \caption{Overview of main components inside the SprinklerPI system.}
 \label{fig:spioview}
 \end{figure}
+
+% TODO
+% web interface not accessible through a firewall
+%  firewall configuration
 
 % }}}
 
@@ -150,18 +158,16 @@ inside the SprinklerPI system.
 
 There are three main hardware components in this system.
 First is the power supply.
-It takes 24 volts AC and outputs both 5 volts DC and fused 24 volts AC.
+It takes 24 volts AC and outputs both 3.3 volts DC and 24 volts AC.
 The sprinkler valves require 24 volts AC.
-The Linux computer and digital logic require 5 volts DC.
-Second is the Linux computer which is a standard RasberryPI model B.
+The Linux computer and digital logic require 3.3 volts DC.
+Second is the Linux computer which is a RasberryPI model B.
 And third is the Control Driver which contains all the
 circuitry needed to accept commands using SPI from the RasberryPI
 and to drive up to eight individual sprinkler valves.
-Additional Control Drivers can be added to drive additional sprinkler
-valves.
-Each individual Control Driver supports eight valves.
-To keep the system modular each of these modules will be on a
-separate PCB.
+Additional control/driver modules can be added in a SPI daisy chain
+configuration to drive additional valves.
+Each individual control/driver supports eight valves.
 Figure \ref{fig:hwoview} gives an overview of the hardware in the system.
 
 \begin{figure}[h!]
@@ -328,7 +334,7 @@ This makes a total of 24 valves where three can be on at once.
 \centering
 \includegraphics[angle=0,scale=0.80]{xcircuit/expansion_current}
 \caption{With a power supply capable of 1 amp at 24 volts AC and
-600 mA at 5 volts DC a maximum of three control groups and one
+600 mA at 3.3 volts DC a maximum of three control groups and one
 Rasberry PI can be driven.}\label{fig:expansion_current}
 \end{figure}
 
@@ -340,11 +346,11 @@ Rasberry PI can be driven.}\label{fig:expansion_current}
 \label{sec:driver}
 
 The control circuit (Section \ref{sec:control}) provides a digital
-output signal in the range of 0 to 5 volts DC.
+output signal in the range of 0 to 3.3 volts DC.
 This signal is inadequate for driving the sprinkler valve which
 requires 24 volts AC.
 The driver circuit discussed here is used to apply 24 volts AC
-signal when triggered by a 5 volts DC signal.
+signal when triggered by a 3.3 volts DC signal.
 
 \begin{figure}[hbp]
 \centering
@@ -375,7 +381,7 @@ with a 5V signal but also with 0V signal.
 To overcome this issue a diode was used to ensure no current
 flows when it is reverse biased.
 The FET (2N7000) is used to switch the triac while it also
-serves to limit the control current of a 0-5 volt signal
+serves to limit the control current of a 0-3.3 volt signal
 to less than 0.5 mA.
 This places the control current well within the limits
 of CMOS logic as required by the control chips (Section \ref{sec:control}).
@@ -387,9 +393,9 @@ of CMOS logic as required by the control chips (Section \ref{sec:control}).
 \label{sec:power}
 
 The power supply must provide two different voltages: 24 volts AC and
-5 volts DC.
+3.3 volts DC.
 The sprinkler valves require 24 volts AC at 270 mA.
-The Linux computer and other digital logic require 5 volts DC with a
+The Linux computer and other digital logic require 3.3 volts DC with a
 maximum draw of 600 mA
 \footnote{The current draw of the RasberryPI was determined
 experimentally to be approximately 500 mA.}.
@@ -399,7 +405,7 @@ Plug mounted 110 to 24 volts AC transformers are commonly available
 as most sprinkler controllers use these.
 
 A switching voltage regulator, the MC34063A, was chosen for
-the 5 volt supply.
+the 3.3 volt supply.
 It has a greater efficiency than a linear regulator such as
 the LM7805.
 
@@ -409,8 +415,8 @@ shown in Figure \ref{fig:power}.
 \begin{figure}[hbp]
 \centering
 \includegraphics[angle=90,scale=0.70]{xcircuit/power_supply}
-\caption{Power supply circuit. A 24 volt AC and 5 volt DC output are
-provided.  The 5 volt DC is provided by the MC340363A switching
+\caption{Power supply circuit. A 24 volt AC and 3.3 volt DC output are
+provided.  The 3.3 volt DC is provided by the MC340363A switching
 regulator.}\label{fig:power}
 \end{figure}
 
