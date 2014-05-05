@@ -87,14 +87,28 @@ if (exists $ENV{VERBOSE}) {
 sub valve_on {
 	my ($valve_file, $valve) = @_;
 
-	unless (open(FILE, ">", $valve_file)) {
+	unless (open(IN, "<", $valve_file)) {
+		print STDERR "Error opening '$valve_file' to be read: $!";
+		return;
+	}
+
+	my $cur_valve = <IN>;
+	chomp($cur_valve);
+
+	close(IN);
+
+	if ($cur_valve eq $valve) {
+		return;
+	}
+
+	unless (open(OUT, ">", $valve_file)) {
 		print STDERR "Error opening '$valve_file': $!";
 		return;
 	}
 
-	print FILE $valve;
+	print OUT "$valve\n";
 
-	close(FILE);
+	close(OUT);
 }
 # }}}
 
