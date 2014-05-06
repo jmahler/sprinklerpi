@@ -1,8 +1,9 @@
 
-all: hardware_state.pdf software_overview.pdf queue-daemon.pdf \
-	timer-daemon.pdf architectural_overview.pdf \
+all: hardware_state.pdf queue-daemon.pdf \
+	scheduler-daemon.pdf \
 	sprinklerpi_overview.pdf sprinklerpi_overview-net.pdf \
-	tester.pdf
+	tester.pdf \
+	daemon_oview.pdf
 
 %.pdf: %.eps
 	epspdf $<

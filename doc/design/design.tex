@@ -66,13 +66,6 @@
 	description={First in first out}.
 }
 
-\newglossaryentry{RFID}
-{
-	name={RFID},
-	description={Radio frequency identification}.
-}
-
-
 % }}}
 
 % {{{ title page
@@ -145,12 +138,11 @@ Figure \ref{fig:spioview} shows an overview of the system.
 \label{fig:spioview}
 \end{figure}
 
-\begin{samepage}
+\pagebreak
 When this system is installed on a private network or behind a firewall
 it cannot be accessed from the Internet.  With the addition of a
 client/server water daemon, that acts as a proxy, this system can still be
 used as shown in Figure \ref{fig:spioviewnet}.
-\end{samepage}
 
 \begin{figure}[h!]
 \begin{center}
@@ -167,18 +159,8 @@ used as shown in Figure \ref{fig:spioviewnet}.
 \section{Hardware Design}
 \label{sec:hardware}
 
-There are three main hardware components in this system.
-First is the power supply.
-It takes 24 volts AC and outputs both 3.3 volts DC and 24 volts AC.
-The sprinkler valves require 24 volts AC.
-The Linux computer and digital logic require 3.3 volts DC.
-Second is the Linux computer which is a RasberryPI model B.
-And third is the Control Driver which contains all the
-circuitry needed to accept commands using SPI from the RasberryPI
-and to drive up to eight individual sprinkler valves.
-Additional control/driver modules can be added in a SPI daisy chain
-configuration to drive additional valves.
-Each individual control/driver supports eight valves.
+There are three main hardware components in this system:
+the power supply, the Linux computer, and the control/driver.
 Figure \ref{fig:hwoview} gives an overview of the hardware in the system.
 
 \begin{figure}[h!]
@@ -187,42 +169,47 @@ Figure \ref{fig:hwoview} gives an overview of the hardware in the system.
 \end{center}
 \caption{Overview of hardware in system.
 Only one control/driver is shown, 
-additional control/drivers can be added up to a maximum of three.
-Expansion is limited by the power supply.}
+additional control/drivers can be added up to a maximum of three.}
 \label{fig:hwoview}
 \end{figure}
+
+The power supply takes 24 volts AC and outputs 3.3 volts DC
+and 24 volts AC..
+The 3.3 volts DC is used by the digital logic and the Linux computer.
+The 24 volts AC is used to driver the sprinkler valves.
+The power supply also includes an in line fuse to limit the current in
+the AC circuit.
+
+The Linux computer is a RasberryPI model B.
+It communicates over Ethernet or using a wireless adapter.
+And it communicates to the control/driver modules using SPI.
+
+The control/driver accepts commands over SPI to turn on a particular valve.
+It then switches the 24 volts AC supply using a triac to turn on a valve.
+The control/driver can also be daisy chained to expand it up to a maximum
+of three control/drivers.
+
+\pagebreak
 
 % {{{ State Flow Diagrams
 \subsection{State Flow Diagrams}
 
-The primary module of interest with regard to state flow is
-the Control Driver (Figure \ref{fig:hwoview}).
-It controls the sprinkler valves based on commands it receives
-from the Linux computer (RasberryPI) over SPI.
-
-The Control Driver is always either driving one of the eight valves
-or has all of the valves off.
-The only time this changes is when a new command is sent.
-
-During power on all the valves must remain in the off state.
-If this were not required, and the system entered some random
-state during power on, a valve could be inadvertently turned on.
-And since there is no watchdog mechanism this valve would remain
-on until the next command was received.
-Figure \ref{fig:hwstate} shows the state machine of the
-Control Driver circuitry in hardware.
+The control/driver goes through two states as shown
+in Figure \ref{fig:hwoview}.
+When it is not receiving a command it is in the drive state.
+In this state it is decoder is enabled and it is either driving
+a valve or all valves are off.
+In the receive command state the output decoder is disabled to
+prevent incorrect intermediate states during transfer.
+When it is disabled it will retain its previous value.
+When the reception of a command over SPI is complete, the decoder
+is re-enabled.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[scale=0.48]{dia/hardware_state}
-\caption{State diagram of hardware control circuitry.
-During power on it is important that the valves remain off.
-In the idle state it waits for a command to turn on a valve or
-turn off all valves.}\label{fig:hwstate}
+\includegraphics[scale=0.40]{dia/hardware_state}
+\caption{State diagram of control/driver.}\label{fig:hwstate}
 \end{figure}
-
-The hardware state is determined by the control circuitry
-described in Section \ref{sec:control}.
 
 % }}}
 
@@ -236,23 +223,28 @@ described in Section \ref{sec:control}.
 \subsubsection{Control}
 \label{sec:control}
 
-Before a sprinkler valve can be driven some control logic is necessary
-between the RasberryPI and the driver (Section \ref{sec:driver}).
-Most residential sprinkler systems are capable of driving eight circuits.
-And only one of these circuits is active at any one time
-\footnote{If multiple circuits were active this could lower the
+The control part of the control/driver module interprets the commands
+received over SPI which determines which valve will be driven or whether
+they will be all off.
+The driver will be discussed in more detail in Section \ref{sec:driver}.
+
+Typical sprinkler systems can drive valves in groups of eight where only
+one valve can be on at a
+time\footnote{If multiple circuits were active this could lower the
 water pressure resulting in inconsistent watering amounts.}.
-This controller is similar except it also supports expansion by groups
-of eight circuits.
+This control module achieves this constraint in hardware by using a
+decoder chip which only allows one output to be on at a time.
 
-This design uses SPI and a minimum of 8-bits is sent per message.
-Each control group requires 4-bits.  So for one to two control groups
-8-bits are required.  For three to four control groups 16-bits are required,
-and so on.  Figure \ref{fig:spi} shows the message format.
+SPI is used to communicate between the Linux computer and the control
+module.
+Each module uses a 4-bit shift register but a minimum of 8-bits must
+be sent per message from the Linux computer.
+Additionally, when control/driver modules are daisy chained, more than
+8-bits must be sent.
 
-Each 4-bit control message contains a single enable bit.
-This design was chosen to simplify the clear of the decoder
-(Figure \ref{fig:control}).
+Figure \ref{fig:spi} shows the message format that is used.
+Notice that there is a dedicated enable bit and it is active low.
+Only 4-bits are used to address the valve.
 
 {
 \renewcommand*\arraystretch{1.5}
@@ -288,31 +280,21 @@ Each group represents eight valves so (b) would support 16 valves.}
 \end{figure}
 }
 
-Translating the message received over SPI to turn on
-a sprinkler valve requires a small amount of discrete logic.
-A shift register is needed to take the bits as inputs.
-A decoder is needed to convert shifted in number to a single
-bit output.
-In this case a 74HC238 3-8 decoder is used since it provides non-inverting
-outputs.
-An output high will turn on a valve.
-Figure \ref{fig:control} shows the control schematic.
+Interpreting the message received is performed using a shift register
+and decoder as shown in Figure \ref{fig:control}.
+An output high of the decoder will turn on a valve.
+Notice that the enable bit in the message will be output on \verb+OA+
+which will enable the decoder chip.
 
 \begin{figure}[hbp]
 \includegraphics[scale=0.85]{xcircuit/control}
 \caption{Sprinkler valve control logic.
-Sprinkler valve number is input using SPI from the RasberryPI in
-to the shift register.  The number is decoded and inverted to produce
-a single high signal for one valve.
+Sprinkler valve number is input using SPI from the Linux computer in
+to the shift register.
+A 4-bit number is output from the shift register and sent to the
+decoder which will turn on a valve or turn them all off.
 All outputs are disabled when OA is clear.}\label{fig:control}
 \end{figure}
-
-On power up it is important that the valves remain off.
-However the shift register chip (74HC194) does not guarantee
-the output state during power up.
-To resolve this issue a simple RC circuit is used to to hold the
-chip in the clear state for several seconds after power
-on (Figure \ref{fig:control}).
 
 % }}}
 
@@ -321,47 +303,47 @@ on (Figure \ref{fig:control}).
 \subsubsection{Expansion}
 \label{sec:expansion}
 
-The RasberryPI uses SPI to communicate with the
-control logic which which drives the sprinkler valve.
-Each group can control up to eight valves with one valve
-being on at a time.
-A daisy chain arrangement can be constructed to allow SPI
-to communicate with more than one group as shown in
-Figure \ref{fig:expansion_spi}.
+Each control/driver module accepts a command over SPI.
+And depending on the message it receives it will turn one of the
+eight valves on or turn them all off.
+And up to three of these modules can be daisy chained together
+to expand the system to a maximum of 24 valves.
+This daisy chain configuration is shown in Figure \ref{fig:expansion_spi}.
 
 \begin{figure}[hbp]
 \centering
 \includegraphics[angle=0,scale=0.80]{xcircuit/expansion_spi}
-\caption{Daisy chain SPI configuration to for multiple control groups.
+\caption{Daisy chain SPI configuration for multiple control groups.
 }\label{fig:expansion_spi}
 \end{figure}
 
-With the current power supply design it is limited to three
-control groups as shown in Figure \ref{fig:expansion_current}.
-Each group can control eight valves with one being on at a time.
-This makes a total of 24 valves where three can be on at once.
+The power supply is the limiting factor in expansion beyond three
+modules as shown in Figure \ref{fig:expansion_current}.
 
 \begin{figure}[hbp]
 \centering
 \includegraphics[angle=0,scale=0.80]{xcircuit/expansion_current}
 \caption{With a power supply capable of 1 amp at 24 volts AC and
 600 mA at 3.3 volts DC a maximum of three control groups and one
-Rasberry PI can be driven.}\label{fig:expansion_current}
+Linux computer can be driven.}\label{fig:expansion_current}
 \end{figure}
 
 % }}}
+
+\pagebreak
 
 % {{{ Driver
 \FloatBarrier
 \subsubsection{Driver}
 \label{sec:driver}
 
-The control circuit (Section \ref{sec:control}) provides a digital
-output signal in the range of 0 to 3.3 volts DC.
-This signal is inadequate for driving the sprinkler valve which
-requires 24 volts AC.
-The driver circuit discussed here is used to apply 24 volts AC
-signal when triggered by a 3.3 volts DC signal.
+The control part of the control/driver module (Section \ref{sec:control})
+determines which valve will be driven.  But it cannot drive the valves
+directly as they require 24 volts AC and the control circuit outputs
+3.3 volts DC.
+The purpose of the driver part of the control/driver module is to convert
+these digital signal and drive the valves.
+The driver circuitry is shown in Figure \ref{fig:driver}.
 
 \begin{figure}[hbp]
 \centering
@@ -372,12 +354,10 @@ LEDs are used to indicate when the valve is on/off.
 It is assumed that only one valve will be on at a time.}\label{fig:driver}
 \end{figure}
 
-To turn the sprinkler valves on requires 24 VAC at approximately 270 mA.
-If it is assumed that during steady state both the solenoid
-and the triac have negligible resistance (Figure \ref{fig:driver}),
-a 10 $\Omega$ resistor can be used to limit the current to 270 mA.
-At 1 watt the resistor supports the worst case amperage with a margin
-over 10\%.
+To turn the sprinkler valves on requires 24 volts AC at approximately 270 mA.
+Each sprinkler valve has a resistance of approximately 80 $\Omega$.
+A 10 $\Omega$ resistor was added to limit the current to 270 mA.
+A resistor with a 1 watt rating provides over a 10\% operating margin.
 
 \begin{align*}
 	P &= I^2 R \\
@@ -386,16 +366,13 @@ over 10\%.
 \end{align*}
 
 The control signal to the triac (Q401E4) is very sensitive.
-The tinyest current will cause it to conduct.
-If it is driven by a 0-5V signal it will conduct not only
-with a 5V signal but also with 0V signal.
-To overcome this issue a diode was used to ensure no current
-flows when it is reverse biased.
-The FET (2N7000) is used to switch the triac while it also
-serves to limit the control current of a 0-3.3 volt signal
-to less than 0.5 mA.
-This places the control current well within the limits
-of CMOS logic as required by the control chips (Section \ref{sec:control}).
+The tiniest of currents in either direction will turn it on.
+A diode is used to restrict the current to one direction and ensure
+that the triac will switch off.
+The FET (2N7000) drives the triac as well as the LED indicator.
+It also serves to limit the gate current required from the control module.
+The required gate current is less than 0.5 mA which is well within
+the limits of CMOS logic used by the control module (Section \ref{sec:control}).
 
 % }}}
 
@@ -463,106 +440,214 @@ In this case the value 2 is transferred.}
 % }}}
 
 % {{{ Theory of Operation
-\FloatBarrier
-\subsection{Theory of Operation}
+%\FloatBarrier
+%\subsection{Theory of Operation}
+%
+%% describe external interface
+%
+%The operation of the hardware as a whole provides the ability to
+%turn a valve on or to turn them all off.
+%One valve can be on at a time for a single Control Driver module.
+%Commands are written over SPI from the Linux computer (RasberryPI).
+%
+%The user interface, described in Section \ref{sec:swdesign}, will
+%establish a friendly user interface on top of this simple hardware
+%interface.
 
-% describe external interface
-
-The operation of the hardware as a whole provides the ability to
-turn a valve on or to turn them all off.
-One valve can be on at a time for a single Control Driver module.
-Commands are written over SPI from the Linux computer (RasberryPI).
-
-The user interface, described in Section \ref{sec:swdesign}, will
-establish a friendly user interface on top of this simple hardware
-interface.
+% }}}
 
 % }}}
 
-% }}}
+\pagebreak
 
 % {{{ Software Design
 \FloatBarrier
 \section{Software Design}
 \label{sec:swdesign}
 
-The software creates a user interface for controlling
-and scheduling the sprinkler valves.
-Figure \ref{fig:swoview} gives an overview of the system.
+The software in this system consists of many modular parts as
+can be seen in Figure \ref{fig:spioview} and Figure \ref{fig:spioviewnet}.
 
-\begin{figure}[htbp!]
+There are several daemons and a web server which all communicate with
+each other using the file system as shown in Figure \ref{fig:dov}.
+These files can even be edited using command line tools and
+they are all stored in a human readable format.
+The daemons use the Linux inotify interface so they can receive
+file change events without having to poll files.
+
+\begin{figure}
 \begin{center}
-\includegraphics[scale=0.45]{dia/software_overview}
+\includegraphics[scale=0.40]{dia/daemon_oview}
 \end{center}
-\caption{Overview of software in the sprinkler control system.
-The web server (www) communicates with the queue daemon
-using a set of files.
-The queue daemon monitors the queue and controls the valves accordingly.
-The timer daemon adds jobs to the queue according to the timer schedule.}
-\label{fig:swoview}
+\caption{Overview daemons and how they interact with the web interface
+and file system.}
+\label{fig:dov}
 \end{figure}
 
+The web interface is written using html, PHP, style sheets (CSS), JavaScript,
+and can run on any standard web server such as Apache or Nginx.
+It provides an interface where schedules can be managed and valves can
+be operated.
+
+Each of the daemons has one specific task.
+The queue daemon watches the queue and makes sure valves are run
+for the correct duration.
+The scheduler waits until a valve is scheduled to run and then adds it
+to the queue.
+The water daemon monitors which valves should be turned on and executes
+the command.
+There are versions for a local device or a network proxy.
+
+% {{{ File System
 \FloatBarrier
 \subsection{File System}
 
-Interprocess communication between the queue daemon, the web server
-and the timer daemon is accomplished using files.
-The following is a listing of the files that are present.
+The central communication mechanism for interprocess communication
+is the file system.  The daemons, web server, and command line programs
+all interact using these specific files.
+The file hierarchy is shown in Figure \ref{fig:fs}.
 
+\begin{figure}[h!]
+
+\begin{center}
+\begin{minipage}{3in}
 \begin{verbatim}
 sprinklerpi/
-  queue
-  valve
-  clear
-  log
-  timer/
-    valve1
-     ...
-    valve8
+  mode
+  valves/
+    group-1
+    group-2
+    group-3
+  queue/
+    group-1
+    group-2
+    group-3
+  schedules/
+    test1.yml
+    ...
 \end{verbatim}
+\end{minipage}
+\end{center}
+\caption{File system hierarchy of sprinklerpi files.}
+\label{fig:fs}
+\end{figure}
 
-\begin{itemize}
-    \item \verb+queue+ - Queue of jobs to execute.
-    \item \verb+valve+ - Current valve number that is running.
-        Zero if none are running.
-    \item \verb+clear+ - When true the queue daemon clears the queue.
-        It is reset to false after queue is cleared.
-    \item \verb+log+ - Log of operations queue-daemon has performed.
-    \item \verb+timer/valve*+ - Schedule of when each valve should run.
-\end{itemize}
+The \verb+mode+ file contains a string specifying the mode.
+The daemons can use this file and only perform their operations while
+in a specific mode.
+For example the scheduler daemon only operates when in the schedule mode.
+If the system is in the manual mode it pauses its operation.
 
+The \verb+valves/group-*+ files each indicate which valve should be
+operating for that group.
+It contains a number, in ascii format, from 0 to 8.
+When it is set to zero the valve is off.
+The water daemon monitors the valve files and executes the water command
+when they change.
+
+The \verb+queue/group-*+ files each store a queue of jobs waiting to be
+executed.
+The scheduler daemon will add jobs to the queue and the queue daemon
+will remove them.
+Entries are removed from the start of the file and added by appending to
+the file.
+File locking must be used to avoid inconsistent intermediate file states.
+The format of a queue file is a line with the valve number and run
+time in seconds.  An example is shown in Figure \ref{fig:qf}.
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{2in}
+\begin{verbatim}
+1 60
+1 900
+2 15
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{An example queue file.}
+\label{fig:qf}
+\end{figure}
+
+The \verb+schedule/*+ files each store an object that describes a full
+schedule.
+They are stored using the YAML file format which is human readable
+and supported across many programming languages.
+
+\begin{figure}
+\begin{center}
+\begin{minipage}{3in}
+\begin{verbatim}
+---
+id: test1.yml
+name: 'Schedule Test #1'
+enabled: 1
+entries:
+- group: "1"
+  valve: "1"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "2"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "3"
+  days: MWF
+  start_time: 00:50
+  run_time: 00:30
+...
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{An example schedule file in YAML format.}
+\label{fig:sched}
+\end{figure}
+% }}}
+
+% {{{ Queue Daemon
 \FloatBarrier
 \subsection{Queue Daemon}
+\label{sec:queue}
 
-The queue daemon monitors the queue file and executes the command.
-An example command might be ``run valve 3 for 5 minutes''.
+When in \verb+schedule+ mode, the queue daemon will monitor the queue
+and run any jobs that are present.
+It monitors all the files for each of the groups.
+Each instruction is one line with the valve to run and its duration
+in seconds (Figure \ref{fig:qf}).
 Figure \ref{fig:queue-daemon} gives a flow chart of its operation.
 
 \begin{figure}[htbp!]
 \begin{center}
-\includegraphics[scale=0.45]{dia/queue-daemon}
+\includegraphics[scale=0.35]{dia/queue-daemon}
 \end{center}
 \caption{Flow chart of the queue daemon operation.}
 \label{fig:queue-daemon}
 \end{figure}
 
-% TODO - abort operation?
+% }}}
 
+% {{{ Scheduler Daemon
 \clearpage
 \FloatBarrier
-\subsection{Timer Daemon}
+\subsection{Scheduler Daemon}
 
-The timer daemon monitors the valve schedule and adds jobs
-to the queue when they are ready to be run.
-Figure \ref{fig:timer-daemon} gives a flowchart of its operation.
+The scheduler daemon waits until jobs in the schedules
+become due and then it adds them to the queue.
+The format is the same as described for the queue
+daemon (Section \ref{sec:queue}).
+Figure \ref{fig:scheduler-daemon} gives a flowchart of its operation.
 
 \begin{figure}[htbp!]
 \begin{center}
-\includegraphics[scale=0.45]{dia/timer-daemon}
+\includegraphics[scale=0.35]{dia/scheduler-daemon}
 \end{center}
-\caption{Flow chart of the timer daemon operation.}
-\label{fig:timer-daemon}
+\caption{Flow chart of the scheduler daemon operation.}
+\label{fig:scheduler-daemon}
 \end{figure}
+% }}}
 
 % }}}
 
