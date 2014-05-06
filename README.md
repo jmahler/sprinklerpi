@@ -114,7 +114,7 @@ Under [Redhat][rpm] these can be installed using `yum install <pkg>`.
     $ yum --enablerepo=rpmforge --enablerepo=atomic install perl-Linux-Inotify2
 
 If the packages are not available in [Redhat][rpm] the `cpan` command
-can be tried.
+can be used.
 
     $ cpan -i Linux::Inotify2
 
@@ -159,14 +159,16 @@ previously.
 If [Nginx][nginx] is being used as the web server several additional packages
 need to be installed.
 
-    $ apt-get install php5-fpm
+    $ apt-get install php5-fpm php5-cgi
 
 The `extension=yaml.so` option should be added to `/etc/php5/fpm/php.ini`.
+To make debugging easier it is helpful to set "display_errors = On" as well.
 
 A similar configuration must be performed when using [Apache][apache].
 
 Then, after restarting the web server, it should be setup and ready to run.
 
+    $ service php5-fpm restart
     $ service nginx restart
 
 or
