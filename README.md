@@ -332,6 +332,17 @@ a few can be stored.
 
   [ws]:http://www.wireshark.org
 
+Q. Why does wifi sporadically go down when using a Ralink based USB wifi
+adapter?
+
+A. This is a known issue with the drivers on a RasberryPI.
+By connecting using the Ethernet port the wifi interface can be brought
+back up.
+
+    $ sudo ifup wlan0
+
+But the most reliable solution is to use Ethernet instead of wifi.
+
 ## AUTHOR
 
 Jeremiah Mahler <jmmahler@gmail.com><br>
