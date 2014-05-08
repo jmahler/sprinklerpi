@@ -1,7 +1,7 @@
 
 ## NAME
 
-SprinklerPI - Web based sprinkler controller.
+SprinklerPI - Web based sprinkler controller running Linux.
 
 ## DESCRIPTION
 
@@ -9,16 +9,20 @@ SprinklerPI is a full featured web based sprinkler controller.
 
 From the web interface watering schedules can be created and edited.
 Each schedule can have any number of entries which describe when to
-turn a valve on and for how long.  Any there are no limits on the
-number of schedules or number of entries which can be created.
+turn a valve on and for how long.  And there are no limits on the
+number of schedules or the complexity of schedules which can be created.
 
-The hardware design is modular allowing it to be scaled up
-or down for a particular install.  Each driver can drive eight
-valves with one on at a time.  And there can be up to three
-drivers allowing for the control of 24 valves.
+The hardware is modular and can be scaled to the size of a particular
+situation.  Each control/driver module can drive eight valves and there
+can be from one to three of these modules allowing for a maximum of
+24 valves.  Expansion is accomplished using a SPI bus with a daisy
+chain configuration.
 
-The controller runs Linux, in this case a [RasberryPI][rpi],
- which makes it reliable and secure.
+The controller runs Linux, in this case a [RasberryPI][rpi].
+Both [Nginx][nginx] and [Apache][apache] web servers are supported
+and they can be installed directly on the RasberryPI.
+The web interface is written in PHP and is supported across many
+platforms.
 
   [rpi]: http://www.rasberrypi.org
 
@@ -28,23 +32,25 @@ using a set of human readable text files.  And each daemon is designed
 to do one task and do it well.
 
 For example, when the web interface modifies a schedule, the scheduled
-daemon is notified and it updates its current schedules.
-When an entry in a schedule becomes due the schedule daemon adds it to
-the queue.  Since not all valves can be on at a time the must be queued.
-The queue daemon manages the queue and decides which valves to turn on
-so that no jobs are lost.  Finally, the watering daemon watches
-the valve files and physically turns on valves.
-And all of these files can be viewed and edited from the command line
-which simplifies debugging.
+daemon, which is watching the schedule file, notices this change and
+updates its schedules.  When an entry in a schedule becomes due the
+schedule daemon adds it to the queue.  Since not all valves can be on
+at the same time the job must be queued.  The queue daemon manages
+the queue and decides which valves to turn on so that no jobs are lost.
+Finally, the watering daemon watches the valve files and physically
+turns on valves.  And all of these files can be viewed and edited from
+the command line which simplifies debugging.
 
-    programs:    www   scheduled  queued   waterd
-                   \     /   \     /  \     /  \
-                    \   /     \   /    \   /    \
-    files:         schedule   queue    valves  (device)
+    programs:  www   scheduled  queued   waterd
+                 \     /   \     /  \     /  \
+                  \   /     \   /    \   /    \
+    files:       schedule   queue    valves  (device)
 
 In cases where the controller is on a private network or
-behind firewalls, daemons are included which will proxy the
-commands so that it can be accessed on a public network.
+behind a firewall, daemons are included which will proxy the
+commands so that it can be accessed from a public network.
+In this case the daemons will run on the public server and
+just the client daemon will run on the private server.
 
                               firewall
                            public | private
@@ -60,14 +66,15 @@ the [GNU General Public License][gpl].
 
 ## CONTENTS
 
-There are various components to this system, each in their own directory,
-as described below.
+There are various components in this project.  Each in located in its
+own directory as described below.
 
   bin/ - Binaries and daemons.
 
   doc/ - All documentation including: design manual, testing manual, etc.
 
-  etc/ - Daemon init.d files and configuration for [Nginx][nginx] web server.
+  etc/ - Configuration files, init.d scripts, and web server configuration
+	examples.
 
   include/ - Libraries and headers for programs in bin/.
 
@@ -77,8 +84,8 @@ as described below.
 
   www/ - Web interface written in [PHP][php].
 
-  sprinklerpi/ - SprinklerPI files.  Both the web interface and daemons
-    read and modify these files.
+  sprinklerpi/ - An example set of SprinklerPI files.
+	Both the web interface and daemons read and modify these files.
 
   [kicad]:http://www.kicad-pcb.org
 
