@@ -1,16 +1,21 @@
 
 ## NAME
 
-SprinklerPI - Web based sprinkler controller running Linux.
+SprinklerPI - Web based sprinkler control system running Linux.
 
 ## DESCRIPTION
 
-SprinklerPI is a full featured web based sprinkler controller.
+- web based
+- sprinkler control system
+- modular software design
+- modular hardware design
+- expandable from 1 to 24 valves
 
-From the web interface watering schedules can be created and edited.
-Each schedule can have any number of entries which describe when to
-turn a valve on and for how long.  And there are no limits on the
-number of schedules or the complexity of schedules which can be created.
+SprinklerPI is a web based sprinkler control system running Linux.
+
+Schedules can be created to run valves at some day and time during the week.
+There is no limit to the size, complexity, or number of schedules.
+The web interface is designed to be simple and easy to use.
 
 The hardware is modular and can be scaled to the size of a particular
 situation.  Each control/driver module can drive eight valves and there
@@ -18,33 +23,34 @@ can be from one to three of these modules allowing for a maximum of
 24 valves.  Expansion is accomplished using a SPI bus with a daisy
 chain configuration.
 
-The controller runs Linux, in this case a [RasberryPI][rpi].
+The controller runs Linux on a [RasberryPI][rpi].
 Both [Nginx][nginx] and [Apache][apache] web servers are supported
 and they can be installed directly on the RasberryPI.
-The web interface is written in PHP and is supported across many
-platforms.
+The web interface is written in [PHP][php] which one of the most
+commonly used languages for constructing web interfaces.
 
   [rpi]: http://www.rasberrypi.org
+  [PHP]: http://www.php.net
 
 The software architecture is designed to be simple and maintainable.
 All programs (daemons, web interface) communicate with each other
 using a set of human readable text files.  And each daemon is designed
 to do one task and do it well.
 
-For example, when the web interface modifies a schedule, the scheduled
+For example, when the web interface modifies a schedule, the schedule
 daemon, which is watching the schedule file, notices this change and
 updates its schedules.  When an entry in a schedule becomes due the
-schedule daemon adds it to the queue.  Since not all valves can be on
-at the same time the job must be queued.  The queue daemon manages
+schedule daemon adds it to the queue.  A queue is used because not
+all valves can be on at the same time.  The queue daemon manages
 the queue and decides which valves to turn on so that no jobs are lost.
 Finally, the watering daemon watches the valve files and physically
 turns on valves.  And all of these files can be viewed and edited from
 the command line which simplifies debugging.
 
-    programs:  www   scheduled  queued   waterd
+     daemons:  www   scheduled  queued   waterd
                  \     /   \     /  \     /  \
                   \   /     \   /    \   /    \
-    files:       schedule   queue    valves  (device)
+       files:    schedule   queue    valves  (device)
 
 In cases where the controller is on a private network or
 behind a firewall, daemons are included which will proxy the
@@ -55,15 +61,11 @@ just the client daemon will run on the private server.
                               firewall
                            public | private
                                   |
-    programs:    ...    server <--|--- client
+     daemons:    ...    server <--|--- client
                    \     /        |       \
                     \   /         |        \
-    files:         valves         |      (device)
+       files:       valves        |      (device)
                                   |
-
-All software and hardware designs are free and released under
-the [GNU General Public License][gpl].
-
 ## CONTENTS
 
 There are various components in this project.  Each in located in its
@@ -72,6 +74,9 @@ own directory as described below.
   bin/ - Binaries and daemons.
 
   doc/ - All documentation including: design manual, testing manual, etc.
+
+  doc/sprinklerpi-files.zip - An example set of SprinklerPI files.
+	Both the web interface and daemons read and modify these files.
 
   etc/ - Configuration files, init.d scripts, and web server configuration
 	examples.
@@ -84,9 +89,6 @@ own directory as described below.
 
   www/ - Web interface written in [PHP][php].
 
-  sprinklerpi/ - An example set of SprinklerPI files.
-	Both the web interface and daemons read and modify these files.
-
   [kicad]:http://www.kicad-pcb.org
 
   [php]:http://www.php.net
@@ -97,16 +99,14 @@ own directory as described below.
 
 ## SYSTEM SETUP
 
-The system needs to have various packages installed in order to function.
+The system requires certain packages to be installed.
 
-Since some of the daemons are written in [Perl][perl] several
-Perl libraries must be installed.  Specifically YAML::Syck
-and Linux::Inotify2.
+Since some of the daemons are written in [Perl][perl], several
+libraries must be installed.  Specifically YAML::Syck and Linux::Inotify2.
 
   [perl]:http://www.perl.org
 
-Under [Debian][deb] Linux these can be installed using
-`apt-get install <pkg>`.
+Under [Debian][deb] Linux packages are available for installation.
 
   [deb]:http://www.debian.org
 
@@ -127,7 +127,7 @@ can be used.
 
 At this point, with the Perl libraries installed, it should be possible
 to run the queue daemon (`spkpi-queued`), scheduler
-daemon (`spkpi-scheduled`), demo daemon (`spkpi-demo`).
+daemon (`spkpi-scheduled`), and demo daemon (`spkpi-demo`).
 
 The final daemons needed to get the system working are the water
 daemon (`spkpi-waterd`) which depends on the `water` command and/or
@@ -144,7 +144,7 @@ will build the executables.
     $ make
 
 Depending on whether this system is using a client/server or installed
-on the device directly may determine what can be compiled.
+directly on the device will determine what can be compiled.
 For example, the `water` command cannot be compiled on systems without
 SPI headers.  For a server only system just make the server.
 
@@ -152,7 +152,7 @@ SPI headers.  For a server only system just make the server.
 
 The final step in setting up the system is configuring the web server.
 The YAML libraries that [PHP][php] depends on are taken care of during
-the previous instructions.  However the PHP version of YAML must
+the previous instructions.  However, the PHP version of YAML must
 still be installed.
 
   [php]:http://www.php.net
@@ -186,7 +186,7 @@ or
 
 The system should be setup and have all the necessary libraries
 in order to run.  But the location of the html and [PHP][php] files
-has not been setup yet.
+still needs to be configured.
 
 The files in this project under `www/` are for a web interface.
 The web server being used should be configured so that
@@ -195,9 +195,9 @@ for [Nginx][nginx] is in `etc/nginx`.  A similar configuration
 can be created for Apache.
 
 Since the web server must be able to modify the sprinklerpi
-files the permissions must be correct.  Here the web server
-is running under the user `www-data`.  Other configurations
-may use the `apache` user.
+files the permissions must be correct.  If the web server is
+running as the user `www-data` that user/group should have
+read/write access to the files.
 
     $ sudo chown -R :www-data sprinklerpi/
     $ sudo chmod -R g+w sprinklerpi/
@@ -208,15 +208,15 @@ The `_config.inc` is where the site is configured.
 
 ## STARTUP, /etc/init.d/
 
-Depending upon how this system is designed to be run, different daemons
+Depending upon how this system is being used, different daemons
 will need to be started.  A set of startup scripts are provided in
-/etc/init.d for each of the situations.
+`/etc/init.d/` for each of the situations.
 
 The init scripts expect a basic configuration to be present in
 
     /etc/default/sprinklerpi
 
-otherwise it will use default values which probably won't work for everybody.
+otherwise they will use default values which may not work.
 This file can either be copied or a symbolic link can be created.
 
     $ sudo ln -s /home/jeri/sprinklerpi/etc/default/sprinklerpi \
@@ -225,20 +225,22 @@ This file can either be copied or a symbolic link can be created.
 This default configuration defines values such as the location of
 the sprinklerpi files and binaries.
 
-Once this is done the scripts can be started in the usual way.
+Once this is completed the scripts can be used to start the daemons.
 
-    $ sudo etc/init.d/sprinklerpi start/stop
+    $ sudo etc/init.d/spkpi-waterd start
 
-Different scripts will be used depending on the situation (below).
+Different scripts will be started depending on the situation (below).
 
 ### situation #1: no fire wall
 
 The simplest case is just a standalone server with no need for public
-access through a fire wall.  In this case just use the `sprinklerpi`
-and `sprinklerpi-waterd` scripts.
+access through a fire wall.  In this case just use all the daemons
+excluding the client/server daemons.
 
-    $ sudo etc/init.d/sprinklerpi start
-    $ sudo etc/init.d/sprinklerpi-waterd start
+    $ sudo etc/init.d/spkpi-waterd start
+    $ sudo etc/init.d/spkpi-scheduled start
+    $ sudo etc/init.d/spkpi-queued start
+    $ sudo etc/init.d/spkpi-demo start
 
 ### situation #2: fire wall
 
@@ -246,20 +248,15 @@ When it is necessary to communicate through a fire wall the client and
 server version will need to be used.  On the client the client version
 is used.
 
-    etc/init.d/sprinklerpi-client
+    $ sudo etc/init.d/spkpi-client start
 
-On the server the `server` and `sprinklerpi` script is used.
+The server daemon is used on the server along with the standard daemons.
 
-    etc/init.d/sprinklerpi
-    etc/init.d/sprinklerpi-server
+    $ sudo etc/init.d/spkpi-server start
 
-## DEVELOPMENT
-
-For development it is often easier to configure your PATH so that
-the daemons and binaries can be easily run.  For example, the
-following line a .bashrc would setup the PATH.
-
-    export PATH=$HOME/sprinklerpi/bin:$PATH
+    $ sudo etc/init.d/spkpi-scheduled start
+    $ sudo etc/init.d/spkpi-queued start
+    $ sudo etc/init.d/spkpi-demo start
 
 ## FAQ
 
