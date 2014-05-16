@@ -34,6 +34,8 @@
 
 \begin{document}
 
+\nocite{github_jmahler_sprinklerpi}
+
 % {{{ glossary entries
 
 \newglossaryentry{SPI}
@@ -306,9 +308,9 @@ All outputs are disabled when OA is clear.}\label{fig:control}
 Each control/driver module accepts a command over SPI.
 And depending on the message it receives it will turn one of the
 eight valves on or turn them all off.
-And up to three of these modules can be daisy chained together
+Up to three of these modules can be daisy chained together
 to expand the system to a maximum of 24 valves.
-This daisy chain configuration is shown in Figure \ref{fig:expansion_spi}.
+This configuration is shown in Figure \ref{fig:expansion_spi}.
 
 \begin{figure}[hbp]
 \centering
@@ -317,8 +319,10 @@ This daisy chain configuration is shown in Figure \ref{fig:expansion_spi}.
 }\label{fig:expansion_spi}
 \end{figure}
 
-The power supply is the limiting factor in expansion beyond three
-modules as shown in Figure \ref{fig:expansion_current}.
+The expansion of the current design is limited by the power supply.
+It can only supply enough current to support three control/driver modules
+and one Linux computer.
+Figure \ref{fig:expansion_current} gives an overview.
 
 \begin{figure}[hbp]
 \centering
@@ -465,15 +469,17 @@ In this case the value 2 is transferred.}
 \section{Software Design}
 \label{sec:swdesign}
 
-The software in this system consists of many modular parts as
-can be seen in Figure \ref{fig:spioview} and Figure \ref{fig:spioviewnet}.
+The software in this system is modular and consists of several parts
+(Figure \ref{fig:spioview} and Figure \ref{fig:spioviewnet}).
 
-There are several daemons and a web server which all communicate with
-each other using the file system as shown in Figure \ref{fig:dov}.
-These files can even be edited using command line tools and
-they are all stored in a human readable format.
-The daemons use the Linux inotify interface so they can receive
-file change events without having to poll files.
+The core of these design is based on a set of files.
+These ``sprinklerpi files'' act as a interprocess communication mechanism.
+Then programs, such as daemons or command line tools, can be used to
+read/write these files.
+And other programs can respond when they see changes in the files
+\footnote{The Linux inotify(7) interface is used to monitor file
+and directory events.}.
+An overview of the system is shown in Figure \ref{fig:dov}.
 
 \begin{figure}
 \begin{center}
@@ -488,15 +494,20 @@ The web interface is written using html, PHP, style sheets (CSS), JavaScript,
 and can run on any standard web server such as Apache or Nginx.
 It provides an interface where schedules can be managed and valves can
 be operated.
+It communicates with the other programs by editing the ``sprinklerpi files''
+just like any other program on the system.
 
-Each of the daemons has one specific task.
-The queue daemon watches the queue and makes sure valves are run
-for the correct duration.
+There are several daemons in this system and each has a specific task.
+A queue is needed because not all valves can be on at the same time.
+The queue daemon monitors the queue and runs the valves for the correct
+duration.
 The scheduler waits until a valve is scheduled to run and then adds it
 to the queue.
-The water daemon monitors which valves should be turned on and executes
-the command.
-There are versions for a local device or a network proxy.
+The water daemon monitors which valves should be on right now and physically
+sends the command to turn it on.
+There is also a variation of the water daemon which will send its command
+over a network.
+Then the physical device can be on some other host.
 
 % {{{ File System
 \FloatBarrier
@@ -504,7 +515,7 @@ There are versions for a local device or a network proxy.
 
 The central communication mechanism for interprocess communication
 is the file system.  The daemons, web server, and command line programs
-all interact using these specific files.
+all interact using these files.
 The file hierarchy is shown in Figure \ref{fig:fs}.
 
 \begin{figure}[h!]
@@ -538,9 +549,10 @@ in a specific mode.
 For example the scheduler daemon only operates when in the schedule mode.
 If the system is in the manual mode it pauses its operation.
 
+\clearpage
 The \verb+valves/group-*+ files each indicate which valve should be
 operating for that group.
-It contains a number, in ascii format, from 0 to 8.
+It contains a number, in ASCII format, from 0 to 8.
 When it is set to zero the valve is off.
 The water daemon monitors the valve files and executes the water command
 when they change.
@@ -573,6 +585,7 @@ The \verb+schedule/*+ files each store an object that describes a full
 schedule.
 They are stored using the YAML file format which is human readable
 and supported across many programming languages.
+An example is given in Figure \ref{fig:sched}.
 
 \begin{figure}
 \begin{center}
@@ -608,18 +621,43 @@ entries:
 % }}}
 
 % {{{ Queue Daemon
+\clearpage
 \FloatBarrier
 \subsection{Queue Daemon}
 \label{sec:queue}
 
-When in \verb+schedule+ mode, the queue daemon will monitor the queue
-and run any jobs that are present.
-It monitors all the files for each of the groups.
-Each instruction is one line with the valve to run and its duration
-in seconds (Figure \ref{fig:qf}).
+The queue daemon waits for jobs to appear the queue file
+and then executes that job for the correct duration of time.
+It turns on the valve by writing to a valve file which signals
+to the water daemon to turn the valve on (Section \ref{sec:waterd}).
+Each entry consists of two values: the valve to run and the
+duration of time in seconds.
+An example is shown in Figure \ref{fig:qf2}.
+There is one queue file for each group.
+A new entry is added to the queue by appending to the queue file.
+An entry is removed by deleting it from the front.
+File locking must be used to ensure that concurrent access does not
+produce incorrect results.
+
+\begin{figure}[h!]
+\begin{center}
+\begin{minipage}{2in}
+\begin{verbatim}
+1 60
+1 900
+2 15
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{An example queue file.  Each entry specifies the valve
+number and the duration in seconds.}
+\label{fig:qf2}
+\end{figure}
+
+The scheduler is only active when in the schedule mode.
 Figure \ref{fig:queue-daemon} gives a flow chart of its operation.
 
-\begin{figure}[htbp!]
+\begin{figure}[h!]
 \begin{center}
 \includegraphics[scale=0.35]{dia/queue-daemon}
 \end{center}
@@ -635,9 +673,11 @@ Figure \ref{fig:queue-daemon} gives a flow chart of its operation.
 \subsection{Scheduler Daemon}
 
 The scheduler daemon waits until jobs in the schedules
-become due and then it adds them to the queue.
-The format is the same as described for the queue
-daemon (Section \ref{sec:queue}).
+become due and then adds them to the queue to be run
+by the queue daemon (Section \ref{sec:queue}).
+The format consists of the valve to run and the run time as
+required by the queue daemon.
+It is only active when in the schedule mode.
 Figure \ref{fig:scheduler-daemon} gives a flowchart of its operation.
 
 \begin{figure}[htbp!]
@@ -647,7 +687,214 @@ Figure \ref{fig:scheduler-daemon} gives a flowchart of its operation.
 \caption{Flow chart of the scheduler daemon operation.}
 \label{fig:scheduler-daemon}
 \end{figure}
+
+There is not one specific schedule file.
+In fact there can be any number of schedule files in the
+schedule directory.
+An example is shown in Figure \ref{fig:schedfiles}.
+
+\begin{figure}[h!]
+\begin{center}
+\begin{minipage}{2in}
+\begin{verbatim}
+sprinklerpi/schedules/
+    summer2012.yml
+    test1.yml
+    test2.yml
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{Example of schedule files in the schedules directory.}
+\label{fig:schedfiles}
+\end{figure}
+
+\clearpage
+A schedule file is a YAML\autocite{yaml}
+\footnote{The YAML format was chosen because it is human readable
+and supported in nearly every programming language}
+formatted text file that describes
+which valves on which days and for how long.
+An example is shown in Figure \ref{fig:yamlsched}.
+
+\begin{figure}[h!]
+\begin{center}
+\begin{minipage}{3in}
+\begin{verbatim}
+---
+id: test1.yml
+name: 'Schedule Test #1'
+enabled: 1
+entries:
+- group: "1"
+  valve: "1"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "2"
+  days: MTWThFSSu
+  start_time: 00:50
+  run_time: 00:30
+- group: "1"
+  valve: "3"
+  days: MWF
+  start_time: 00:50
+  run_time: 00:30
+...
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{An example schedule file in YAML format.}
+\label{fig:yamlsched}
+\end{figure}
+
+
 % }}}
+
+% {{{ Water Daemon
+\clearpage
+\FloatBarrier
+\subsection{Water Daemon}
+\label{sec:waterd}
+
+The water daemon monitors the valve file and
+physically turns on valves.
+Each valve file specifies the valve number to turn on or zero for off.
+Figure \ref{fig:waterd} gives an overview of its operation.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.35]{dia/water-daemon}
+\end{center}
+\caption{Flow chart of water daemon operation.}
+\label{fig:waterd}
+\end{figure}
+
+The operation of the water daemon is very simple.
+Why not integrate it in to another daemon such as the queue daemon
+(Section \ref{sec:queue})?
+Doing this would negate the benefits of the ``sprinklerpi files''.
+It would no longer be possible to see what valve is currently on.
+And every program which wants to control valves would need to know
+about the physical interface which increases complexity.
+
+% }}}
+
+% {{{ Water Command
+\clearpage
+\FloatBarrier
+\subsection{Water Command}
+\label{sec:watercmd}
+
+To physically turn on a valve using the SPI bus requires
+a specific number of bits in a specific order to be sent.
+To encompass this complexity a water command (\verb+water+) was created.
+
+The command is run from the command line and takes the valve numbers to
+turn on for each group as a string of numbers from zero to eight.
+Figure \ref{fig:watercmd} gives an example of its usage.
+
+\begin{figure}[h!]
+\begin{center}
+\begin{minipage}{2in}
+\begin{verbatim}
+water "654"
+water "000"
+\end{verbatim}
+\end{minipage}
+\end{center}
+\caption{Water command usage.  The first command turns on 
+valve 6 in group 1, valve 5 in group 2, and valve 4 in group 3.
+The second command turns them all off.}
+\label{fig:watercmd}
+\end{figure}
+
+% }}}
+
+% {{{ Client/Server Proxy
+\FloatBarrier
+\subsection{Client/Server Proxy}
+\label{sec:proxy}
+
+In some cases this system will be installed on a private network
+behind a firewall which makes the system inaccessible from the Internet.
+To get around this situation a client/server proxy has been created
+which proxies the low level commands.
+Essentially, instead of a water daemon which drives a physical daemon,
+there is a water server which sends commands to a water client which
+then physically drives the device.
+The protocol uses TCP which allows the client to establish a connection
+to the server which can then send commands to the client.
+Figure \ref{fig:dov-net}, which is a variation of Figure \ref{fig:dov},
+gives an overview.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.35]{dia/daemon_oview-net}
+\end{center}
+\caption{Overview daemons in the client/server proxy configuration.
+This configuration involves two Linux computers, one on a public
+network and the other on a private network.}
+\label{fig:dov-net}
+\end{figure}
+
+% }}}
+
+% {{{ Web Interface
+\FloatBarrier
+\subsection{Web Interface}
+\label{sec:proxy}
+
+The web interface creates a simple and easy to use interface for
+constructing schedules and manually operating valves.
+It is essentially just an interface to the sprinklerpi files.
+
+The interface is written PHP which generates HTML.
+Javascript was used to trigger form submissions on form changes.
+And CSS was used to create a consistent style across the system.
+
+Figure \ref{fig:wwwmanual} shows the interface when in manual mode.
+Notice that the mode can be chosen using the dropdown menu in
+the upper right.
+A dropdown box for each valve in each group is provided.
+When the value is changed this triggers a form submission.
+And by processing this form submission the sprinklerpi files
+are updated.
+This interface modifies the sprinklerpi files just like any other
+daemon or command line program.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.50]{../testing/img/www-manual_mode.png}
+\end{center}
+\caption{Web interface in manual mode.}
+\label{fig:wwwmanual}
+\end{figure}
+
+\clearpage
+Figure \ref{fig:wwwsched} shows the interface when in schedule mode.
+From here schedules can be edit, created and enabled/disabled.
+There is no practical limit on the size or complexity of these
+schedules.
+Notice that it is possible to start a single valve multiple times
+at once.
+In this case the queue daemon (Section \ref{sec:queue}) will sort
+this and run the jobs for the correct amount of time although the
+order is not guaranteed.
+
+The days of the week are given in a shorthand notation
+where M is Monday, T is Tuesday, W is Wednesday and so on.
+
+The start time is specified in hours and minutes.
+The run time is specified in minutes and seconds.
+
+\begin{figure}[h!]
+\begin{center}
+\includegraphics[scale=0.50]{../testing/img/www-schedule_test1.png}
+\end{center}
+\caption{Schedule interface in schedule mode.}
+\label{fig:wwwsched}
+\end{figure}
 
 % }}}
 
