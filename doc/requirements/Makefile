@@ -16,5 +16,4 @@ clean:
 	-rm -f *.idx *.ilg *.ind *.idl
 	-rm -f *.glo *.xdy
 	-rm -f *.glg *.gls *.ist
-	-rm -f requirements.pdf requirements-all.pdf
 

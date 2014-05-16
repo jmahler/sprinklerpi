@@ -11,5 +11,4 @@ testing.pdf: testing.tex
 
 clean:
 	-rm -f *.log *.aux *.toc *.out *.blg *.bcf *.bbl *.xml
-	-rm -f testing.pdf testing.ps testing.dvi
 	-rm -f *.glo *.gls *.glg *.glsdefs *.xdy

@@ -14,5 +14,4 @@ design.ps: design.pdf
 
 clean:
 	-rm -f *.log *.aux *.toc *.out *.blg *.bcf *.bbl *.xml
-	-rm -f design.pdf design.ps design.dvi
 	-rm -f *.glo *.gls *.glg *.glsdefs *.xdy
