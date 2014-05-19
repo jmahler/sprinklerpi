@@ -28,7 +28,9 @@ if ($err) {
 # use the new object for rest of script
 $spkpi = $new_spkpi;
 ?>
-<!DOCTYPE html>
+<!DOCTYPE html
+Cache-control: no-transform;
+>
 <html>
   <head>
     <link rel="stylesheet" type="text/css" href="main.css" />
