@@ -107,7 +107,6 @@ if (isset($_POST['form'])
 function format_time($x) {
   $parts = split(":", $x, 2);
 
-
   $pos =strpos($x, ":");
   if (FALSE === $pos) {
     $x = sprintf("%02d:00", $x);
@@ -166,11 +165,30 @@ if (isset($_POST['form']) and $_POST['form'] === 'update') {
   $sel_sched = $sched['id'];
 
   if (!$err) {
-    $file = "$sched_dir/" . $sched['id'];
-    if (yaml_emit_file($file, $sched)) {
-      # success
-    } else {
-      exit("yaml emit failed, are permissions for '$file' correct?");
+    if (isset($_POST['apply'])) {
+      $file = "$sched_dir/" . $sched['id'];
+      if (yaml_emit_file($file, $sched)) {
+        # success
+      } else {
+        exit("yaml emit failed, are permissions for '$file' correct?");
+      }
+    } else if (isset($_POST['run_once'])) {
+      foreach ($entries as $entry) {
+        $group = $entry['group'];
+        $queue_file = "$spkpi_dir/queue/group-" . $group;
+        $valve = $entry['valve'];
+
+        $run_time_fmt = $entry['run_time'];
+        list($min, $_sec) = sscanf($run_time_fmt, "%02d:%02d");
+        $run_time = $min*60 + $_sec;
+
+        $cmd = "echo \"$valve $run_time\" >> $queue_file";
+        $status = '';
+        $output = array();
+        $res = exec($cmd, $output, $status);
+        if ($status)
+			    exit("exec of '$cmd' failed. Are the file permissions correct?\n");
+      }
     }
   }
 
@@ -323,8 +341,9 @@ if (!isset($sched)) {
         <span class="err">*Errors in submission</span>
       <?php } ?>
       <span class="right" style="margin-right: 40px">
-      <input type="submit" value="Submit" />
       <input type="button" value="Cancel" onclick="window.location.href=window.location.href" />
+      <input type="submit" name="apply" value="Apply" />
+      <input type="submit" name="run_once" value="Run Once" />
       </span>
       </div>
     <?php } ?>
