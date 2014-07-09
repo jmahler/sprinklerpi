@@ -36,7 +36,14 @@ Cache-control: no-transform;
     <link rel="stylesheet" type="text/css" href="main.css" />
     <title>SprinklerPI: (<?php echo $spkpi->mode; ?>)</title>
   </head>
-<body>
+  <script>
+  function clockTick() {
+    var d  = new Date();
+    document.getElementById('clock').innerHTML = d.toLocaleString();
+    setTimeout(function(){clockTick()}, 1000);
+  }
+  </script>
+<body onload="clockTick()">
 
 <div class="header">
   <span class="left title">SprinklerPI</span>
@@ -55,6 +62,10 @@ Cache-control: no-transform;
       </span>
     </form>
   </span>
+</div>
+
+<div id="clock" style="text-align: center; font-weight: bold;">
+11:22:33
 </div>
 
 <div class="focus center">
