@@ -48,7 +48,7 @@
 class SprinklerPI {
 	public $mode = 'off';
 	public $spkpi_dir = '';
-	public $modes = ["off", "manual", "schedule", "demo"];
+	public $modes = ["off", "manual", "schedule"];
 	public $errmsg;
 	public $valves = [1 => 0, 2 => 0, 3 => 0];
 

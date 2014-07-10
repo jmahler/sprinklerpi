@@ -125,9 +125,9 @@ can be used.
 
     $ cpan -i Linux::Inotify2
 
-At this point, with the Perl libraries installed, it should be possible
-to run the queue daemon (`spkpi-queued`), scheduler
-daemon (`spkpi-scheduled`), and demo daemon (`spkpi-demo`).
+At this point, with the Perl libraries installed, it should be possible to run
+the queue daemon (`spkpi-queued`), and the scheduler daemon
+(`spkpi-scheduled`).
 
 The final daemons needed to get the system working are the water
 daemon (`spkpi-waterd`) which depends on the `water` command and/or
@@ -240,7 +240,6 @@ excluding the client/server daemons.
     $ sudo etc/init.d/spkpi-waterd start
     $ sudo etc/init.d/spkpi-scheduled start
     $ sudo etc/init.d/spkpi-queued start
-    $ sudo etc/init.d/spkpi-demo start
 
 ### situation #2: fire wall
 
@@ -256,7 +255,6 @@ The server daemon is used on the server along with the standard daemons.
 
     $ sudo etc/init.d/spkpi-scheduled start
     $ sudo etc/init.d/spkpi-queued start
-    $ sudo etc/init.d/spkpi-demo start
 
 ## FAQ
 
@@ -317,24 +315,6 @@ To fix the problem increase the value of `max_input_vars` in php.ini.
 
     ; php.ini
     max_input_vars = 15000
-
-Q.  Why does the demo continue running for a long time even after
-switching to another mode?
-
-A. When using the client/server proxy this is because of all the messages
-that have been queued up in the network buffer.  It can be seen by
-looking at the valve files on the server that they are not changing.
-
-    cat sprinklerpi/valves/*
-
-And it can be seen that not messages are being sent by monitoring the
-traffic using [Wireshark][ws].
-
-It won't stop until the entire queue on the client side has been emptied
-which can take several minutes.  Each message is only a few bytes so quite
-a few can be stored.
-
-  [ws]:http://www.wireshark.org
 
 Q. Why does wifi sporadically go down when using a Ralink based USB wifi
 adapter?

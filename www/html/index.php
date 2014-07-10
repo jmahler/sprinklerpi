@@ -2,7 +2,7 @@
 include '_config.inc';
 
 $self = "index.php";
-$modes = ["off", "manual", "schedule", "demo"];
+$modes = ["off", "manual", "schedule"];
 
 $spkpi = new SprinklerPI($spkpi_dir);
 
@@ -78,9 +78,6 @@ Cache-control: no-transform;
       break;
     case "schedule":
       include 'body_schedule.php';
-      break;
-    case "demo":
-      include 'body_demo.php';
       break;
   } ?>
 <br>
