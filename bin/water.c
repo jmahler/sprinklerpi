@@ -2,15 +2,14 @@
  * NAME
  * ----
  *
- * water - SprinklerPI water control, turns on/off sprinklers
+ * water - SprinklerPI water command, turn on/off sprinklers
  *
  * DESCRIPTION
  * -----------
  *
- * The 'water' program turns on on the sprinklers.
- * It does not control the duration.  This must be
- * done by some other program.  Once a sprinkler is
- * turned on it will remain on until it is turned off.
+ * The 'water' program turns on on the sprinklers.  It does not control
+ * the duration.  This must be done by some other program.  Once a
+ * sprinkler is turned on it will remain on until it is turned off.
  *
  * To turn on valve three simply give its number.
  *
@@ -20,18 +19,17 @@
  *
  *   $ water "0"
  *
- * But there can also be multiple groups.
- * Use "12" to * turn on valve one in group one and valve
- * two in group two.  Notice that the first group is the leftmost
- * number.
+ * But there can also be multiple groups.  Use "12" to turn on valve one
+ * in group one and valve two in group two.  Notice that the first group
+ * is the leftmost number.
  *
  *   $ water "12"
  *
- * And this syntax can also be expanded to three groups.
+ * This syntax can extended up to three groups.
  *
  *   $ water "123"
  *
- * To to see what the command is doing use the '-v' option.
+ * To see what the command is doing use the '-v' option.
  * And for other usage see the '-h' option.
  *
  *   $ water -v "65"
@@ -39,10 +37,10 @@
  *
  *   $ water -h
  *
- * With just this command a simple timer can be constructed using
- * the `sleep` command.
- * This example has one control group and waters circuit 3 for 5 minutes.
- * Notice that it has to be explicitly turned off.
+ * With just this command a simple timer can be constructed using the
+ * `sleep` command.  This example has one control group and waters
+ * circuit 3 for 5 minutes.  Notice that it has to be explicitly turned
+ * off.
  *
  *   $ water "3"; sleep 5m; water "0"
  *
