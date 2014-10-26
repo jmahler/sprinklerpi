@@ -1,5 +1,5 @@
 
-all: water spkpi-waterd-client spkpi-waterd-server
+all: water
 
 ARGV=-Wall -Wextra -pedantic
 INC=-I../include ../lib/sprinklerpi.o

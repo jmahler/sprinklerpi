@@ -52,20 +52,6 @@ the command line which simplifies debugging.
                   \   /     \   /    \   /    \
        files:    schedule   queue    valves  (device)
 
-In cases where the controller is on a private network or
-behind a firewall, daemons are included which will proxy the
-commands so that it can be accessed from a public network.
-In this case the daemons will run on the public server and
-just the client daemon will run on the private server.
-
-                              firewall
-                           public | private
-                                  |
-     daemons:    ...    server <--|--- client
-                   \     /        |       \
-                    \   /         |        \
-       files:       valves        |      (device)
-                                  |
 ## CONTENTS
 
 There are various components in this project.  Each in located in its
@@ -228,31 +214,6 @@ the sprinklerpi files and binaries.
 Once this is completed the scripts can be used to start the daemons.
 
     $ sudo etc/init.d/spkpi-waterd start
-
-Different scripts will be started depending on the situation (below).
-
-### situation #1: no fire wall
-
-The simplest case is just a standalone server with no need for public
-access through a fire wall.  In this case just use all the daemons
-excluding the client/server daemons.
-
-    $ sudo etc/init.d/spkpi-waterd start
-    $ sudo etc/init.d/spkpi-scheduled start
-    $ sudo etc/init.d/spkpi-queued start
-
-### situation #2: fire wall
-
-When it is necessary to communicate through a fire wall the client and
-server version will need to be used.  On the client the client version
-is used.
-
-    $ sudo etc/init.d/spkpi-client start
-
-The server daemon is used on the server along with the standard daemons.
-
-    $ sudo etc/init.d/spkpi-server start
-
     $ sudo etc/init.d/spkpi-scheduled start
     $ sudo etc/init.d/spkpi-queued start
 

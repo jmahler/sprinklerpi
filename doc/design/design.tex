@@ -139,20 +139,6 @@ Figure \ref{fig:spioview} shows an overview of the system.
 \label{fig:spioview}
 \end{figure}
 
-\pagebreak
-When this system is installed on a private network or behind a firewall
-it cannot be accessed from the Internet.  With the addition of a
-client/server water daemon, that acts as a proxy, this system can still be
-used as shown in Figure \ref{fig:spioviewnet}.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[scale=0.40]{dia/sprinklerpi_overview-net}
-\end{center}
-\caption{SprinklerPI system configured for access behind a firewall.}
-\label{fig:spioviewnet}
-\end{figure}
-
 % }}}
 
 % {{{ Hardware Design
@@ -806,35 +792,6 @@ water "000"
 valve 6 in group 1, valve 5 in group 2, and valve 4 in group 3.
 The second command turns them all off.}
 \label{fig:watercmd}
-\end{figure}
-
-% }}}
-
-% {{{ Client/Server Proxy
-\FloatBarrier
-\subsection{Client/Server Proxy}
-\label{sec:proxy}
-
-In some cases this system will be installed on a private network
-behind a firewall which makes the system inaccessible from the Internet.
-To get around this situation a client/server proxy has been created
-which proxies the low level commands.
-Essentially, instead of a water daemon which drives a physical daemon,
-there is a water server which sends commands to a water client which
-then physically drives the device.
-The protocol uses TCP which allows the client to establish a connection
-to the server which can then send commands to the client.
-Figure \ref{fig:dov-net}, which is a variation of Figure \ref{fig:dov},
-gives an overview.
-
-\begin{figure}[h!]
-\begin{center}
-\includegraphics[scale=0.35]{dia/daemon_oview-net}
-\end{center}
-\caption{Overview daemons in the client/server proxy configuration.
-This configuration involves two Linux computers, one on a public
-network and the other on a private network.}
-\label{fig:dov-net}
 \end{figure}
 
 % }}}
