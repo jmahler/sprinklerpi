@@ -57,7 +57,7 @@ the command line which simplifies debugging.
 There are various components in this project.  Each in located in its
 own directory as described below.
 
-  bin/ - Binaries and daemons.
+  src/ - All source code and daemons.
 
   doc/ - All documentation including: design manual, testing manual, etc.
 
@@ -66,10 +66,6 @@ own directory as described below.
 
   etc/ - Configuration files, init.d scripts, and web server configuration
 	examples.
-
-  include/ - Libraries and headers for programs in bin/.
-
-  lib/ - Associated libraries for headers in `include/`.
 
   pcb/ - Printed circuit board (PCB) designs using [Kicad][kicad].
 

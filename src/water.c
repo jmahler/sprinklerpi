@@ -79,7 +79,7 @@
 #include <unistd.h>
 #include <errno.h>
 
-#include "sprinklerpi.h"
+#include "libsprinklerpi.h"
 
 void usage(char *proc) {
 	fprintf(stderr, "usage: %s [-d /dev/name] [-v] \"0-8...\"\n", proc);

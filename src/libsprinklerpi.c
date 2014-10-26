@@ -1,5 +1,5 @@
 
-#include "sprinklerpi.h"
+#include "libsprinklerpi.h"
 
 int encode_cmd(char* incmd, char inlen,
 				char** enccmd, char* enclen) {

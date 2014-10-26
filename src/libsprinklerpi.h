@@ -1,6 +1,6 @@
 
-#ifndef _SPRINKLERPI_H
-#define _SPRINKLERPI_H
+#ifndef _LIBSPRINKLERPI_H
+#define _LIBSPRINKLERPI_H
 
 #include <stdlib.h>
 
@@ -56,7 +56,6 @@
  * // ...
  *
  */
-int encode_cmd(char* incmd, char inlen,
-				char** enccmd, char* enclen);
+int encode_cmd(char* incmd, char inlen, char** enccmd, char* enclen);
 
-#endif
+#endif /* _LIBSPRINKLERPI_H */
