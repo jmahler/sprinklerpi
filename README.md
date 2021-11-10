@@ -71,7 +71,7 @@ own directory as described below.
 
   www/ - Web interface written in [PHP][php].
 
-  [kicad]:http://www.kicad-pcb.org
+  [kicad]:http://www.kicad.org
 
   [php]:http://www.php.net
 
